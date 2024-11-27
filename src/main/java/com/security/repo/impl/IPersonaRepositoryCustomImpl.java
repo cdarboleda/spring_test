@@ -10,7 +10,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
-public class PersonaRepositoryCustomImpl implements IPersonaRepositoryCustom{
+public class IPersonaRepositoryCustomImpl implements IPersonaRepositoryCustom{
 
     @PersistenceContext
     private EntityManager entityManager;
