@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.security.db.Persona;
 
 @Repository
-public interface IPersonaRepository extends JpaRepository<Persona, Integer>, IPersonaRepositoryCustom {
+public interface IPersonaRepository extends JpaRepository<Persona, Integer>, IPersonaRepositoryCustom{
 
 }
     

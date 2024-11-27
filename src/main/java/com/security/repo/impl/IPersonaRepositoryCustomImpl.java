@@ -3,14 +3,19 @@ package com.security.repo.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.security.db.PersonaRol;
 import com.security.repo.IPersonaRepositoryCustom;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 
-public class PersonaRepositoryCustomImpl implements IPersonaRepositoryCustom{
+@Repository
+@Transactional
+public class IPersonaRepositoryCustomImpl implements IPersonaRepositoryCustom{
 
     @PersistenceContext
     private EntityManager entityManager;
