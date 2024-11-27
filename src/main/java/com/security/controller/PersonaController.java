@@ -26,7 +26,8 @@ public class PersonaController {
         Persona persona = this.personaService.findByIdPerson(id)
                 .orElseThrow(() -> new RuntimeException("Persona con id: " + id + " no encontrada"));
 
-        Persona persona1 = this.personaService.findByIdPerson(id).get();
+        //Persona persona1 = this.personaService.findByIdPerson(id).get();
+        //System.out.println("amogu------------------------------");
 
         return new ResponseEntity<>(persona, null, HttpStatus.OK);
     }
