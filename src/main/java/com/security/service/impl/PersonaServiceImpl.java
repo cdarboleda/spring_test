@@ -19,6 +19,7 @@ public class PersonaServiceImpl implements IPersonaService{
     public List<Rol> findPersonRoles(Integer id) {
         //Me devuelve los registros de personaRol donde el id matches
         var personaRoles = this.personaRepository.findPersonRoles(id);
+        
         //Debo convertirlo en Rol
         personaRoles.stream().map((personaRol)->
         {
