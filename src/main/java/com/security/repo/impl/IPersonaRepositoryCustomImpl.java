@@ -13,6 +13,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
+
 @Repository
 @Transactional
 public class IPersonaRepositoryCustomImpl implements IPersonaRepositoryCustom{

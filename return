@@ -1,0 +1,17 @@
+[33mcommit 4be2507b7930d5c4ad2360d7cd615c1cbbf94974[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: KevinChiguano <kevin_chili1998@hotmail.com>
+Date:   Wed Nov 27 11:04:26 2024 -0500
+
+    Controller inicial
+
+[33mcommit b0e2af23aed33a52c06aafe349eefde9cd5335e0[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: cdarboleda <cdarboleda936@gmail.com>
+Date:   Wed Nov 27 09:45:57 2024 -0500
+
+    Move main file
+
+[33mcommit deec6b2a9ee0040a892278f1326ed284852e51f7[m
+Author: cdarboleda <cdarboleda936@gmail.com>
+Date:   Wed Nov 27 08:34:10 2024 -0500
+
+    Api estructura inicial
