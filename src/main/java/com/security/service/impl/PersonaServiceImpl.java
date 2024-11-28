@@ -21,20 +21,32 @@ public class PersonaServiceImpl implements IPersonaService{
     @Override
     public List<Rol> findPersonRoles(Integer id) {
         //Me devuelve los registros de personaRol donde el id matches
-        //var personaRoles = this.personaRepository.findPersonRoles(id);
+        var personaRoles = this.personaRepository.findPersonRoles(id);
+
+        System.out.println(personaRoles.toString());
         
         //Debo convertirlo en Rol
-        /*personaRoles.stream().map((personaRol)->
+        personaRoles.stream().map((personaRol)->
         {
             //return el rol en cuestión
             return null;
-        });*/
+        });
         return null;
     }
 
     @Override
     public Optional<Persona> findByIdPerson(Integer id) {
         return this.personaRepository.findById(id);
+    }
+
+    @Override
+    public Persona insert(Persona persona) {
+        return this.personaRepository.save(persona);
+    }
+
+    @Override
+    public List<Persona> findAll() {
+        return this.personaRepository.findAll();
     }
 
 

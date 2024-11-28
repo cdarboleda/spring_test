@@ -10,4 +10,8 @@ public interface IPersonaService {
     public List<Rol> findPersonRoles(Integer id);
 
     public Optional<Persona> findByIdPerson(Integer id);
+
+    public Persona insert(Persona persona);
+
+    public List<Persona> findAll();
 }
