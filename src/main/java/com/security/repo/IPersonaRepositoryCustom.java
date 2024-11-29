@@ -1,10 +1,7 @@
 package com.security.repo;
 
-import java.util.List;
-
-import com.security.db.PersonaRol;
-
+//Aqui pondríamos nuevos metodos para consultas mas complejas, asi que necesiten el entity manager
+//si no luego le borramos
 public interface IPersonaRepositoryCustom {
-    
-    public List<PersonaRol> findPersonRoles(Integer id);
+
 }

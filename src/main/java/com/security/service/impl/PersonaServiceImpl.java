@@ -1,5 +1,6 @@
 package com.security.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,27 +12,26 @@ import com.security.db.Rol;
 import com.security.repo.IPersonaRepository;
 import com.security.service.IPersonaService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class PersonaServiceImpl implements IPersonaService{
 
     @Autowired
     private IPersonaRepository personaRepository;
 
+    private final String entity ="Persona";
 
     @Override
-    public List<Rol> findPersonRoles(Integer id) {
-        //Me devuelve los registros de personaRol donde el id matches
-        var personaRoles = this.personaRepository.findPersonRoles(id);
-
-        System.out.println(personaRoles.toString());
-        
-        //Debo convertirlo en Rol
-        personaRoles.stream().map((personaRol)->
-        {
-            //return el rol en cuestión
-            return null;
-        });
-        return null;
+    public List<Rol> findRolesByPersonId(Integer id) {
+        if (!this.personaRepository.existsById(id)) { //No queria que use el findById ya que ese traeria todoo el objeto
+            throw new EntityNotFoundException(this.entity);
+        }
+        List<Rol> roles = this.personaRepository.findRolesByPersonaId(id);
+        if(roles.isEmpty()){
+            throw new EntityNotFoundException("roles de "+this.entity);
+        }
+        return roles;
     }
 
     @Override

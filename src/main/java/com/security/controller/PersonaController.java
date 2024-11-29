@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.db.Persona;
+import com.security.db.Rol;
 import com.security.service.IPersonaService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @CrossOrigin
@@ -39,9 +42,6 @@ public class PersonaController {
         Persona persona = this.personaService.findByIdPerson(id)
                 .orElseThrow(() -> new RuntimeException("Persona con id: " + id + " no encontrada"));
 
-        //Persona persona1 = this.personaService.findByIdPerson(id).get();
-        //System.out.println("amogu------------------------------");
-
         return new ResponseEntity<>(persona, null, HttpStatus.OK);
     }
 
@@ -50,4 +50,11 @@ public class PersonaController {
         return new ResponseEntity<>(this.personaService.findAll(), null, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/{id}/roles", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerRolesPorPersonaId(@PathVariable Integer id) {
+        // Si no existe la persona, la excepción se lanza
+        List<Rol> roles = this.personaService.findRolesByPersonId(id);
+        return new ResponseEntity<>(roles, HttpStatus.OK);
+
+    }
 }
