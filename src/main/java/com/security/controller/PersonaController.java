@@ -52,9 +52,16 @@ public class PersonaController {
 
     @GetMapping(path = "/{id}/roles", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> obtenerRolesPorPersonaId(@PathVariable Integer id) {
-        // Si no existe la persona, la excepción se lanza
-        List<Rol> roles = this.personaService.findRolesByPersonId(id);
-        return new ResponseEntity<>(roles, HttpStatus.OK);
+        return new ResponseEntity<>(this.personaService.findRolesByPersonId(id), HttpStatus.OK);
+    }
 
+    @GetMapping(path = "/{id}/procesos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerProcesosPorPersonaId(@PathVariable Integer id) {
+        return new ResponseEntity<>(this.personaService.findProcesosByPersonaId(id), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{id}/procesos-owner", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerProcesosOwnerDePersona(@PathVariable Integer id) {
+        return new ResponseEntity<>(this.personaService.findProcesosWherePersonaIsOwner(id), HttpStatus.OK);
     }
 }

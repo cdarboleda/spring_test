@@ -39,7 +39,15 @@ public class Persona {
     private String password;
 
     @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<Proceso> procesos;   
+    private List<Proceso> procesos;
+
+    @ManyToMany
+    @JoinTable(
+        name="persona_proceso",
+        joinColumns = @JoinColumn(name="pers_id"),
+        inverseJoinColumns = @JoinColumn(name="proc_id")
+    )
+    private List<Proceso> personasProceso; 
 
     @ManyToMany
     @JoinTable(
@@ -52,7 +60,8 @@ public class Persona {
     // @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     // private List<PersonaRol> personaRoles;
 
-    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<ProcesoPersona> procesoPersonas;
+
+    //@OneToMany(mappedBy = "persona", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    //private List<ProcesoPersona> procesoPersonas;
 
 }
