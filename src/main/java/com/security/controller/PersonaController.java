@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,13 +33,17 @@ public class PersonaController {
     @Autowired
     private IGestorPersonaRol personaRol;
 
-    @PostMapping(path = "/{rol}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PersonaDTO> insertar( @PathVariable String rol, @RequestBody Persona persona){
-
-        PersonaDTO personaTmp = this.personaRol.insertar(persona, rol);
-
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Persona> insertar(@RequestBody PersonaDTO persona){
+        Persona personaTmp = this.personaRol.insertar(persona);
         return new ResponseEntity<>(personaTmp, null, HttpStatus.OK);
+    }
 
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Persona> actualizar(@PathVariable Integer id, @RequestBody PersonaDTO personaDTO){
+        personaDTO.setId(id);
+        Persona personaTmp = this.personaRol.actualizar(personaDTO);
+        return new ResponseEntity<>(personaTmp, null, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

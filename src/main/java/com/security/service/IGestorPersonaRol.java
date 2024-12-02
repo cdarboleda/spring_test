@@ -5,6 +5,7 @@ import com.security.service.dto.PersonaDTO;
 
 public interface IGestorPersonaRol {
 
-    public PersonaDTO insertar(Persona persona, String rol);
+    public Persona insertar(PersonaDTO persona);
+    public Persona actualizar(PersonaDTO persona);
 
 }

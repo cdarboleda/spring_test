@@ -1,6 +1,8 @@
 package com.security.service.dto;
 
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -18,6 +20,6 @@ public class PersonaDTO {
    
     private String password;
 
-    private String rol;
+    private List<Integer> roles;
     
 }

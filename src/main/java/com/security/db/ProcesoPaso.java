@@ -11,6 +11,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+
 @Entity
 @Table(name = "proceso_paso")
 @Data

@@ -1,7 +1,9 @@
 package com.security.service.impl;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import com.security.service.dto.utils.Convertidor;
 import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class GestorPersonaRolImpl implements IGestorPersonaRol {
 
     @Autowired
@@ -30,32 +33,55 @@ public class GestorPersonaRolImpl implements IGestorPersonaRol {
     private Convertidor convertidor;
 
     @Override
-    @Transactional
-    public PersonaDTO insertar(Persona persona, String rol) {
-        if (persona == null || rol == null || rol.isEmpty()) {
+    public Persona insertar(PersonaDTO personaDTO) {
+        if (personaDTO == null) {
             throw new IllegalArgumentException("Persona y rol no pueden ser nulos o vacíos");
         }
-        
-        
+        personaDTO.setId(null);
 
-        Rol tmpRol = rolRepository.findByNombre(rol)
-                .orElseThrow(() -> new RuntimeException("Rol " + rol + " no encontrado"));
+        List<Rol> roles = personaDTO.getRoles()
+        .stream()
+        .map((idRol)->this.rolRepository.findById(idRol).get())
+        .filter(Objects::nonNull)//.filter(rol -> rol!=null)
+        .collect(Collectors.toList());
 
-        persona.setRoles(Collections.singletonList(tmpRol));
-
-        System.out.println("-----------------------------------------------");
-        System.out.println(tmpRol.getNombre());
-
-        //System.out.println(persona.getRoles());
-
-        
-
-        return convertidor.convertirAPersonaDTO(personaRepository.save(persona), rol);
+        Persona persona = convertidor.convertirAPersona(personaDTO);
+        persona.setRoles(roles);
+        return personaRepository.save(persona);
     }
 
+    //El front me debe dar los datos completos si o si
+    @Override
+    public Persona actualizar(PersonaDTO personaDTO) {
+        if (personaDTO == null) {
+            throw new IllegalArgumentException("Persona y rol no pueden ser nulos o vacíos");
+        }
+        Optional<Persona> persona = this.personaRepository.findById(personaDTO.getId());
+        if(!persona.isPresent()){
+            throw new IllegalArgumentException("Esta persona no existe!!!, SOLO actualizar");
+        }
+        Persona personaDTOPersona = convertidor.convertirAPersona(personaDTO);
+        
+        List<Rol> roles = personaDTO.getRoles()
+        .stream()
+        .map((idRol)->this.rolRepository.findById(idRol).get())
+        .filter(Objects::nonNull)//.filter(rol -> rol!=null)
+        .collect(Collectors.toList());
+
+        personaDTOPersona.setId(persona.get().getId());
+        personaDTOPersona.setProcesos(persona.get().getProcesos());
+        personaDTOPersona.setPersonasProceso(persona.get().getPersonasProceso());
+        personaDTOPersona.setRoles(roles);
+
+        return personaRepository.save(personaDTOPersona);
+    }
+
+    
     private boolean rolExiste(Integer idPersona, String rol){
         List<Rol> roles = this.personaRepository.findRolesByPersonaId(idPersona);
         return false;
     }
+
+
 
 }

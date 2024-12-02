@@ -27,6 +27,9 @@ public class Documento {
     @Column(name = "docu_nombre")
     private String nombre;
 
+    @Column(name ="docu_url")
+    private String url;
+
     @Column(name = "docu_descripcion")
     private String descripcion;
 

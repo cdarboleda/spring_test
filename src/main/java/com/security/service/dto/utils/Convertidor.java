@@ -16,7 +16,7 @@ public class Convertidor {
         dto.setCorreo(persona.getCorreo());
         dto.setPassword(persona.getPassword());
         dto.setTelefono(persona.getTelefono());
-        dto.setRol(rol);
+        //dto.setRol(rol);
         
         return dto;
 

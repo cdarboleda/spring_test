@@ -32,10 +32,5 @@ public class Rol {
 
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore
-    private List<Persona> personas;
-
-    //Obsoleto cuando tenía la entidad PersonaRol
-    // @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, orphanRemoval = true)
-    // private List<PersonaRol> personaRoles;
-    
+    private List<Persona> personas;   
 }

@@ -57,11 +57,4 @@ public class Persona {
     )
     private List<Rol> roles;
 
-    // @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    // private List<PersonaRol> personaRoles;
-
-
-    //@OneToMany(mappedBy = "persona", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    //private List<ProcesoPersona> procesoPersonas;
-
 }
