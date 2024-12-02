@@ -11,6 +11,9 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+
+//////////////////////////////Borrar eso
+
 @Entity
 @Table(name="proceso_persona")
 @Data

@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.db.Persona;
-import com.security.db.Rol;
+import com.security.service.IGestorPersonaRol;
 import com.security.service.IPersonaService;
+import com.security.service.dto.PersonaDTO;
 
-import jakarta.persistence.EntityNotFoundException;
+
 
 @RestController
 @CrossOrigin
@@ -28,10 +29,13 @@ public class PersonaController {
     @Autowired
     private IPersonaService personaService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Persona> insertar(@RequestBody Persona persona){
+    @Autowired
+    private IGestorPersonaRol personaRol;
 
-        Persona personaTmp = this.personaService.insert(persona);
+    @PostMapping(path = "/{rol}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PersonaDTO> insertar( @PathVariable String rol, @RequestBody Persona persona){
+
+        PersonaDTO personaTmp = this.personaRol.insertar(persona, rol);
 
         return new ResponseEntity<>(personaTmp, null, HttpStatus.OK);
 
