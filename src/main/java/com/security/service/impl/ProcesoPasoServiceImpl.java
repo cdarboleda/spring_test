@@ -9,8 +9,6 @@ import com.security.db.ProcesoPaso;
 import com.security.repo.IProcesoPasoRepository;
 import com.security.service.IProcesoPasoService;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
 public class ProcesoPasoServiceImpl implements IProcesoPasoService{
 

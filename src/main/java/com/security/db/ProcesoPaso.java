@@ -2,6 +2,7 @@ package com.security.db;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,12 +36,12 @@ public class ProcesoPaso {
     @Column(name = "proc_comentario")
     private String comentario;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="proc_id")
     private Proceso proceso;
 
     //UN paso tiene un estado, pero varios estados pueden compartir un estado
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "esta_id", nullable = false)
     private Estado estado;
 

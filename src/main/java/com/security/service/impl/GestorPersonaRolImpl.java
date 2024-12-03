@@ -16,6 +16,7 @@ import com.security.service.IGestorPersonaRol;
 import com.security.service.dto.PersonaDTO;
 import com.security.service.dto.utils.Convertidor;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -27,7 +28,6 @@ public class GestorPersonaRolImpl implements IGestorPersonaRol {
 
     @Autowired
     private IRolRepository rolRepository;
-
 
     @Autowired
     private Convertidor convertidor;
@@ -75,13 +75,17 @@ public class GestorPersonaRolImpl implements IGestorPersonaRol {
 
         return personaRepository.save(personaDTOPersona);
     }
-
     
-    private boolean rolExiste(Integer idPersona, String rol){
-        List<Rol> roles = this.personaRepository.findRolesByPersonaId(idPersona);
-        return false;
+    @Override
+    public List<Rol> findRolesByPersonaId(Integer id) {
+        if (!this.personaRepository.existsById(id)) {
+            throw new EntityNotFoundException("No hay persona con id: " + id);
+        }
+        List<Rol> roles = this.rolRepository.findRolesByPersonaId(id);
+        if (roles.isEmpty()) {
+            throw new EntityNotFoundException("No hay roles para persona con id " + id);
+        }    
+        return roles;
     }
-
-
 
 }

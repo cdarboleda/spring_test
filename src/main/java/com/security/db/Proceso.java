@@ -50,13 +50,13 @@ public class Proceso {
     private List<Documento> documentos;
 
     //Es el de id_owner del proceso
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "pers_id")
     private Persona persona;
 
     //Es la de procesoPersonas
-    @ManyToMany(mappedBy = "personasProceso")
+    @ManyToMany(mappedBy = "personasProceso", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Persona> personas;
 

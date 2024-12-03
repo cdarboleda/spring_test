@@ -41,7 +41,7 @@ public class Persona {
     @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Proceso> procesos;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name="persona_proceso",
         joinColumns = @JoinColumn(name="pers_id"),
@@ -49,7 +49,7 @@ public class Persona {
     )
     private List<Proceso> personasProceso; 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "persona_rol", // Nombre de la tabla de unión
         joinColumns = @JoinColumn(name = "pers_id"), // Columna que referencia a Persona

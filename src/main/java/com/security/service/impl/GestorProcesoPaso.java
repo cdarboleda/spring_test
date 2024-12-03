@@ -3,7 +3,6 @@ package com.security.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.security.db.Proceso;
-import com.security.db.ProcesoLog;
 import com.security.factory.ProcesoPasoFactoryManager;
 import com.security.service.IProcesoLogService;
 
