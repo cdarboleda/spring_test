@@ -7,6 +7,7 @@ import com.security.db.Persona;
 
 public interface IPersonaService {
     public Optional<Persona> findByIdPerson(Integer id);
+    public Persona findByCedula(String cedula);
     public Persona findById(Integer id);
     public Persona insert(Persona persona);
 

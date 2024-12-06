@@ -36,6 +36,8 @@ public class Persona {
     private String apellido;
     @Column(name = "pers_correo")
     private String correo;
+    @Column(name = "pers_cedula", unique = true)
+    private String cedula;
     @Column(name = "pers_telefono")
     private String telefono;
     @Column(name = "pers_password")

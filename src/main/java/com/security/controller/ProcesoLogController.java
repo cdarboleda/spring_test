@@ -27,7 +27,7 @@ public class ProcesoLogController {
     private IProcesoLogService procesoLogService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> insertar(@RequestBody ProcesoLog procesoLog) {
+    public ResponseEntity<?> insertar(@RequestBody ProcesoLog procesoLog) {
 
         Boolean logInsertado = this.procesoLogService.insert(procesoLog) != null;
 
@@ -36,12 +36,12 @@ public class ProcesoLogController {
     }
 
     @GetMapping(path = "/{id}/proceso")
-    public ResponseEntity<List<ProcesoLog>> obtenerLogPorProcesoId(@PathVariable Integer id) {
+    public ResponseEntity<?> obtenerLogPorProcesoId(@PathVariable Integer id) {
         return new ResponseEntity<>(this.procesoLogService.findByProcesoId(id), null, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}/proceso-paso")
-    public ResponseEntity<List<ProcesoLog>> obtenerLogPorProcesoPasoId(@RequestParam Integer idProceso,
+    public ResponseEntity<?> obtenerLogPorProcesoPasoId(@RequestParam Integer idProceso,
             @RequestParam Integer idProcesoPaso) {
         return new ResponseEntity<>(this.procesoLogService.findByIdProcesoAndIdProcesoPaso(idProceso, idProcesoPaso),
                 null, HttpStatus.OK);

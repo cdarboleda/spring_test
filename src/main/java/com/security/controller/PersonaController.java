@@ -40,20 +40,20 @@ public class PersonaController {
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Persona> insertar(@RequestBody PersonaDTO persona) {
+    public ResponseEntity<?> insertar(@RequestBody PersonaDTO persona) {
         Persona personaTmp = this.personaRol.insertar(persona);
         return new ResponseEntity<>(personaTmp, null, HttpStatus.OK);
     }
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Persona> actualizar(@PathVariable Integer id, @RequestBody PersonaDTO personaDTO) {
+    public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody PersonaDTO personaDTO) {
         personaDTO.setId(id);
         Persona personaTmp = this.personaRol.actualizar(personaDTO);
         return new ResponseEntity<>(personaTmp, null, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Persona> buscarPorId(@PathVariable Integer id) {
+    public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
         Persona persona = this.personaService.findByIdPerson(id)
                 .orElseThrow(() -> new RuntimeException("Persona con id: " + id + " no encontrada"));
 
@@ -61,7 +61,7 @@ public class PersonaController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Persona>> buscarTodo() {
+    public ResponseEntity<?> buscarTodo() {
         return new ResponseEntity<>(this.personaService.findAll(), null, HttpStatus.OK);
     }
 

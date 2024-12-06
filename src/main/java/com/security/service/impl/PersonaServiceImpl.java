@@ -1,6 +1,5 @@
 package com.security.service.impl;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +14,6 @@ import com.security.service.IPersonaService;
 
 import jakarta.persistence.EntityNotFoundException;
 
-
 @Service
 public class PersonaServiceImpl implements IPersonaService {
 
@@ -29,12 +27,13 @@ public class PersonaServiceImpl implements IPersonaService {
 
     @Override
     public Persona findById(Integer id) {
-        Persona persona= this.personaRepository.findById(id)
-        .orElseThrow(()->new EntityNotFoundException("No se encontró la persona de id: "+ id));
+        Persona persona = this.personaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontró la persona de id: " + id));
         return persona;
     }
+
     @Override
-    public Boolean existsById(Integer id){
+    public Boolean existsById(Integer id) {
         if (!this.personaRepository.existsById(id)) {
             throw new EntityNotFoundException("No hay persona con id: " + id);
         }
@@ -64,6 +63,12 @@ public class PersonaServiceImpl implements IPersonaService {
             throw new EntityNotFoundException("No se encontraron personas con los IDs proporcionados.");
         }
         return personas;
+    }
+
+    @Override
+    public Persona findByCedula(String cedula) {
+        return this.personaRepository.findByCedula(cedula)
+                .orElseThrow(() -> new EntityNotFoundException("No se encontro la persona con cedula: " + cedula));
     }
 
 }

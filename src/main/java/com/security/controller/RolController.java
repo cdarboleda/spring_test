@@ -29,12 +29,12 @@ public class RolController {
     private IRolService rolService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Rol> insertar(@RequestBody Rol rol){
+    public ResponseEntity<?> insertar(@RequestBody Rol rol){
         return new ResponseEntity<>(this.rolService.insert(rol), null, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Rol> buscarPorId(@PathVariable Integer id){
+    public ResponseEntity<?> buscarPorId(@PathVariable Integer id){
 
         Rol rol = this.rolService.findById(id).orElseThrow(() -> new EntityNotFoundException("Rol con el id "+ id + " no encontrado."));
 
@@ -42,7 +42,7 @@ public class RolController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Rol>> buscarRoles(){
+    public ResponseEntity<?> buscarRoles(){
         return new ResponseEntity<>(this.rolService.findAll(), null, HttpStatus.OK);
     }    
     

@@ -50,6 +50,7 @@ public class EstadoServiceImpl implements IEstadoService{
         Estado estadoActual = this.findById(estado.getId());
         estadoActual.setNombre(estado.getNombre());
         estadoActual.setDescripcion(estado.getDescripcion());
+        estadoActual.setTipo(estado.getTipo());
         return estadoActual;
     }
 

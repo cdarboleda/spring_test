@@ -13,6 +13,7 @@ public class Convertidor {
         dto.setId(persona.getId());
         dto.setNombre(persona.getNombre());
         dto.setApellido(persona.getApellido());
+        dto.setCedula(persona.getCedula());
         dto.setCorreo(persona.getCorreo());
         dto.setPassword(persona.getPassword());
         dto.setTelefono(persona.getTelefono());
@@ -27,6 +28,7 @@ public class Convertidor {
         persona.setId(dto.getId());
         persona.setNombre(dto.getNombre());
         persona.setApellido(dto.getApellido());
+        persona.setCedula(dto.getCedula());
         persona.setCorreo(dto.getCorreo());
         persona.setPassword(dto.getPassword());
         persona.setTelefono(dto.getTelefono());

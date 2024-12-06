@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.security.db.Estado;
 import com.security.service.IEstadoService;
 
+import jakarta.validation.Valid;
+
 @RequestMapping("/estado")
 @RestController
 @CrossOrigin
@@ -35,7 +37,7 @@ public class EstadoController {
     }
     
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> insertar(@RequestBody Estado estado){
+    public ResponseEntity<?> insertar(@Valid @RequestBody Estado estado){
         return new ResponseEntity<>(this.estadoService.insert(estado), null, HttpStatus.OK);
     }
 
