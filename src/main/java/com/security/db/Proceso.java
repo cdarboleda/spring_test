@@ -1,7 +1,9 @@
 package com.security.db;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -46,22 +48,44 @@ public class Proceso {
     @Column(name = "proc_estado")
     private Boolean estado;
     
-    @OneToMany(mappedBy = "proceso", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "proceso", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Documento> documentos;
 
-    //Es el de id_owner del proceso
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     @JoinColumn(name = "pers_id")
     private Persona persona;
 
-    //Es la de procesoPersonas
     @ManyToMany(mappedBy = "personasProceso", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Persona> personas;
+    private Set<Persona> personas = new HashSet<>();
 
-    @OneToMany(mappedBy = "proceso", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    public void addPersona(Persona persona){
+        this.personas.add(persona);
+        persona.getPersonasProceso().add(this);
+    }
+
+    public void removePersona(Persona persona){
+        this.personas.remove(persona);
+        persona.getPersonasProceso().remove(this);
+    }
+
+    @OneToMany(mappedBy = "proceso", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<ProcesoPaso> procesoPasos; 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Proceso)) return false;
+        return id != null && id.equals(((Proceso) o).getId());
+    }
+ 
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 
 }
 

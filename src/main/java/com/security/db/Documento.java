@@ -2,6 +2,9 @@ package com.security.db;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,11 +37,13 @@ public class Documento {
     @Column(name = "docu_descripcion")
     private String descripcion;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "docu_fecha_creacion")
     private LocalDateTime fechaCreacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="proc_id")
+    @JsonIgnore
     private Proceso proceso;
 
 }

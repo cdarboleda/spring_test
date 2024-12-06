@@ -13,6 +13,7 @@ import com.security.db.Rol;
 import com.security.repo.IPersonaRepository;
 import com.security.repo.IRolRepository;
 import com.security.service.IGestorPersonaRol;
+import com.security.service.IPersonaService;
 import com.security.service.dto.PersonaDTO;
 import com.security.service.dto.utils.Convertidor;
 
@@ -25,6 +26,9 @@ public class GestorPersonaRolImpl implements IGestorPersonaRol {
 
     @Autowired
     private IPersonaRepository personaRepository;
+
+    @Autowired
+    private IPersonaService personaService;
 
     @Autowired
     private IRolRepository rolRepository;
@@ -78,10 +82,8 @@ public class GestorPersonaRolImpl implements IGestorPersonaRol {
     
     @Override
     public List<Rol> findRolesByPersonaId(Integer id) {
-        if (!this.personaRepository.existsById(id)) {
-            throw new EntityNotFoundException("No hay persona con id: " + id);
-        }
-        List<Rol> roles = this.rolRepository.findRolesByPersonaId(id);
+        this.personaService.existsById(id);
+        List<Rol> roles = this.rolRepository.findByPersonasId(id);
         if (roles.isEmpty()) {
             throw new EntityNotFoundException("No hay roles para persona con id " + id);
         }    

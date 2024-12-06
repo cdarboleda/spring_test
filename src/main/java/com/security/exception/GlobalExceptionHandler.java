@@ -17,6 +17,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleEntityNotFound(EntityNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+    
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<String> customException(CustomException ex) {
+        return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
+    } 
 
     // // Manejo genérico para RuntimeException (que ahora solo captura excepciones generales)
     // @ExceptionHandler(RuntimeException.class)

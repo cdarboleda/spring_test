@@ -17,10 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.security.db.Persona;
 import com.security.service.IGestorPersonaRol;
+import com.security.service.IGestorProceso;
 import com.security.service.IPersonaService;
 import com.security.service.dto.PersonaDTO;
-
-
 
 @RestController
 @CrossOrigin
@@ -33,14 +32,21 @@ public class PersonaController {
     @Autowired
     private IGestorPersonaRol personaRol;
 
+    @Autowired
+    private IGestorProceso gestorProceso;
+
+    @Autowired
+    private IGestorPersonaRol gestorPersonaRol;
+
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Persona> insertar(@RequestBody PersonaDTO persona){
+    public ResponseEntity<Persona> insertar(@RequestBody PersonaDTO persona) {
         Persona personaTmp = this.personaRol.insertar(persona);
         return new ResponseEntity<>(personaTmp, null, HttpStatus.OK);
     }
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Persona> actualizar(@PathVariable Integer id, @RequestBody PersonaDTO personaDTO){
+    public ResponseEntity<Persona> actualizar(@PathVariable Integer id, @RequestBody PersonaDTO personaDTO) {
         personaDTO.setId(id);
         Persona personaTmp = this.personaRol.actualizar(personaDTO);
         return new ResponseEntity<>(personaTmp, null, HttpStatus.OK);
@@ -55,7 +61,22 @@ public class PersonaController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Persona>> buscarTodo(){
+    public ResponseEntity<List<Persona>> buscarTodo() {
         return new ResponseEntity<>(this.personaService.findAll(), null, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{id}/procesos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerProcesosPorPersonaId(@PathVariable Integer id) {
+        return new ResponseEntity<>(this.gestorProceso.findProcesosByPersonaId(id), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{id}/procesos-requiriente", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerProcesosDePersonaRequiriente(@PathVariable Integer id) {
+        return new ResponseEntity<>(this.gestorProceso.findProcesosWherePersonaIsOwner(id), HttpStatus.OK);
+    }
+
+    @GetMapping(path="/{id}/roles", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerRolesPorPersonaId(@PathVariable Integer id) {
+        return new ResponseEntity<>(this.gestorPersonaRol.findRolesByPersonaId(id), null, HttpStatus.OK);
     }
 }

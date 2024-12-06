@@ -1,8 +1,11 @@
 package com.security.db;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,7 +41,8 @@ public class Persona {
     @Column(name = "pers_password")
     private String password;
 
-    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "persona",fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Proceso> procesos;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -47,7 +51,8 @@ public class Persona {
         joinColumns = @JoinColumn(name="pers_id"),
         inverseJoinColumns = @JoinColumn(name="proc_id")
     )
-    private List<Proceso> personasProceso; 
+    @JsonIgnore
+    private Set<Proceso> personasProceso= new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -55,6 +60,20 @@ public class Persona {
         joinColumns = @JoinColumn(name = "pers_id"), // Columna que referencia a Persona
         inverseJoinColumns = @JoinColumn(name = "rol_id") // Columna que referencia a Rol
     )
+    @JsonIgnore
     private List<Rol> roles;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Persona)) return false;
+        return id != null && id.equals(((Persona) o).getId());
+    }
+ 
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
 
 }

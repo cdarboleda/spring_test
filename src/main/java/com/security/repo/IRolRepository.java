@@ -14,6 +14,9 @@ public interface IRolRepository extends JpaRepository<Rol, Integer>{
 
     public Optional<Rol> findByNombre(String nombre);
 
+    //Este hace lo mismo que el de abajo
+    public List<Rol> findByPersonasId(Integer id);
+
     @Query("SELECT r FROM Rol r JOIN r.personas p WHERE p.id = :id")
     List<Rol> findRolesByPersonaId(@Param("id") Integer id);
     

@@ -1,7 +1,6 @@
 package com.security.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,11 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.db.Rol;
-import com.security.service.IGestorPersonaRol;
 import com.security.service.IRolService;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -30,10 +27,6 @@ public class RolController {
 
     @Autowired
     private IRolService rolService;
-
-    @Autowired
-    private IGestorPersonaRol gestorPersonaRol;
-
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Rol> insertar(@RequestBody Rol rol){
@@ -51,12 +44,6 @@ public class RolController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Rol>> buscarRoles(){
         return new ResponseEntity<>(this.rolService.findAll(), null, HttpStatus.OK);
-    }
-
-    @GetMapping("/persona/{id}")
-    public ResponseEntity<?> obtenerRolesPorPersonaId(@PathVariable Integer id) {
-        return new ResponseEntity<>(this.gestorPersonaRol.findRolesByPersonaId(id), null, HttpStatus.OK);
-    }
-    
+    }    
     
 }
