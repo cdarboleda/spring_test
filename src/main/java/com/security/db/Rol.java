@@ -25,7 +25,7 @@ public class Rol {
     @SequenceGenerator(name = "seq_rol", initialValue = 1, allocationSize = 1)
     private Integer id;
 
-    @Column(name = "rol_nombre")
+    @Column(name = "rol_nombre", unique = true)
     private String nombre;
 
     @Column(name = "rol_descripcion")

@@ -7,6 +7,7 @@ public class PersonaLigeroDTO {
     private Integer id;
     private String nombre;
     private String apellido;
+    private String cedula;
     private String correo;
     private String telefono;
     private String password;

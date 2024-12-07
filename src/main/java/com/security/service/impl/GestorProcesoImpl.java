@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 
 import com.security.db.Persona;
 import com.security.db.Proceso;
+import com.security.db.ProcesoPaso;
 import com.security.exception.CustomException;
 import com.security.factory.ProcesoFactory;
 import com.security.factory.ProcesoPlantilla;
 import com.security.repo.IProcesoRepository;
 import com.security.service.IGestorProceso;
 import com.security.service.IPersonaService;
+import com.security.service.IProcesoPasoService;
 import com.security.service.IProcesoService;
 import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoDTO;
@@ -47,6 +49,8 @@ public class GestorProcesoImpl implements IGestorProceso{
     private ConvertidorPersona convertidorPersona;
     @Autowired
     private ConvertidorDocumento convertidorDocumento;
+    @Autowired
+    private IProcesoPasoService procesoPasoService;
 
     @Override
     public List<ProcesoLigeroDTO> findProcesosByPersonaId(Integer id) {
@@ -77,14 +81,25 @@ public class GestorProcesoImpl implements IGestorProceso{
         Persona requiriente = this.personaService.findById(procesoDTO.getRequirienteId());
         List<Persona> personasDelProceso = this.personaService.findPersonasByIds(procesoDTO.getPersonasId());
 
+        List<ProcesoPaso> pasos = this.procesoPasoService.crearPasos(procesoDTO.getNombre());
+
+
         Proceso proceso = new Proceso();
         proceso.setNombre(procesoTipoPlantilla.getNombre());
         proceso.setDescripcion(procesoTipoPlantilla.getDescripcion());
         proceso.setFechaInicio(LocalDateTime.now());
         proceso.setEstado(false);
         proceso.setPersona(requiriente);
-        //proceso.setPersonas(personasDelProceso);
+
+        //Agregar El Proceso a cada paso
+        pasos.forEach((paso) -> paso.setProceso(proceso));
+
+        //AgregarPasos
+        proceso.setProcesoPasos(pasos);
+
+
         personasDelProceso.forEach((persona)->proceso.addPersona(persona));
+
         Proceso procesoGuardado = this.procesoRepository.save(proceso);
         return convertidorProceso.convertirALigeroDTO(procesoGuardado);
     }

@@ -1,32 +1,32 @@
 package com.security.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.security.db.Proceso;
-import com.security.factory.ProcesoPasoFactoryManager;
-import com.security.service.IProcesoLogService;
+import com.security.db.Estado;
+import com.security.db.ProcesoPaso;
+import com.security.service.IEstadoService;
+import com.security.service.IGestorProcesoPaso;
+import com.security.service.IProcesoPasoService;
 
-import jakarta.transaction.Transactional;
-
-public class GestorProcesoPaso {
+@Service
+public class GestorProcesoPaso implements IGestorProcesoPaso {
 
     @Autowired
-    private IProcesoLogService logService;
+    private IProcesoPasoService pasoService;
 
     @Autowired
-    private ProcesoPasoFactoryManager factoryManager;
+    private IEstadoService estadoService;
 
-    @Transactional
-    public void insertar(Proceso proceso){
+    @Override
+    public ProcesoPaso updateEstado(Integer idPaso, Integer idEstado) {
 
-        //ProcesoLog log =  this.logService.insert(proceso);
+        ProcesoPaso paso = this.pasoService.findById(idPaso);
+        Estado estado = this.estadoService.findById(idEstado);
 
-        //factory.generarPasosPorProceso(log);
-
-        //factoryManager.generarPasosPorProceso(log);
-
+        paso.setEstado(estado);
+        return this.pasoService.insert(paso);
 
     }
 
-    
 }

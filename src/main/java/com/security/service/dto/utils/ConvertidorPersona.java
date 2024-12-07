@@ -13,6 +13,7 @@ public class ConvertidorPersona {
         personaDTO.setId(persona.getId());
         personaDTO.setNombre(persona.getNombre());
         personaDTO.setApellido(persona.getApellido());
+        personaDTO.setCedula(persona.getCedula());
         personaDTO.setCorreo(persona.getCorreo());
         personaDTO.setTelefono(persona.getTelefono());
         personaDTO.setPassword(persona.getPassword());
@@ -24,6 +25,7 @@ public class ConvertidorPersona {
         persona.setId(personaDTO.getId());
         persona.setNombre(personaDTO.getNombre());
         persona.setApellido(personaDTO.getApellido());
+        persona.setCedula(personaDTO.getCedula());
         persona.setCorreo(personaDTO.getCorreo());
         persona.setTelefono(personaDTO.getTelefono());
         persona.setPassword(personaDTO.getPassword());

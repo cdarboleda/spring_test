@@ -71,7 +71,7 @@ public class Proceso {
         persona.getPersonasProceso().remove(this);
     }
 
-    @OneToMany(mappedBy = "proceso", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "proceso", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore
     private List<ProcesoPaso> procesoPasos; 
 
