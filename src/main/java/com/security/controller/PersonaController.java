@@ -53,6 +53,11 @@ public class PersonaController {
         return new ResponseEntity<>(personaTmp, null, HttpStatus.OK);
     }
 
+    @PutMapping(path = "/add-roles",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> actualizarRoles(@RequestBody PersonaDTO dto){
+        return new ResponseEntity<>(this.gestorPersonaRol.addRolToPersona(dto), null, HttpStatus.OK);
+    }
+
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
         Persona persona = this.personaService.findByIdPerson(id)
@@ -80,6 +85,7 @@ public class PersonaController {
     public ResponseEntity<?> obtenerRolesPorPersonaId(@PathVariable Integer id) {
         return new ResponseEntity<>(this.gestorPersonaRol.findRolesByPersonaId(id), null, HttpStatus.OK);
     }
+
 
     @PostMapping("/{id}/addPaso")
     public ResponseEntity<?> anadirPaso(@PathVariable Integer id, @RequestParam Integer idPaso) {

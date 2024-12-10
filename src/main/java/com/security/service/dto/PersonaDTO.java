@@ -1,7 +1,9 @@
 package com.security.service.dto;
 
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lombok.Data;
 
@@ -22,8 +24,9 @@ public class PersonaDTO {
    
     private String password;
 
-    private List<Integer> roles;
+    private Set<Integer> roles = new HashSet<>();
 
     private Integer responsableId;
+
     
 }
