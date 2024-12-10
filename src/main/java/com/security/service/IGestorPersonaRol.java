@@ -11,4 +11,5 @@ public interface IGestorPersonaRol {
     public Persona insertar(PersonaDTO persona);
     public Persona actualizar(PersonaDTO persona);
     public List<Rol> findRolesByPersonaId(Integer id);
+    public void anadirPaso(Integer idPersona, Integer idPaso);
 }

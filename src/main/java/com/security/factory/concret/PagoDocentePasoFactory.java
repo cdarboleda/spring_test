@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.security.db.Estado;
+import com.security.db.Persona;
 import com.security.db.Proceso;
 import com.security.db.ProcesoPaso;
 import com.security.factory.IProcesoPasoFactory;
 import com.security.repo.IEstadoRepository;
-import com.security.service.IEstadoService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -26,17 +26,18 @@ public class PagoDocentePasoFactory implements IProcesoPasoFactory {
     @Transactional
     public List<ProcesoPaso> generatePasos() {
         List<ProcesoPaso> pasos = new ArrayList<>();
-        pasos.add(this.crearPaso("paso 1.1", "Descripción del Paso 1.1", 1, null, this.obtenerEstado("en-curso")));
-        pasos.add(this.crearPaso("Paso 1.2", "Descripción del Paso 1.2", 2, null, this.obtenerEstado("pendiente")));
+        pasos.add(this.crearPaso("paso 1.1", "Descripción del Paso 1.1", 1, null, null, this.obtenerEstado("en-curso")));
+        pasos.add(this.crearPaso("Paso 1.2", "Descripción del Paso 1.2", 2, null, null, this.obtenerEstado("pendiente")));
         return pasos;
     }
 
-    private ProcesoPaso crearPaso(String nombre, String descripcion, Integer orden, Proceso proceso, Estado estado) {
+    private ProcesoPaso crearPaso(String nombre, String descripcion, Integer orden, Proceso proceso, Persona responsable, Estado estado) {
         ProcesoPaso paso = new ProcesoPaso();
         paso.setNombre(nombre);
         paso.setDescripcion(descripcion);
         paso.setOrden(orden);
         paso.setProceso(proceso);
+        paso.setResponsable(responsable);
         paso.setEstado(estado);
         return paso;
     }

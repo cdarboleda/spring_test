@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -64,6 +65,10 @@ public class Persona {
     )
     @JsonIgnore
     private List<Rol> roles;
+
+    @OneToMany(mappedBy = "responsable", orphanRemoval = true)
+    @JsonIgnore
+    private Set<ProcesoPaso> pasos;
 
     @Override
     public boolean equals(Object o) {

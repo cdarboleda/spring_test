@@ -23,5 +23,7 @@ public class PersonaDTO {
     private String password;
 
     private List<Integer> roles;
+
+    private Integer responsableId;
     
 }

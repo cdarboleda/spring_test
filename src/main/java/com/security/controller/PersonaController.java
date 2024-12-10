@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.db.Persona;
@@ -79,4 +80,11 @@ public class PersonaController {
     public ResponseEntity<?> obtenerRolesPorPersonaId(@PathVariable Integer id) {
         return new ResponseEntity<>(this.gestorPersonaRol.findRolesByPersonaId(id), null, HttpStatus.OK);
     }
+
+    @PostMapping("/{id}/addPaso")
+    public ResponseEntity<?> anadirPaso(@PathVariable Integer id, @RequestParam Integer idPaso) {
+        this.gestorPersonaRol.anadirPaso(id, idPaso);
+        return new ResponseEntity<>("Paso "+idPaso+" added", null, HttpStatus.OK);
+    }
+    
 }

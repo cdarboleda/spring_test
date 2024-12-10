@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -45,6 +46,11 @@ public class ProcesoPaso {
     @ToString.Exclude
     @JsonIgnore
     private Proceso proceso;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pers_id", nullable = true)
+    @JsonIgnore
+    private Persona responsable;
 
     // UN paso tiene un estado, pero varios estados pueden compartir un estado
     @ManyToOne(fetch = FetchType.EAGER)

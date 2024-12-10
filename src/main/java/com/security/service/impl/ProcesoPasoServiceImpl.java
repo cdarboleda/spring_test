@@ -28,13 +28,13 @@ public class ProcesoPasoServiceImpl implements IProcesoPasoService {
 
     @Override
     public ProcesoPaso findById(Integer id) {
-        return this.procesoPasoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Proceso con id: " + id + " no encontrado."));
+        return this.procesoPasoRepository.findById(id).orElseThrow(()->new EntityNotFoundException("No existe el paso con id "+id));
     }
 
     @Override
     public ProcesoPaso insert(ProcesoPaso procesoPaso) {
         return this.procesoPasoRepository.save(procesoPaso);
     }
+
 
 }

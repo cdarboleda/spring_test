@@ -3,17 +3,22 @@ package com.security.service.impl;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.security.db.Persona;
+import com.security.db.ProcesoPaso;
 import com.security.db.Rol;
+import com.security.exception.CustomException;
 import com.security.repo.IPersonaRepository;
 import com.security.repo.IRolRepository;
 import com.security.service.IGestorPersonaRol;
 import com.security.service.IPersonaService;
+import com.security.service.IProcesoPasoService;
 import com.security.service.dto.PersonaDTO;
 import com.security.service.dto.utils.Convertidor;
 
@@ -35,6 +40,9 @@ public class GestorPersonaRolImpl implements IGestorPersonaRol {
 
     @Autowired
     private Convertidor convertidor;
+
+    @Autowired
+    private IProcesoPasoService pasoService;
 
     @Override
     public Persona insertar(PersonaDTO personaDTO) {
@@ -78,6 +86,19 @@ public class GestorPersonaRolImpl implements IGestorPersonaRol {
         personaDTOPersona.setRoles(roles);
 
         return personaRepository.save(personaDTOPersona);
+    }
+    @Override
+    public void anadirPaso(Integer idPersona, Integer idPaso){
+        Persona responsable = this.personaService.findById(idPersona);
+        ProcesoPaso paso = this.pasoService.findById(idPaso);
+        Set<ProcesoPaso> pasosActuales = responsable.getPasos();
+        if(pasosActuales.stream().anyMatch((pasoSet)->pasoSet.getId()==paso.getId())){
+            throw new CustomException("La persona ya es responsable del paso con id: "+idPaso, HttpStatus.BAD_REQUEST);
+        }
+
+        pasosActuales.add(paso);
+        responsable.setPasos(pasosActuales);
+        paso.setResponsable(responsable);
     }
     
     @Override
