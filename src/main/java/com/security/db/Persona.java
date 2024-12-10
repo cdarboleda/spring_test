@@ -63,7 +63,7 @@ public class Persona {
         inverseJoinColumns = @JoinColumn(name = "rol_id") // Columna que referencia a Rol
     )
     @JsonIgnore
-    private List<Rol> roles;
+    private Set<Rol> roles = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

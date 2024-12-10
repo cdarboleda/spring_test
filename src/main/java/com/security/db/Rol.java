@@ -1,6 +1,8 @@
 package com.security.db;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -33,5 +35,5 @@ public class Rol {
 
     @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Persona> personas;   
+    private Set<Persona> personas = new HashSet<>();   
 }

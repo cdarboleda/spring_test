@@ -3,6 +3,7 @@ package com.security.service.impl;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,36 +42,41 @@ public class GestorPersonaRolImpl implements IGestorPersonaRol {
         if (personaDTO == null) {
             throw new IllegalArgumentException("Persona y rol no pueden ser nulos o vacíos");
         }
+
+        Optional<Persona> personaExistente = personaRepository.findByCedula(personaDTO.getCedula());
+        if (personaExistente.isPresent()) {
+            throw new IllegalArgumentException("Ya existe una persona con la cédula: " + personaDTO.getCedula());
+        }
         personaDTO.setId(null);
 
-        List<Rol> roles = personaDTO.getRoles()
-        .stream()
-        .map((idRol)->this.rolRepository.findById(idRol).get())
-        .filter(Objects::nonNull)//.filter(rol -> rol!=null)
-        .collect(Collectors.toList());
+        Set<Rol> roles = personaDTO.getRoles()
+                .stream()
+                .map((idRol) -> this.rolRepository.findById(idRol).get())
+                .filter(Objects::nonNull)// .filter(rol -> rol!=null)
+                .collect(Collectors.toSet());
 
         Persona persona = convertidor.convertirAPersona(personaDTO);
         persona.setRoles(roles);
         return personaRepository.save(persona);
     }
 
-    //El front me debe dar los datos completos si o si
+    // El front me debe dar los datos completos si o si
     @Override
     public Persona actualizar(PersonaDTO personaDTO) {
         if (personaDTO == null) {
             throw new IllegalArgumentException("Persona y rol no pueden ser nulos o vacíos");
         }
         Optional<Persona> persona = this.personaRepository.findById(personaDTO.getId());
-        if(!persona.isPresent()){
+        if (!persona.isPresent()) {
             throw new IllegalArgumentException("Esta persona no existe!!!, SOLO actualizar");
         }
         Persona personaDTOPersona = convertidor.convertirAPersona(personaDTO);
-        
-        List<Rol> roles = personaDTO.getRoles()
-        .stream()
-        .map((idRol)->this.rolRepository.findById(idRol).get())
-        .filter(Objects::nonNull)//.filter(rol -> rol!=null)
-        .collect(Collectors.toList());
+
+        Set<Rol> roles = personaDTO.getRoles()
+                .stream()
+                .map((idRol) -> this.rolRepository.findById(idRol).get())
+                .filter(Objects::nonNull)// .filter(rol -> rol!=null)
+                .collect(Collectors.toSet());
 
         personaDTOPersona.setId(persona.get().getId());
         personaDTOPersona.setProcesos(persona.get().getProcesos());
@@ -79,15 +85,38 @@ public class GestorPersonaRolImpl implements IGestorPersonaRol {
 
         return personaRepository.save(personaDTOPersona);
     }
-    
+
     @Override
     public List<Rol> findRolesByPersonaId(Integer id) {
         this.personaService.existsById(id);
         List<Rol> roles = this.rolRepository.findByPersonasId(id);
         if (roles.isEmpty()) {
             throw new EntityNotFoundException("No hay roles para persona con id " + id);
-        }    
+        }
         return roles;
+    }
+
+    @Override
+    public Persona addRolToPersona(PersonaDTO dto) {
+        Optional<Persona> personaOpt = personaRepository.findByCedula(dto.getCedula());
+
+        if (personaOpt.isEmpty()) {
+            throw new RuntimeException("Persona no encontrada con la cédula: " + dto.getCedula());
+        }
+
+        Persona persona = personaOpt.get();
+
+        Set<Rol> roles = rolRepository.findAllById(dto.getRoles())
+                .stream()
+                .collect(Collectors.toSet());
+
+        if (roles.isEmpty()) {
+            throw new RuntimeException("No se encontraron roles para los IDs proporcionados");
+        }
+
+        persona.getRoles().addAll(roles);
+
+        return personaRepository.save(persona);
     }
 
 }
