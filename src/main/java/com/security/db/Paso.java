@@ -1,5 +1,7 @@
 package com.security.db;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -13,32 +15,27 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Table(name = "proceso_paso")
 @Data
-public class ProcesoPaso {
+public class Paso {
 
     @Id
-    @Column(name = "proc_paso_id")
+    @Column(name = "paso_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_proc_paso")
     @SequenceGenerator(name = "seq_proc_paso", initialValue = 1, allocationSize = 1)
     private Integer id;
 
-    @Column(name = "proc_paso_nombre")
+    @Column(name = "paso_nombre")
     private String nombre;
 
-    @Column(name = "proc_paso_descripcion")
-    private String descripcion;
-
-    @Column(name = "proc_paso_orden")
+    @Column(name = "paso_orden")
     private Integer orden;
 
-    @Column(name = "proc_comentario")
-    private String comentario;
+    @Column(name = "paso_fecha_inicio")
+    private LocalDateTime fechaInicio;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proc_id")
@@ -51,5 +48,10 @@ public class ProcesoPaso {
     @JoinColumn(name = "esta_id", nullable = false)
     @ToString.Exclude
     private Estado estado;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "responsable_id")
+    @ToString.Exclude
+    private Persona persona;
 
 }

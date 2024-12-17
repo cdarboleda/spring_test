@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.db.ProcesoPaso;
-import com.security.service.IGestorProcesoPaso;
-import com.security.service.IProcesoPasoService;
+import com.security.db.Paso;
+import com.security.service.IGestorEstadoPaso;
+import com.security.service.IPasoService;
 
 import jakarta.websocket.server.PathParam;
 
@@ -25,10 +25,10 @@ import jakarta.websocket.server.PathParam;
 public class ProcesoPasoController {
 
     @Autowired
-    private IProcesoPasoService procesoPasoService;
+    private IPasoService procesoPasoService;
 
     @Autowired
-    private IGestorProcesoPaso gestorProcesoPaso;
+    private IGestorEstadoPaso gestorProcesoPaso;
 
     /*@GetMapping(path = "/{proceso}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> crearPasos(@PathVariable String proceso){

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 
-import com.security.db.ProcesoPaso;
+import com.security.db.Paso;
 
 import lombok.Data;
 
@@ -21,5 +21,5 @@ public class ProcesoCompletoDTO{
     private List<DocumentoLigeroDTO> documentos;
     private PersonaLigeroDTO requiriente;
     private HashSet<PersonaLigeroDTO> personasProceso;
-    private List<ProcesoPaso> procesoPasos;
+    private List<Paso> procesoPasos;
 }

@@ -5,35 +5,35 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.security.db.ProcesoPaso;
+import com.security.db.Paso;
 import com.security.factory.ProcesoPasoFactoryManager;
-import com.security.repo.IProcesoPasoRepository;
-import com.security.service.IProcesoPasoService;
+import com.security.repo.IPasoRepository;
+import com.security.service.IPasoService;
 
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class ProcesoPasoServiceImpl implements IProcesoPasoService {
+public class PasoServiceImpl implements IPasoService {
 
     @Autowired
-    private IProcesoPasoRepository procesoPasoRepository;
+    private IPasoRepository procesoPasoRepository;
 
     @Autowired
     private ProcesoPasoFactoryManager factoryManager;
 
     @Override
-    public List<ProcesoPaso> crearPasos(String proceso) {
+    public List<Paso> crearPasos(String proceso) {
         return this.factoryManager.generarPasosPorProceso(proceso);
     }
 
     @Override
-    public ProcesoPaso findById(Integer id) {
+    public Paso findById(Integer id) {
         return this.procesoPasoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Proceso con id: " + id + " no encontrado."));
     }
 
     @Override
-    public ProcesoPaso insert(ProcesoPaso procesoPaso) {
+    public Paso insert(Paso procesoPaso) {
         return this.procesoPasoRepository.save(procesoPaso);
     }
 

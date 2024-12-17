@@ -4,24 +4,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.security.db.Estado;
-import com.security.db.ProcesoPaso;
+import com.security.db.Paso;
 import com.security.service.IEstadoService;
-import com.security.service.IGestorProcesoPaso;
-import com.security.service.IProcesoPasoService;
+import com.security.service.IGestorEstadoPaso;
+import com.security.service.IPasoService;
 
 @Service
-public class GestorProcesoPaso implements IGestorProcesoPaso {
+public class GestorEstadoPasoImpl implements IGestorEstadoPaso {
 
     @Autowired
-    private IProcesoPasoService pasoService;
+    private IPasoService pasoService;
 
     @Autowired
     private IEstadoService estadoService;
 
     @Override
-    public ProcesoPaso updateEstado(Integer idPaso, Integer idEstado) {
+    public Paso updateEstado(Integer idPaso, Integer idEstado) {
 
-        ProcesoPaso paso = this.pasoService.findById(idPaso);
+        Paso paso = this.pasoService.findById(idPaso);
         Estado estado = this.estadoService.findById(idEstado);
 
         paso.setEstado(estado);
