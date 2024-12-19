@@ -50,7 +50,7 @@ public class Proceso {
     
     @OneToMany(mappedBy = "proceso", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Documento> documentos;
+    private List<CarpetaDocumento> carpetasDocumento;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore

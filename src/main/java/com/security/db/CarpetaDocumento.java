@@ -18,28 +18,21 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "documento")
+@Table(name = "carpeta_documento")
 @Data
-public class Documento {
+public class CarpetaDocumento {
 
     @Id
-    @Column(name = "docu_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="seq_docu")
-    @SequenceGenerator(name = "seq_docu", initialValue = 1, allocationSize = 1)
+    @Column(name = "carp_docu_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="seq_carp_docu")
+    @SequenceGenerator(name = "seq_carp_docu", initialValue = 1, allocationSize = 1)
     private Integer id;
 
-    @Column(name = "docu_nombre")
-    private String nombre;
-
-    @Column(name ="docu_url")
+    @Column(name ="carp_docu_url")
     private String url;
 
-    @Column(name = "docu_descripcion")
-    private String descripcion;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @Column(name = "docu_fecha_creacion")
-    private LocalDateTime fechaCreacion;
+    @Column(name ="carp_docu_tipo")
+    private String tipo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="proceso_id")

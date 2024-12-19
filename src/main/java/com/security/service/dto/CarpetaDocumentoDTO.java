@@ -4,12 +4,11 @@ import lombok.Data;
 
 @Data
 //Para modificar
-public class DocumentoDTO {
+public class CarpetaDocumentoDTO {
 
     private Integer id;
-    private String nombre;
     private String url;
-    private String descripcion;
+    private String tipo;
     private Integer procesoId;//Para saber a que proceso insertarle
     // public DocumentoDTO(){
         

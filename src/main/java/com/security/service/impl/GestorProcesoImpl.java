@@ -24,7 +24,7 @@ import com.security.service.IProcesoService;
 import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoLigeroDTO;
-import com.security.service.dto.utils.ConvertidorDocumento;
+import com.security.service.dto.utils.ConvertidorCarpetaDocumento;
 import com.security.service.dto.utils.ConvertidorPersona;
 import com.security.service.dto.utils.ConvertidorProceso;
 
@@ -48,7 +48,7 @@ public class GestorProcesoImpl implements IGestorProceso{
     @Autowired
     private ConvertidorPersona convertidorPersona;
     @Autowired
-    private ConvertidorDocumento convertidorDocumento;
+    private ConvertidorCarpetaDocumento convertidorDocumento;
     @Autowired
     private IPasoService pasoService;
 
@@ -129,8 +129,8 @@ public class GestorProcesoImpl implements IGestorProceso{
         Proceso proceso = this.procesoService.findById(id);
         ProcesoCompletoDTO procesoDTO = convertidorProceso.convertirACompletoDTO(proceso);
 
-        procesoDTO.setDocumentos(
-            proceso.getDocumentos().stream()
+        procesoDTO.setCarpetasDocumento(
+            proceso.getCarpetasDocumento().stream()
             .map(convertidorDocumento::convertirALigeroDTO)
             .collect(Collectors.toList())
         );

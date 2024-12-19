@@ -18,7 +18,7 @@ public class ProcesoCompletoDTO{
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
     private Boolean estado;
-    private List<DocumentoLigeroDTO> documentos;
+    private List<CarpetaDocumentoLigeroDTO> carpetasDocumento;
     private PersonaLigeroDTO requiriente;
     private HashSet<PersonaLigeroDTO> personasProceso;
     private List<Paso> pasos;

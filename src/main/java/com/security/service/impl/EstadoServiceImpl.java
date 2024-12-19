@@ -44,12 +44,12 @@ public class EstadoServiceImpl implements IEstadoService{
         return this.estadoRepository.save(estado);
     }
 
+    //Si es que tocase editar los valores de un estado ya registrado
     @Override
     public Estado update(Estado estado) {
         if (estado == null) throw new CustomException("Error en los campos enviados", HttpStatus.BAD_REQUEST);
         Estado estadoActual = this.findById(estado.getId());
         estadoActual.setNombre(estado.getNombre());
-        estadoActual.setDescripcion(estado.getDescripcion());
         estadoActual.setTipo(estado.getTipo());
         return estadoActual;
     }

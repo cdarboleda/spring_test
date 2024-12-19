@@ -30,11 +30,6 @@ public class Estado {
     @NotEmpty
     private String nombre;
 
-    @Column(name = "esta_descripcion")
-    @NotBlank
-    @NotEmpty
-    private String descripcion;
-
     @Column(name = "esta_tipo")
     @NotBlank
     @NotEmpty
