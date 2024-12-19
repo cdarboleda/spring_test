@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import com.security.db.Proceso;
 import com.security.repo.IProcesoRepository;
 import com.security.service.IProcesoService;
-import com.security.service.dto.ProcesoCompletoDTO;
-import com.security.service.dto.utils.ConvertidorProceso;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;

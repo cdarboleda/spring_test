@@ -10,6 +10,6 @@ public interface IProcesoLogRepository extends JpaRepository<ProcesoLog, Integer
 
     public List<ProcesoLog> findByIdProceso(Integer id);
 
-    public List<ProcesoLog> findByIdProcesoAndIdProcesoPaso(Integer idProceso, Integer idProcesoPaso);
+    public List<ProcesoLog> findByIdProcesoAndIdPaso(Integer idProceso, Integer idPaso);
     
 }

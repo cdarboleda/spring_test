@@ -33,8 +33,8 @@ public class ProcesoLogServiceImpl implements IProcesoLogService{
     }
 
     @Override
-    public List<ProcesoLog> findByIdProcesoAndIdProcesoPaso(Integer idProceso, Integer idProcesoPaso) {
-        return this.procesoLogRepository.findByIdProcesoAndIdProcesoPaso(idProceso, idProcesoPaso);
+    public List<ProcesoLog> findByIdProcesoAndIdPaso(Integer idProceso, Integer idPaso) {
+        return this.procesoLogRepository.findByIdProcesoAndIdPaso(idProceso, idPaso);
     }
 
 

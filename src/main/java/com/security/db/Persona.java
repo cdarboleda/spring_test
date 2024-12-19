@@ -68,7 +68,7 @@ public class Persona {
 
     @OneToMany(mappedBy = "responsable", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<ProcesoPaso> pasos;
+    private Set<Paso> pasos;
 
     @Override
     public boolean equals(Object o) {

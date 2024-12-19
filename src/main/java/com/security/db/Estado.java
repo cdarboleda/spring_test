@@ -40,9 +40,4 @@ public class Estado {
     @NotEmpty
     private String tipo; 
 
-    //Este podemos ignorar, el chat dice que si no hace falta ir desde Estado a Paso,
-    // podemos ignorar y dejar el ManyToOne de Paso a Estado
-    //@OneToMany(mappedBy = "estado", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    //private List<ProcesoPaso> procesoPasos;
-
 }

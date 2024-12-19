@@ -42,7 +42,7 @@ public class Documento {
     private LocalDateTime fechaCreacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="proc_id")
+    @JoinColumn(name="proceso_id")
     @JsonIgnore
     private Proceso proceso;
 

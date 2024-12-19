@@ -13,22 +13,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.db.ProcesoPaso;
-import com.security.service.IGestorProcesoPaso;
-import com.security.service.IProcesoPasoService;
+import com.security.db.Paso;
+import com.security.service.IGestorEstadoPaso;
+import com.security.service.IPasoService;
 
 import jakarta.websocket.server.PathParam;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/proceso-paso")
-public class ProcesoPasoController {
+public class PasoController {
 
     @Autowired
-    private IProcesoPasoService procesoPasoService;
+    private IPasoService pasoService;
 
     @Autowired
-    private IGestorProcesoPaso gestorProcesoPaso;
+    private IGestorEstadoPaso gestorEstadoPaso;
 
     /*@GetMapping(path = "/{proceso}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> crearPasos(@PathVariable String proceso){
@@ -37,12 +37,12 @@ public class ProcesoPasoController {
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarPorId(@PathVariable Integer id){
-        return new ResponseEntity<>(this.procesoPasoService.findById(id), null, HttpStatus.OK);
+        return new ResponseEntity<>(this.pasoService.findById(id), null, HttpStatus.OK);
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> actualizarPorId(@RequestParam Integer idPaso, @RequestParam Integer idEstado){
-        return new ResponseEntity<>(this.gestorProcesoPaso.updateEstado(idPaso, idEstado), null, HttpStatus.OK);
+        return new ResponseEntity<>(this.gestorEstadoPaso.updateEstado(idPaso, idEstado), null, HttpStatus.OK);
     } 
     
 }

@@ -75,7 +75,7 @@ public class Proceso {
 
     @OneToMany(mappedBy = "proceso", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<ProcesoPaso> procesoPasos; 
+    private List<Paso> pasos; 
 
     @Override
     public boolean equals(Object o) {

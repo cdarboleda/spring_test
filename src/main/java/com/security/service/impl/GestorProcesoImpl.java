@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 
 import com.security.db.Persona;
 import com.security.db.Proceso;
-import com.security.db.ProcesoPaso;
+import com.security.db.Paso;
 import com.security.exception.CustomException;
 import com.security.factory.ProcesoFactory;
 import com.security.factory.ProcesoPlantilla;
 import com.security.repo.IProcesoRepository;
 import com.security.service.IGestorProceso;
 import com.security.service.IPersonaService;
-import com.security.service.IProcesoPasoService;
+import com.security.service.IPasoService;
 import com.security.service.IProcesoService;
 import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoDTO;
@@ -50,7 +50,7 @@ public class GestorProcesoImpl implements IGestorProceso{
     @Autowired
     private ConvertidorDocumento convertidorDocumento;
     @Autowired
-    private IProcesoPasoService procesoPasoService;
+    private IPasoService pasoService;
 
     @Override
     public List<ProcesoLigeroDTO> findProcesosByPersonaId(Integer id) {
@@ -81,7 +81,7 @@ public class GestorProcesoImpl implements IGestorProceso{
         Persona requiriente = this.personaService.findById(procesoDTO.getRequirienteId());
         List<Persona> personasDelProceso = this.personaService.findPersonasByIds(procesoDTO.getPersonasId());
 
-        List<ProcesoPaso> pasos = this.procesoPasoService.crearPasos(procesoDTO.getNombre());
+        List<Paso> pasos = this.pasoService.crearPasos(procesoDTO.getNombre());
 
 
         Proceso proceso = new Proceso();
@@ -95,7 +95,7 @@ public class GestorProcesoImpl implements IGestorProceso{
         pasos.forEach((paso) -> paso.setProceso(proceso));
 
         //AgregarPasos
-        proceso.setProcesoPasos(pasos);
+        proceso.setPasos(pasos);
 
 
         personasDelProceso.forEach((persona)->proceso.addPersona(persona));
@@ -140,8 +140,6 @@ public class GestorProcesoImpl implements IGestorProceso{
                 .map(convertidorPersona::convertirALigeroDTO)
                 .collect(Collectors.toCollection(HashSet::new))
         );
-        //procesoDTO.setProcesoPasos(proceso.getProcesoPasos());
-
         return procesoDTO;
     }
     

@@ -25,20 +25,11 @@ public class ProcesoLog {
     @Column(name = "proc_log_proc_id")
     private Integer idProceso;
 
-    @Column(name = "proc_log_proc_paso_id")
-    private Integer idProcesoPaso;
-
-    @Column(name = "proc_log_pers_id")
-    private Integer idResponsable;
-    
-    @Column(name = "proc_log_paso_nombre")
-    private String pasoNombre;
+    @Column(name = "proc_log_paso_id")
+    private Integer idPaso;
 
     @Column(name = "proc_log_estado")
     private String estado;
-
-    @Column(name = "proc_log_comentario")
-    private String comentario;
 
     @Column(name = "proc_log_fecha_cambio")
     private LocalDateTime fechaCambio;
