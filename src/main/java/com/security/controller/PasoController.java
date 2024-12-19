@@ -21,7 +21,7 @@ import jakarta.websocket.server.PathParam;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/proceso-paso")
+@RequestMapping("/paso")
 public class PasoController {
 
     @Autowired
