@@ -11,8 +11,10 @@ import com.security.repo.IRolRepository;
 import com.security.service.IRolService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class RolServiceImpl implements IRolService{
 
     @Autowired

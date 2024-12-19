@@ -9,17 +9,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.security.db.Persona;
+import com.security.db.Proceso;
 import com.security.exception.CustomException;
 import com.security.repo.IPersonaRepository;
+import com.security.repo.IProcesoRepository;
+import com.security.service.IGestorProceso;
 import com.security.service.IPersonaService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class PersonaServiceImpl implements IPersonaService {
 
     @Autowired
     private IPersonaRepository personaRepository;
+    @Autowired
+    private IProcesoRepository procesoRepository;
 
     @Override
     public Optional<Persona> findByIdPerson(Integer id) {
@@ -70,6 +77,18 @@ public class PersonaServiceImpl implements IPersonaService {
     public Persona findByCedula(String cedula) {
         return this.personaRepository.findByCedula(cedula)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro la persona con cedula: " + cedula));
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        Persona persona = this.findById(id);        
+        // persona.getPersonasProceso().forEach(proceso -> {
+            
+        //     proceso.getPersonas().remove(persona);
+        // });
+        // persona.getPersonasProceso().clear();
+  
+        this.personaRepository.deleteById(id);
     }
 
 }

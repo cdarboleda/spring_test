@@ -11,8 +11,7 @@ public interface IPersonaService {
     public Persona findByCedula(String cedula);
     public Persona findById(Integer id);
     public Persona insert(Persona persona);
-
-
+    public void deleteById(Integer id);
     public List<Persona> findAll();
     public Boolean existsById(Integer id);
     public List<Persona> findPersonasByIds(List<Integer> ids);

@@ -117,10 +117,10 @@ public class GestorProcesoImpl implements IGestorProceso{
     @Override
     public void delete(Integer id){
         Proceso proceso = this.procesoService.findById(id);
-        proceso.getPersonas().forEach(persona -> {
-            persona.getPersonasProceso().remove(proceso);
-        });
-        proceso.getPersonas().clear();
+        // proceso.getPersonas().forEach(persona -> {
+        //     persona.getPersonasProceso().remove(proceso);
+        // });
+        // proceso.getPersonas().clear();
         procesoRepository.deleteById(id);
     }
 

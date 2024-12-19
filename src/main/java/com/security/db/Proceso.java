@@ -48,11 +48,11 @@ public class Proceso {
     @Column(name = "proc_estado")
     private Boolean estado;
     
-    @OneToMany(mappedBy = "proceso", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "proceso", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Documento> documentos;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "pers_id")
     private Persona persona;
@@ -61,15 +61,17 @@ public class Proceso {
     @JsonIgnore
     private Set<Persona> personas = new HashSet<>();
 
+    //Se usa para añadir persona
     public void addPersona(Persona persona){
         this.personas.add(persona);
         persona.getPersonasProceso().add(this);
     }
 
-    public void removePersona(Persona persona){
-        this.personas.remove(persona);
-        persona.getPersonasProceso().remove(this);
-    }
+    //Este no se usa
+    // public void removePersona(Persona persona){
+    //     this.personas.remove(persona);
+    //     persona.getPersonasProceso().remove(this);
+    // }
 
     @OneToMany(mappedBy = "proceso", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore

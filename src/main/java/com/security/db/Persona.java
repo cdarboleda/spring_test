@@ -44,11 +44,11 @@ public class Persona {
     @Column(name = "pers_password")
     private String password;
 
-    @OneToMany(mappedBy = "persona",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "persona",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Proceso> procesos;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
         name="persona_proceso",
         joinColumns = @JoinColumn(name="pers_id"),
@@ -66,7 +66,7 @@ public class Persona {
     @JsonIgnore
     private Set<Rol> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "responsable", orphanRemoval = true)
+    @OneToMany(mappedBy = "responsable", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<ProcesoPaso> pasos;
 
