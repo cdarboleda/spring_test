@@ -1,8 +1,7 @@
 package com.security.db;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -18,25 +17,25 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "carpeta_documento")
+@Table(name = "proceso_pago_docente")
 @Data
-public class CarpetaDocumento {
+public class ProcesoPagoDocente {
 
     @Id
-    @Column(name = "carp_docu_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="seq_carp_docu")
-    @SequenceGenerator(name = "seq_carp_docu", initialValue = 1, allocationSize = 1)
+    @Column(name = "pago_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="seq_pago")
+    @SequenceGenerator(name = "seq_pago", initialValue = 1, allocationSize = 1)
     private Integer id;
 
-    @Column(name ="carp_docu_url")
-    private String url;
-
-    @Column(name ="carp_docu_tipo")
-    private String tipo;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="proc_id")
+    @JoinColumn(name = "proc_id")
     @JsonIgnore
     private Proceso proceso;
 
+    @Column(name = "pago_coordinador_identificador")
+    private Integer coordinador_id;
+
+    @Column(name = "pago_modalidad_virtual")
+    private Boolean modalidadVirtual;
+    
 }

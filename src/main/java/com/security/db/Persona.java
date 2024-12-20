@@ -50,12 +50,12 @@ public class Persona {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
-        name="persona_proceso",
+        name="proceso_titulacion_persona",
         joinColumns = @JoinColumn(name="pers_id"),
         inverseJoinColumns = @JoinColumn(name="proc_id")
     )
     @JsonIgnore
-    private Set<Proceso> personasProceso= new HashSet<>();
+    private Set<Proceso> procesoTitulacionPersonas= new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

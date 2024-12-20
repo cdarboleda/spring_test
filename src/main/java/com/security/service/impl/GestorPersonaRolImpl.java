@@ -87,7 +87,7 @@ public class GestorPersonaRolImpl implements IGestorPersonaRol {
 
         personaDTOPersona.setId(persona.get().getId());
         personaDTOPersona.setProcesos(persona.get().getProcesos());
-        personaDTOPersona.setPersonasProceso(persona.get().getPersonasProceso());
+        personaDTOPersona.setProcesoTitulacionPersonas(persona.get().getProcesoTitulacionPersonas());
         personaDTOPersona.setRoles(roles);
 
         return personaRepository.save(personaDTOPersona);

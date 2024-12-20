@@ -57,14 +57,14 @@ public class Proceso {
     @JoinColumn(name = "pers_id")
     private Persona persona;
 
-    @ManyToMany(mappedBy = "personasProceso", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "procesoTitulacionPersonas", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Persona> personas = new HashSet<>();
 
     //Se usa para añadir persona
     public void addPersona(Persona persona){
         this.personas.add(persona);
-        persona.getPersonasProceso().add(this);
+        persona.getProcesoTitulacionPersonas().add(this);
     }
 
     //Este no se usa
@@ -77,17 +77,21 @@ public class Proceso {
     @JsonIgnore
     private List<Paso> pasos; 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Proceso)) return false;
-        return id != null && id.equals(((Proceso) o).getId());
-    }
+    @OneToMany(mappedBy = "proceso", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<ProcesoPagoDocente> pagoDocentes; 
+
+    // @Override
+    // public boolean equals(Object o) {
+    //     if (this == o) return true;
+    //     if (!(o instanceof Proceso)) return false;
+    //     return id != null && id.equals(((Proceso) o).getId());
+    // }
  
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+    // @Override
+    // public int hashCode() {
+    //     return getClass().hashCode();
+    // }
 
 }
 

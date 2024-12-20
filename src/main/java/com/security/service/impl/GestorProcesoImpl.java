@@ -79,7 +79,7 @@ public class GestorProcesoImpl implements IGestorProceso{
 
         ProcesoPlantilla procesoTipoPlantilla = procesoFactory.createProceso(procesoDTO.getNombre());
         Persona requiriente = this.personaService.findById(procesoDTO.getRequirienteId());
-        List<Persona> personasDelProceso = this.personaService.findPersonasByIds(procesoDTO.getPersonasId());
+        //List<Persona> personasDelProceso = this.personaService.findPersonasByIds(procesoDTO.getPersonasId());
 
         List<Paso> pasos = this.pasoService.crearPasos(procesoDTO.getNombre());
 
@@ -98,7 +98,7 @@ public class GestorProcesoImpl implements IGestorProceso{
         proceso.setPasos(pasos);
 
 
-        personasDelProceso.forEach((persona)->proceso.addPersona(persona));
+        //personasDelProceso.forEach((persona)->proceso.addPersona(persona));
 
         Proceso procesoGuardado = this.procesoRepository.save(proceso);
         return convertidorProceso.convertirALigeroDTO(procesoGuardado);
@@ -135,7 +135,7 @@ public class GestorProcesoImpl implements IGestorProceso{
             .collect(Collectors.toList())
         );
         procesoDTO.setRequiriente(convertidorPersona.convertirALigeroDTO(proceso.getPersona()));
-        procesoDTO.setPersonasProceso(
+        procesoDTO.setPersonasTitulacion(
             proceso.getPersonas().stream()
                 .map(convertidorPersona::convertirALigeroDTO)
                 .collect(Collectors.toCollection(HashSet::new))

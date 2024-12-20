@@ -20,6 +20,6 @@ public class ProcesoCompletoDTO{
     private Boolean estado;
     private List<CarpetaDocumentoLigeroDTO> carpetasDocumento;
     private PersonaLigeroDTO requiriente;
-    private HashSet<PersonaLigeroDTO> personasProceso;
+    private HashSet<PersonaLigeroDTO> personasTitulacion;
     private List<Paso> pasos;
 }
