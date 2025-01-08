@@ -19,6 +19,7 @@ import com.security.util.KeycloakProvider;
 import jakarta.ws.rs.core.Response;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -37,6 +38,39 @@ public class KeycloakServiceImpl implements IKeycloakService {
                 .list();
     }
 
+        /**
+     * Metodo para listar todos los usuarios de Keycloak con sus roles
+     * @return List<UserDTO>
+     */
+    public List<UserDTO> findAllUsersWithRoles() {
+        // Obtener todos los usuarios de Keycloak
+        List<UserRepresentation> users = KeycloakProvider.getRealmResource()
+                .users()
+                .list();
+
+        // Mapear los usuarios a UserDTO con roles
+        return users.stream().map(user -> {
+            // Obtener roles asignados al usuario
+            List<String> roles = KeycloakProvider.getRealmResource()
+                    .users()
+                    .get(user.getId())
+                    .roles()
+                    .realmLevel()
+                    .listEffective()
+                    .stream()
+                    .map(RoleRepresentation::getName)
+                    .toList();
+
+            // Crear el DTO
+            return UserDTO.builder()
+                    .username(user.getUsername())
+                    .email(user.getEmail())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .roles(new HashSet<>(roles))
+                    .build();
+        }).toList();
+    }
 
     /**
      * Metodo para buscar un usuario por su username

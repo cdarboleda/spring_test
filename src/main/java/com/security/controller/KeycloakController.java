@@ -20,7 +20,7 @@ import com.security.service.dto.UserDTO;
 
 @RestController
 @RequestMapping("/keycloak/user")
-@PreAuthorize("hasRole('admin_client_role')")
+@PreAuthorize("hasAnyRole('admin_client_role', 'user_client_role')")
 public class KeycloakController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class KeycloakController {
 
     @GetMapping("/search")
     public ResponseEntity<?> findAllUsers(){
-        return ResponseEntity.ok(keycloakService.findAllUsers());
+        return ResponseEntity.ok(keycloakService.findAllUsersWithRoles());
     }
 
     @GetMapping("/search/{username}")

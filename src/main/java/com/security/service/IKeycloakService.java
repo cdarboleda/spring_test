@@ -9,6 +9,7 @@ import com.security.service.dto.UserDTO;
 public interface IKeycloakService {
 
     List<UserRepresentation> findAllUsers();
+    List<UserDTO> findAllUsersWithRoles();
     List<UserRepresentation> searchUserByUsername(String username);
     String createUser(UserDTO userDTO);
     void deleteUser(String userId);
