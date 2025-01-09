@@ -1,6 +1,5 @@
 package com.security.service.impl;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.resource.RealmResource;
@@ -18,11 +17,11 @@ import com.security.util.KeycloakProvider;
 
 import jakarta.ws.rs.core.Response;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-
-
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -30,16 +29,18 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
     /**
      * Metodo para listar todos los usuarios de Keycloak
+     * 
      * @return List<UserRepresentation>
      */
-    public List<UserRepresentation> findAllUsers(){
+    public List<UserRepresentation> findAllUsers() {
         return KeycloakProvider.getRealmResource()
                 .users()
                 .list();
     }
 
-        /**
+    /**
      * Metodo para listar todos los usuarios de Keycloak con sus roles
+     * 
      * @return List<UserDTO>
      */
     public List<UserDTO> findAllUsersWithRoles() {
@@ -51,15 +52,40 @@ public class KeycloakServiceImpl implements IKeycloakService {
         // Mapear los usuarios a UserDTO con roles
         return users.stream().map(user -> {
             // Obtener roles asignados al usuario
-            List<String> roles = KeycloakProvider.getRealmResource()
-                    .users()
-                    .get(user.getId())
-                    .roles()
-                    .realmLevel()
-                    .listEffective()
-                    .stream()
-                    .map(RoleRepresentation::getName)
-                    .toList();
+            // List<String> roles = KeycloakProvider.getRealmResource()
+            //         .users()
+            //         .get(user.getId())
+            //         .roles()
+            //         .realmLevel()
+            //         .listEffective()
+            //         .stream()
+            //         .map(RoleRepresentation::getName)
+            //         .toList();
+
+            // Obtener roles de cliente para "spring-boot-app"
+            List<String> clientRoles = new ArrayList<>();
+            try {
+                String clientId = KeycloakProvider.getRealmResource()
+                        .clients()
+                        .findByClientId("spring-boot-app")
+                        .stream()
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("Cliente no encontrado"))
+                        .getId();
+
+                clientRoles = KeycloakProvider.getRealmResource()
+                        .users()
+                        .get(user.getId())
+                        .roles()
+                        .clientLevel(clientId)
+                        .listEffective()
+                        .stream()
+                        .map(RoleRepresentation::getName)
+                        .toList();
+            } catch (Exception e) {
+                System.err.println(
+                        "Error obteniendo roles de cliente para usuario " + user.getUsername() + ": " + e.getMessage());
+            }
 
             // Crear el DTO
             return UserDTO.builder()
@@ -67,13 +93,14 @@ public class KeycloakServiceImpl implements IKeycloakService {
                     .email(user.getEmail())
                     .firstName(user.getFirstName())
                     .lastName(user.getLastName())
-                    .roles(new HashSet<>(roles))
+                    .roles(new HashSet<>(clientRoles))
                     .build();
         }).toList();
     }
 
     /**
      * Metodo para buscar un usuario por su username
+     * 
      * @return List<UserRepresentation>
      */
     public List<UserRepresentation> searchUserByUsername(String username) {
@@ -82,9 +109,9 @@ public class KeycloakServiceImpl implements IKeycloakService {
                 .searchByUsername(username, true);
     }
 
-
     /**
      * Metodo para crear un usuario en keycloak
+     * 
      * @return String
      */
     public String createUser(@NonNull UserDTO userDTO) {
@@ -144,23 +171,23 @@ public class KeycloakServiceImpl implements IKeycloakService {
         }
     }
 
-
     /**
      * Metodo para borrar un usuario en keycloak
+     * 
      * @return void
      */
-    public void deleteUser(String userId){
+    public void deleteUser(String userId) {
         KeycloakProvider.getUserResource()
                 .get(userId)
                 .remove();
     }
 
-
     /**
      * Metodo para actualizar un usuario en keycloak
+     * 
      * @return void
      */
-    public void updateUser(String userId, @NonNull UserDTO userDTO){
+    public void updateUser(String userId, @NonNull UserDTO userDTO) {
 
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setTemporary(false);

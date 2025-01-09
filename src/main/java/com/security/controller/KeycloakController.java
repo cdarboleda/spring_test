@@ -20,7 +20,7 @@ import com.security.service.dto.UserDTO;
 
 @RestController
 @RequestMapping("/keycloak/user")
-@PreAuthorize("hasAnyRole('admin_client_role', 'user_client_role')")
+@PreAuthorize("hasAnyRole('admin_client_role', 'docente_client_role','coordinador_client_role')")
 public class KeycloakController {
 
     @Autowired
