@@ -36,7 +36,7 @@ public class RolController {
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarPorId(@PathVariable Integer id){
 
-        Rol rol = this.rolService.findById(id).orElseThrow(() -> new EntityNotFoundException("Rol con el id "+ id + " no encontrado."));
+        Rol rol = this.rolService.findByIdOptional(id).orElseThrow(() -> new EntityNotFoundException("Rol con el id "+ id + " no encontrado."));
 
         return new ResponseEntity<>(rol , null, HttpStatus.OK);
     }

@@ -16,19 +16,16 @@ public class ConvertidorPersona {
         personaDTO.setCedula(persona.getCedula());
         personaDTO.setCorreo(persona.getCorreo());
         personaDTO.setTelefono(persona.getTelefono());
-        personaDTO.setPassword(persona.getPassword());
         return personaDTO;
     }
 
-    public Persona convertirAEntidad(PersonaLigeroDTO personaDTO) {
-        Persona persona = new Persona();
+    public Persona convertirAEntidad(Persona persona, PersonaLigeroDTO personaDTO) {
         persona.setId(personaDTO.getId());
         persona.setNombre(personaDTO.getNombre());
         persona.setApellido(personaDTO.getApellido());
         persona.setCedula(personaDTO.getCedula());
         persona.setCorreo(personaDTO.getCorreo());
         persona.setTelefono(personaDTO.getTelefono());
-        persona.setPassword(personaDTO.getPassword());
         return persona;
     }
 }

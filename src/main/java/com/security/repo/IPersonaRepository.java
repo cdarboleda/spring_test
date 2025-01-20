@@ -12,6 +12,5 @@ public interface IPersonaRepository extends JpaRepository<Persona, Integer>{
 
     public Optional<Persona> findByCedula(String cedula);
 
-    
 }
     

@@ -11,7 +11,6 @@ public class ConvertidorCarpetaDocumento {
     public CarpetaDocumentoLigeroDTO convertirALigeroDTO(CarpetaDocumento doc) {
         CarpetaDocumentoLigeroDTO docDTO = new CarpetaDocumentoLigeroDTO();
         docDTO.setId(doc.getId());
-        docDTO.setTipo(doc.getTipo());
         docDTO.setUrl(doc.getUrl());
         return docDTO;
     }
@@ -19,7 +18,6 @@ public class ConvertidorCarpetaDocumento {
     public CarpetaDocumento convertirAEntidad(CarpetaDocumentoLigeroDTO docDTO) {
         CarpetaDocumento doc = new CarpetaDocumento();
         doc.setId(docDTO.getId());
-        doc.setTipo(docDTO.getTipo());
         doc.setUrl(docDTO.getUrl());
         return doc;
     }

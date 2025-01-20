@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.db.Persona;
-import com.security.service.IGestorPersonaRol;
-import com.security.service.IGestorProceso;
+import com.security.exception.CustomException;
+import com.security.service.IGestorPersonaService;
+import com.security.service.IGestorProcesoService;
 import com.security.service.IPersonaService;
 import com.security.service.dto.PersonaDTO;
+
+import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin
@@ -32,39 +35,28 @@ public class PersonaController {
     private IPersonaService personaService;
 
     @Autowired
-    private IGestorPersonaRol personaRol;
+    private IGestorProcesoService gestorProcesoService;
 
     @Autowired
-    private IGestorProceso gestorProceso;
-
-    @Autowired
-    private IGestorPersonaRol gestorPersonaRol;
+    private IGestorPersonaService gestorPersonaService;
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> insertar(@RequestBody PersonaDTO persona) {
-        Persona personaTmp = this.personaRol.insertar(persona);
-        return new ResponseEntity<>(personaTmp, null, HttpStatus.OK);
+    public ResponseEntity<?> insertar(@Valid @RequestBody PersonaDTO persona) {
+        return new ResponseEntity<>(this.gestorPersonaService.insertar(persona), HttpStatus.OK);
     }
 
+    //Buscar necesita la cedula dentro del body
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody PersonaDTO personaDTO) {
         personaDTO.setId(id);
-        Persona personaTmp = this.personaRol.actualizar(personaDTO);
-        return new ResponseEntity<>(personaTmp, null, HttpStatus.OK);
-    }
-
-    @PutMapping(path = "/add-roles",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> actualizarRoles(@RequestBody PersonaDTO dto){
-        return new ResponseEntity<>(this.gestorPersonaRol.addRolToPersona(dto), null, HttpStatus.OK);
+        //personaDTO.setCedula(cedula);
+        return new ResponseEntity<>(this.gestorPersonaService.actualizar(personaDTO), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
-        Persona persona = this.personaService.findByIdPerson(id)
-                .orElseThrow(() -> new RuntimeException("Persona con id: " + id + " no encontrada"));
-
-        return new ResponseEntity<>(persona, null, HttpStatus.OK);
+        return new ResponseEntity<>(this.personaService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,23 +66,22 @@ public class PersonaController {
 
     @GetMapping(path = "/{id}/procesos", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> obtenerProcesosPorPersonaId(@PathVariable Integer id) {
-        return new ResponseEntity<>(this.gestorProceso.findProcesosByPersonaId(id), HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/{id}/procesos-requiriente", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> obtenerProcesosDePersonaRequiriente(@PathVariable Integer id) {
-        return new ResponseEntity<>(this.gestorProceso.findProcesosWherePersonaIsOwner(id), HttpStatus.OK);
+        return new ResponseEntity<>(this.gestorProcesoService.findProcesosByPersonaId(id), HttpStatus.OK);
     }
 
     @GetMapping(path="/{id}/roles", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> obtenerRolesPorPersonaId(@PathVariable Integer id) {
-        return new ResponseEntity<>(this.gestorPersonaRol.findRolesByPersonaId(id), null, HttpStatus.OK);
+        return new ResponseEntity<>(this.gestorPersonaService.findRolesByPersonaId(id), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/{id}/pasos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerPasosPorPersonaId(@PathVariable Integer id){
+        return new ResponseEntity<>(this.gestorPersonaService.findPasosByPersonaId(id), HttpStatus.OK);
+    }
 
     @PostMapping(path="/{id}/addPaso", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> anadirPaso(@PathVariable Integer id, @RequestParam Integer idPaso) {
-        this.gestorPersonaRol.anadirPaso(id, idPaso);
+        this.gestorPersonaService.anadirPaso(id, idPaso);
         return new ResponseEntity<>("Paso "+idPaso+" added", null, HttpStatus.OK);
     }
 

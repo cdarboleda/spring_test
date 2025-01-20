@@ -10,7 +10,8 @@ import com.security.db.CarpetaDocumento;
 @Repository
 public interface ICarpetaDocumentoRepository extends JpaRepository<CarpetaDocumento, Integer>{
     
-    List<CarpetaDocumento> findByProcesoId(Integer procesoId);
+    public List<CarpetaDocumento> findByProcesoId(Integer procesoId);
+    public List<CarpetaDocumento> findByPersonaId(Integer personaId);
 
     // @Query("SELECT new com.security.service.dto.DocumentoDTO"+
     // "(d.id, d.nombre, d.url, d.descripcion, d.fechaCreacion, p.id, p.nombre) " +

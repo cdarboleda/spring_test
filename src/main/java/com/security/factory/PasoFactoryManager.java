@@ -10,18 +10,26 @@ import org.springframework.stereotype.Component;
 
 import com.security.db.Paso;
 import com.security.factory.concret.PagoDocentePasoFactory;
+import com.security.factory.concret.TitulacionPasoFactory;
+import com.security.service.dto.PasoDTO;
 
 @Component
 public class PasoFactoryManager {
 
     private final Map<String, IPasoFactory> factoryMap = new HashMap<>();
-
+    
     @Autowired
-    public PasoFactoryManager(PagoDocentePasoFactory pagoDocentePasoFactory) {
-        factoryMap.put("pago-docentes", pagoDocentePasoFactory);
+    public PasoFactoryManager(IPasoFactory procesoEspecifico) {
+        factoryMap.put("pago-docentes", new PagoDocentePasoFactory());
+        factoryMap.put("titulacion", new TitulacionPasoFactory());
     }
 
-    public List<Paso> generarPasosPorProceso(String proceso) {
+    // @Autowired
+    // public PasoFactoryManager(TitulacionPasoFactory pagoDocentePasoFactory) {
+    //     factoryMap.put("titulacion", pagoDocentePasoFactory);
+    // }
+
+    public List<PasoDTO> generarPasosPorProceso(String proceso) {
         IPasoFactory factory = factoryMap.get(proceso);
 
         if (factory != null) {

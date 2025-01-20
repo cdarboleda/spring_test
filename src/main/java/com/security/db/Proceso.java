@@ -1,11 +1,10 @@
 package com.security.db;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.security.db.enums.TipoProceso;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,9 +14,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -27,17 +26,15 @@ import lombok.Data;
 @Data
 public class Proceso {
 
+    //nombre, descripcion, titulacion
+    //estado -> finalizado
+    //pago docente a OneToOne
+
     @Id
     @Column(name = "proc_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="seq_proc")
     @SequenceGenerator(name = "seq_proc", initialValue = 1, allocationSize = 1)
     private Integer id;
-
-    @Column(name = "proc_nombre")
-    private String nombre;
-
-    @Column(name = "proc_descripcion")
-    private String descripcion;
 
     @Column(name = "proc_fecha_inicio")
     private LocalDateTime fechaInicio;
@@ -46,7 +43,15 @@ public class Proceso {
     private LocalDateTime fechaFin;
 
     @Column(name = "proc_estado")
-    private Boolean estado;
+    private Boolean finalizado;
+
+    @Column(name = "proc_nombre") //Se sobrescriben en los hijos, si no, pues al crear como generico se pone cualquier cosa
+    private String nombre;
+    @Column(name = "proc_descripcion") 
+    private String descripcion;
+
+    @Column(name = "paso_tipo_proceso", nullable = true)//si es nulo es un generico
+    private TipoProceso tipoProceso;
     
     @OneToMany(mappedBy = "proceso", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
@@ -55,17 +60,21 @@ public class Proceso {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "pers_id")
-    private Persona persona;
+    private Persona requiriente;
 
-    @ManyToMany(mappedBy = "procesoTitulacionPersonas", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "proceso", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Persona> personas = new HashSet<>();
+    private List<ProcesoLog> procesoLog;
+
+    // @ManyToMany(mappedBy = "procesoTitulacionPersonas", fetch = FetchType.LAZY)
+    // @JsonIgnore
+    // private Set<Persona> personas = new HashSet<>();
 
     //Se usa para añadir persona
-    public void addPersona(Persona persona){
-        this.personas.add(persona);
-        persona.getProcesoTitulacionPersonas().add(this);
-    }
+    // public void addPersona(Persona persona){
+    //     this.personas.add(persona);
+    //     persona.getProcesoTitulacionPersonas().add(this);
+    // }
 
     //Este no se usa
     // public void removePersona(Persona persona){
@@ -77,9 +86,15 @@ public class Proceso {
     @JsonIgnore
     private List<Paso> pasos; 
 
-    @OneToMany(mappedBy = "proceso", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name =" proc_id", unique = true)
     @JsonIgnore
-    private List<ProcesoPagoDocente> pagoDocentes; 
+    private ProcesoPagoDocente procesoPagoDocente;
+
+    @OneToOne
+    @JoinColumn(name =" proc_id", unique = true)
+    @JsonIgnore
+    private ProcesoTitulacion procesoTitulacion;
 
     // @Override
     // public boolean equals(Object o) {

@@ -8,6 +8,7 @@ import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -27,13 +28,16 @@ import java.util.Set;
 @Slf4j
 public class KeycloakServiceImpl implements IKeycloakService {
 
+    @Autowired
+    private KeycloakProvider keycloakProvider;
+
     /**
      * Metodo para listar todos los usuarios de Keycloak
      * 
      * @return List<UserRepresentation>
      */
     public List<UserRepresentation> findAllUsers() {
-        return KeycloakProvider.getRealmResource()
+        return keycloakProvider.getRealmResource()
                 .users()
                 .list();
     }
@@ -45,7 +49,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
      */
     public List<UserDTO> findAllUsersWithRoles() {
         // Obtener todos los usuarios de Keycloak
-        List<UserRepresentation> users = KeycloakProvider.getRealmResource()
+        List<UserRepresentation> users = keycloakProvider.getRealmResource()
                 .users()
                 .list();
 
@@ -65,7 +69,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
             // Obtener roles de cliente para "spring-boot-app"
             List<String> clientRoles = new ArrayList<>();
             try {
-                String clientId = KeycloakProvider.getRealmResource()
+                String clientId = keycloakProvider.getRealmResource()
                         .clients()
                         .findByClientId("spring-boot-app")
                         .stream()
@@ -73,7 +77,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
                         .orElseThrow(() -> new RuntimeException("Cliente no encontrado"))
                         .getId();
 
-                clientRoles = KeycloakProvider.getRealmResource()
+                clientRoles = keycloakProvider.getRealmResource()
                         .users()
                         .get(user.getId())
                         .roles()
@@ -104,7 +108,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
      * @return List<UserRepresentation>
      */
     public List<UserRepresentation> searchUserByUsername(String username) {
-        return KeycloakProvider.getRealmResource()
+        return keycloakProvider.getRealmResource()
                 .users()
                 .searchByUsername(username, true);
     }
@@ -117,7 +121,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
     public String createUser(@NonNull UserDTO userDTO) {
 
         int status = 0;
-        UsersResource usersResource = KeycloakProvider.getUserResource();
+        UsersResource usersResource = keycloakProvider.getUserResource();
 
         UserRepresentation userRepresentation = new UserRepresentation();
         userRepresentation.setFirstName(userDTO.getFirstName());
@@ -142,7 +146,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
             usersResource.get(userId).resetPassword(credentialRepresentation);
 
-            RealmResource realmResource = KeycloakProvider.getRealmResource();
+            RealmResource realmResource = keycloakProvider.getRealmResource();
 
             List<RoleRepresentation> rolesRepresentation = null;
 
@@ -177,7 +181,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
      * @return void
      */
     public void deleteUser(String userId) {
-        KeycloakProvider.getUserResource()
+        keycloakProvider.getUserResource()
                 .get(userId)
                 .remove();
     }
@@ -203,7 +207,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
         user.setEmailVerified(true);
         user.setCredentials(Collections.singletonList(credentialRepresentation));
 
-        UserResource usersResource = KeycloakProvider.getUserResource().get(userId);
+        UserResource usersResource = keycloakProvider.getUserResource().get(userId);
         usersResource.update(user);
     }
 }

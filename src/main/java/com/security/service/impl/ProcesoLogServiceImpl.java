@@ -29,13 +29,13 @@ public class ProcesoLogServiceImpl implements IProcesoLogService{
 
     @Override
     public List<ProcesoLog> findByProcesoId(Integer id) {
-        return this.procesoLogRepository.findByIdProceso(id);
+        return this.procesoLogRepository.findByProcesoId(id);
     }
 
-    @Override
-    public List<ProcesoLog> findByIdProcesoAndIdPaso(Integer idProceso, Integer idPaso) {
-        return this.procesoLogRepository.findByIdProcesoAndIdPaso(idProceso, idPaso);
-    }
+    // @Override
+    // public List<ProcesoLog> findByIdProcesoAndIdPaso(Integer idProceso, Integer idPaso) {
+    //     return this.procesoLogRepository.findByIdProcesoAndIdPaso(idProceso, idPaso);
+    // }
 
 
     

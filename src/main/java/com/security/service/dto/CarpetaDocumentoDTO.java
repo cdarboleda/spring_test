@@ -8,8 +8,8 @@ public class CarpetaDocumentoDTO {
 
     private Integer id;
     private String url;
-    private String tipo;
     private Integer procesoId;//Para saber a que proceso insertarle
+    private Integer personaId;//Para saber a que persona insertarle
     // public DocumentoDTO(){
         
     // }

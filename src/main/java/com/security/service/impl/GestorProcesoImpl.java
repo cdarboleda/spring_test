@@ -17,7 +17,8 @@ import com.security.exception.CustomException;
 import com.security.factory.ProcesoFactory;
 import com.security.factory.ProcesoPlantilla;
 import com.security.repo.IProcesoRepository;
-import com.security.service.IGestorProceso;
+import com.security.service.IGestorPasoService;
+import com.security.service.IGestorProcesoService;
 import com.security.service.IPersonaService;
 import com.security.service.IPasoService;
 import com.security.service.IProcesoService;
@@ -25,6 +26,7 @@ import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoLigeroDTO;
 import com.security.service.dto.utils.ConvertidorCarpetaDocumento;
+import com.security.service.dto.utils.ConvertidorPaso;
 import com.security.service.dto.utils.ConvertidorPersona;
 import com.security.service.dto.utils.ConvertidorProceso;
 
@@ -33,7 +35,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class GestorProcesoImpl implements IGestorProceso{
+public class GestorProcesoImpl implements IGestorProcesoService {
 
     @Autowired
     private IProcesoRepository procesoRepository;
@@ -51,96 +53,108 @@ public class GestorProcesoImpl implements IGestorProceso{
     private ConvertidorCarpetaDocumento convertidorDocumento;
     @Autowired
     private IPasoService pasoService;
+    @Autowired
+    private IGestorPasoService gestorPasoService;
+
+    @Autowired
+    private ConvertidorPaso convertidorPaso;
 
     @Override
     public List<ProcesoLigeroDTO> findProcesosByPersonaId(Integer id) {
-        return findEntitiesByPersonId(id, this.procesoRepository::findByPersonaId, "procesos relacionados a la persona");
+        return findEntitiesByPersonId(id, this.procesoRepository::findByRequirienteId,
+                "procesos relacionados a la persona");
     }
-    @Override
-    public List<ProcesoLigeroDTO> findProcesosWherePersonaIsOwner(Integer id) {
-        return findEntitiesByPersonId(id, this.procesoRepository::findByPersonasId, "procesos del requiriente");
-    }
-       
-    public List<ProcesoLigeroDTO> findEntitiesByPersonId(Integer id,Function<Integer, List<Proceso>> procesoFetcher,
-        String tipoConsulta) {
+    // @Override
+    // public List<ProcesoLigeroDTO> findProcesosWherePersonaIsOwner(Integer id) {
+    // return findEntitiesByPersonId(id, this.procesoRepository::findByPersonasId,
+    // "procesos del requiriente");
+    // }
+
+    public List<ProcesoLigeroDTO> findEntitiesByPersonId(Integer id, Function<Integer, List<Proceso>> procesoFetcher,
+            String tipoConsulta) {
         this.personaService.existsById(id);
         List<Proceso> procesos = procesoFetcher.apply(id);
-        if(procesos.isEmpty()) throw new EntityNotFoundException("No se encontraron "+tipoConsulta+" para persona con id: "+id);
+        if (procesos.isEmpty())
+            throw new EntityNotFoundException("No se encontraron " + tipoConsulta + " para persona con id: " + id);
         List<ProcesoLigeroDTO> procesosLigeros = procesos.stream()
-            .map(convertidorProceso::convertirALigeroDTO)
-            .collect(Collectors.toList());
+                .map(convertidorProceso::convertirALigeroDTO)
+                .collect(Collectors.toList());
         return procesosLigeros;
     }
-    
 
     @Override
     public ProcesoLigeroDTO insert(ProcesoDTO procesoDTO) {
-        if (procesoDTO == null) throw new CustomException("Error en los campos enviados", HttpStatus.BAD_REQUEST);
+        if (procesoDTO == null)
+            throw new CustomException("Error en los campos enviados", HttpStatus.BAD_REQUEST);
 
         ProcesoPlantilla procesoTipoPlantilla = procesoFactory.createProceso(procesoDTO.getNombre());
         Persona requiriente = this.personaService.findById(procesoDTO.getRequirienteId());
-        //List<Persona> personasDelProceso = this.personaService.findPersonasByIds(procesoDTO.getPersonasId());
+        // List<Persona> personasDelProceso =
+        // this.personaService.findPersonasByIds(procesoDTO.getPersonasId());
 
-        List<Paso> pasos = this.pasoService.crearPasos(procesoDTO.getNombre());
-
-
+        // List<Paso> pasos = this.gestorPasoService.crearPasos(procesoDTO.getNombre());
+        
         Proceso proceso = new Proceso();
         proceso.setNombre(procesoTipoPlantilla.getNombre());
         proceso.setDescripcion(procesoTipoPlantilla.getDescripcion());
         proceso.setFechaInicio(LocalDateTime.now());
-        proceso.setEstado(false);
-        proceso.setPersona(requiriente);
+        proceso.setFinalizado(false);
+        proceso.setRequiriente(requiriente);
 
-        //Agregar El Proceso a cada paso
-        pasos.forEach((paso) -> paso.setProceso(proceso));
 
-        //AgregarPasos
+        List<Paso> pasos = this.gestorPasoService.crearPasos(procesoDTO.getNombre())
+        .stream()
+        .map(pasoDTO -> {
+            Paso paso = new Paso();
+            convertidorPaso.convertirAEntidad(paso, pasoDTO);
+            paso.setProceso(proceso);
+            return paso;
+        })
+        .collect(Collectors.toList());
+
         proceso.setPasos(pasos);
-
-
-        //personasDelProceso.forEach((persona)->proceso.addPersona(persona));
 
         Proceso procesoGuardado = this.procesoRepository.save(proceso);
         return convertidorProceso.convertirALigeroDTO(procesoGuardado);
     }
 
-    //le deje en el gestor ya que talvez luego toque usarel de personas
+    // le deje en el gestor ya que talvez luego toque usarel de personas
     @Override
     public ProcesoLigeroDTO update(ProcesoDTO procesoDTO) {
-        if (procesoDTO == null) throw new CustomException("Error en los campos enviados", HttpStatus.BAD_REQUEST);
+        if (procesoDTO == null)
+            throw new CustomException("Error en los campos enviados", HttpStatus.BAD_REQUEST);
         Proceso proceso = this.procesoService.findById(procesoDTO.getId());
         proceso.setFechaFin(procesoDTO.getFechaFinal());
-        proceso.setEstado(procesoDTO.getEstado());
+        // proceso.setFinalizado(procesoDTO.getEstado());
         return convertidorProceso.convertirALigeroDTO(proceso);
     }
-    
+
     @Override
-    public void delete(Integer id){
+    public void delete(Integer id) {
         Proceso proceso = this.procesoService.findById(id);
         // proceso.getPersonas().forEach(persona -> {
-        //     persona.getPersonasProceso().remove(proceso);
+        // persona.getPersonasProceso().remove(proceso);
         // });
         // proceso.getPersonas().clear();
         procesoRepository.deleteById(id);
     }
 
     @Override
-    public ProcesoCompletoDTO findByIdCompletoDTO(Integer id){
+    public ProcesoCompletoDTO findByIdCompletoDTO(Integer id) {
         Proceso proceso = this.procesoService.findById(id);
         ProcesoCompletoDTO procesoDTO = convertidorProceso.convertirACompletoDTO(proceso);
 
         procesoDTO.setCarpetasDocumento(
-            proceso.getCarpetasDocumento().stream()
-            .map(convertidorDocumento::convertirALigeroDTO)
-            .collect(Collectors.toList())
-        );
-        procesoDTO.setRequiriente(convertidorPersona.convertirALigeroDTO(proceso.getPersona()));
-        procesoDTO.setPersonasTitulacion(
-            proceso.getPersonas().stream()
-                .map(convertidorPersona::convertirALigeroDTO)
-                .collect(Collectors.toCollection(HashSet::new))
-        );
+                proceso.getCarpetasDocumento().stream()
+                        .map(convertidorDocumento::convertirALigeroDTO)
+                        .collect(Collectors.toList()));
+        procesoDTO.setRequiriente(convertidorPersona.convertirALigeroDTO(proceso.getRequiriente()));
+        // procesoDTO.setPersonasTitulacion(
+        // proceso.getPersonas().stream()
+        // .map(convertidorPersona::convertirALigeroDTO)
+        // .collect(Collectors.toCollection(HashSet::new))
+        // );
         return procesoDTO;
     }
-    
+
 }

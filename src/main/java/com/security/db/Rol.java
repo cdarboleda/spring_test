@@ -16,6 +16,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name = "rol")
@@ -35,5 +36,19 @@ public class Rol {
 
     @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
     @JsonIgnore
+    @ToString.Exclude
     private Set<Persona> personas = new HashSet<>();   
+
+    //Me toco poner estos, sino los set se dañan
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Rol)) return false;
+        return id != null && id.equals(((Rol) o).getId());
+    }
+ 
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

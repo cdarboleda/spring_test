@@ -1,9 +1,11 @@
 package com.security.factory.concret;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
 import com.security.db.Paso;
@@ -16,8 +18,7 @@ import com.security.service.dto.PasoDTO;
 import jakarta.transaction.Transactional;
 
 @Component
-public class PagoDocentePasoFactory implements IPasoFactory {
-
+public class TitulacionPasoFactory implements IPasoFactory {
 
     @Override
     @Transactional
@@ -46,5 +47,6 @@ public class PagoDocentePasoFactory implements IPasoFactory {
         paso.setFechaFin(null);
         return paso;
     }
+
 
 }

@@ -15,7 +15,6 @@ public class Convertidor {
         dto.setApellido(persona.getApellido());
         dto.setCedula(persona.getCedula());
         dto.setCorreo(persona.getCorreo());
-        dto.setPassword(persona.getPassword());
         dto.setTelefono(persona.getTelefono());
         //dto.setRol(rol);
         
@@ -23,14 +22,12 @@ public class Convertidor {
 
     }
 
-    public Persona convertirAPersona(PersonaDTO dto){
-        Persona persona = new Persona();
+    public Persona convertirAPersona(Persona persona, PersonaDTO dto){
         persona.setId(dto.getId());
         persona.setNombre(dto.getNombre());
         persona.setApellido(dto.getApellido());
         persona.setCedula(dto.getCedula());
         persona.setCorreo(dto.getCorreo());
-        persona.setPassword(dto.getPassword());
         persona.setTelefono(dto.getTelefono());
         
         return persona;

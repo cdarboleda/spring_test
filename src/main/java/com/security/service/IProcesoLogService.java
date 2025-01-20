@@ -12,7 +12,7 @@ public interface IProcesoLogService {
 
     public List<ProcesoLog> findByProcesoId(Integer id);
 
-    public List<ProcesoLog> findByIdProcesoAndIdPaso(Integer idProceso, Integer idPaso);
+    //public List<ProcesoLog> findByIdProcesoAndIdPaso(Integer idProceso, Integer idPaso);
 
     
 }

@@ -13,8 +13,9 @@ import com.security.db.Proceso;
 import com.security.exception.CustomException;
 import com.security.repo.IPersonaRepository;
 import com.security.repo.IProcesoRepository;
-import com.security.service.IGestorProceso;
+import com.security.service.IGestorProcesoService;
 import com.security.service.IPersonaService;
+import com.security.service.dto.PersonaDTO;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -25,11 +26,9 @@ public class PersonaServiceImpl implements IPersonaService {
 
     @Autowired
     private IPersonaRepository personaRepository;
-    @Autowired
-    private IProcesoRepository procesoRepository;
 
     @Override
-    public Optional<Persona> findByIdPerson(Integer id) {
+    public Optional<Persona> findByIdOptional(Integer id) {
         return this.personaRepository.findById(id);
     }
 
@@ -46,11 +45,6 @@ public class PersonaServiceImpl implements IPersonaService {
             throw new EntityNotFoundException("No hay persona con id: " + id);
         }
         return true;
-    }
-
-    @Override
-    public Persona insert(Persona persona) {
-        return this.personaRepository.save(persona);
     }
 
     @Override
@@ -79,16 +73,32 @@ public class PersonaServiceImpl implements IPersonaService {
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro la persona con cedula: " + cedula));
     }
 
+    public Optional<Persona> findByCedulaOptional(String cedula) {
+        return this.personaRepository.findByCedula(cedula);
+    }
+
     @Override
     public void deleteById(Integer id) {
-        Persona persona = this.findById(id);        
+        Persona persona = this.findById(id);
         // persona.getPersonasProceso().forEach(proceso -> {
-            
-        //     proceso.getPersonas().remove(persona);
+
+        // proceso.getPersonas().remove(persona);
         // });
         // persona.getPersonasProceso().clear();
-  
+
         this.personaRepository.deleteById(id);
+    }
+
+    //nomas revisa si estan nulos o vacio, 
+    //si por ejemplo se mandan letras en ves de numeros en roles, igual sale 400 pero sin mensaje personalziado pero no salta este if
+    @Override
+    public Boolean tieneErrores(PersonaDTO p) {
+        return (p.getNombre() == null ||
+                p.getApellido() == null ||
+                p.getCedula() == null ||
+                p.getCorreo() == null ||
+                p.getRoles() == null ||
+                p.getRoles().isEmpty()) ? true : false;
     }
 
 }

@@ -8,8 +8,8 @@ import com.security.db.ProcesoLog;
 
 public interface IProcesoLogRepository extends JpaRepository<ProcesoLog, Integer>{
 
-    public List<ProcesoLog> findByIdProceso(Integer id);
+    public List<ProcesoLog> findByProcesoId(Integer id);
 
-    public List<ProcesoLog> findByIdProcesoAndIdPaso(Integer idProceso, Integer idPaso);
+    // public List<ProcesoLog> findByIdProcesoAndIdPaso(Integer idProceso, Integer idPaso);
     
 }

@@ -25,6 +25,7 @@ public class CarpetaDocumentoServiceImpl implements ICarpetaDocumentoService {
     @Autowired
     private ConvertidorCarpetaDocumento convertidorCarpetaDocumento;
 
+
     //Este devuelve el documento sin nada de info de su proceso, por el json ignore
     @Override
     public CarpetaDocumento findById(Integer id) {
@@ -42,10 +43,20 @@ public class CarpetaDocumentoServiceImpl implements ICarpetaDocumentoService {
     }
 
     @Override
-    public List<CarpetaDocumentoLigeroDTO> findAllByIdProceso(Integer idProceso) {
+    public List<CarpetaDocumentoLigeroDTO> findAllByProcesoId(Integer idProceso) {
         List<CarpetaDocumento> documentos = this.carpetaDocumentoRepository.findByProcesoId(idProceso);
         if (documentos.isEmpty()) {
             throw new EntityNotFoundException("No hay carpeta documentos para el proceso con id: " + idProceso);
+        }
+        List<CarpetaDocumentoLigeroDTO> documentosLigeros = documentos.stream().map(convertidorCarpetaDocumento::convertirALigeroDTO).collect(Collectors.toList());
+        return documentosLigeros;
+    }
+
+    @Override
+    public List<CarpetaDocumentoLigeroDTO> findAllByPersonaId(Integer idPersona) {
+        List<CarpetaDocumento> documentos = this.carpetaDocumentoRepository.findByPersonaId(idPersona);
+        if (documentos.isEmpty()) {
+            throw new EntityNotFoundException("No hay carpeta documentos para la persona con id: " + idPersona);
         }
         List<CarpetaDocumentoLigeroDTO> documentosLigeros = documentos.stream().map(convertidorCarpetaDocumento::convertirALigeroDTO).collect(Collectors.toList());
         return documentosLigeros;
@@ -61,12 +72,11 @@ public class CarpetaDocumentoServiceImpl implements ICarpetaDocumentoService {
 
     //La logica de negocio no me deberia dejar cambiar de idProceso
     @Override
-    public CarpetaDocumentoLigeroDTO update(CarpetaDocumentoDTO documentoDTO) {
+    public CarpetaDocumentoLigeroDTO updateUrl(CarpetaDocumentoDTO documentoDTO) {
         if (documentoDTO == null) {
             throw new IllegalArgumentException("Hubo un problema con la carpeta documento, revise su contenido");
         }
         CarpetaDocumento documentoActual = this.findById(documentoDTO.getId()); 
-        documentoActual.setTipo(documentoDTO.getTipo());
         documentoActual.setUrl(documentoDTO.getUrl());
         return convertidorCarpetaDocumento.convertirALigeroDTO(documentoActual);
     }

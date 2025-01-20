@@ -40,11 +40,11 @@ public class ProcesoLogController {
         return new ResponseEntity<>(this.procesoLogService.findByProcesoId(id), null, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{id}/proceso-paso")
-    public ResponseEntity<?> obtenerLogPorPasoId(@RequestParam Integer idProceso,
-            @RequestParam Integer idPaso) {
-        return new ResponseEntity<>(this.procesoLogService.findByIdProcesoAndIdPaso(idProceso, idPaso),
-                null, HttpStatus.OK);
-    }
+    // @GetMapping(path = "/{id}/proceso-paso")
+    // public ResponseEntity<?> obtenerLogPorPasoId(@RequestParam Integer idProceso,
+    //         @RequestParam Integer idPaso) {
+    //     return new ResponseEntity<>(this.procesoLogService.findByIdProcesoAndIdPaso(idProceso, idPaso),
+    //             null, HttpStatus.OK);
+    // }
 
 }

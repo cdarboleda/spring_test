@@ -13,7 +13,9 @@ public interface IRolService {
 
     public Rol update(Rol rol);
 
-    public Optional<Rol> findById(Integer id);
+    public Optional<Rol> findByIdOptional(Integer id);
+    public Rol findById(Integer id);
 
     public List<Rol> findAll();
+    public List<Rol> findAllByIds(List<Integer> ids);
 }

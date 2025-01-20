@@ -3,6 +3,8 @@ package com.security.service.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.security.db.enums.TipoProceso;
+
 import lombok.Data;
 
 @Data
@@ -11,8 +13,11 @@ public class ProcesoDTO {
     private Integer id;
     private String nombre;
     private Integer requirienteId;
-    private List<Integer> personasId;
+    private String descripcion;
+    private String tipoProceso;
+
+    private List<String> personasId;
     private LocalDateTime fechaFinal;//Solo serviria cuando vamos a actualizar el final
-    private Boolean estado;//Solo serviria cuando vamos a actualizar el final
+    private Boolean finalizado;//Solo serviria cuando vamos a actualizar el final
 
 }

@@ -4,14 +4,16 @@ import java.util.List;
 import java.util.Optional;
 
 import com.security.db.Persona;
+import com.security.service.dto.PersonaDTO;
 
 public interface IPersonaService {
-    public Optional<Persona> findByIdPerson(Integer id);
+    public Optional<Persona> findByIdOptional(Integer id);
     public Persona findByCedula(String cedula);
+    public Optional<Persona> findByCedulaOptional(String cedula);
     public Persona findById(Integer id);
-    public Persona insert(Persona persona);
     public void deleteById(Integer id);
     public List<Persona> findAll();
     public Boolean existsById(Integer id);
     public List<Persona> findPersonasByIds(List<Integer> ids);
+    public Boolean tieneErrores(PersonaDTO personaDTO);
 }

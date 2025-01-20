@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 import com.security.factory.ProcesoPlantilla;
 
 @Component
-public class ProcesoTitulacion extends ProcesoPlantilla{
+public class ProcesoTitulacionConcrete extends ProcesoPlantilla{
 
-    public ProcesoTitulacion(){
+    public ProcesoTitulacionConcrete(){
         this.nombre = "Pago de Titulación";
         this.descripcion = "Aqui se titula";
     }

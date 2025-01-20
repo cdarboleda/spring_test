@@ -10,5 +10,4 @@ public class PersonaLigeroDTO {
     private String cedula;
     private String correo;
     private String telefono;
-    private String password;
 }

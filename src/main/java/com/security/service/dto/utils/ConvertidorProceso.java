@@ -17,7 +17,7 @@ public class ConvertidorProceso {
         procesoDTO.setDescripcion(proceso.getDescripcion());
         procesoDTO.setFechaInicio(proceso.getFechaInicio());
         procesoDTO.setFechaFin(proceso.getFechaFin());
-        procesoDTO.setEstado(proceso.getEstado());
+        procesoDTO.setEstado(proceso.getFinalizado());
         return procesoDTO;
     }
 
@@ -29,7 +29,7 @@ public class ConvertidorProceso {
         procesoDTO.setDescripcion(proceso.getDescripcion());
         procesoDTO.setFechaInicio(proceso.getFechaInicio());
         procesoDTO.setFechaFin(proceso.getFechaFin());
-        procesoDTO.setEstado(proceso.getEstado());
+        procesoDTO.setEstado(proceso.getFinalizado());
         return procesoDTO;
     }
 

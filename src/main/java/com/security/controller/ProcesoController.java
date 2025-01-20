@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.service.IGestorProceso;
+import com.security.service.IGestorProcesoService;
 import com.security.service.IProcesoService;
 import com.security.service.dto.ProcesoDTO;
 
@@ -28,7 +28,7 @@ public class ProcesoController {
      private IProcesoService procesoService;
 
      @Autowired
-     private IGestorProceso gestorProceso;
+     private IGestorProcesoService gestorProceso;
 
     //  @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     //  public ResponseEntity<?> obtenerProcesoById(@PathVariable Integer id) {

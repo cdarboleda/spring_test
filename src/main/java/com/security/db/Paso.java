@@ -2,17 +2,20 @@ package com.security.db;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.type.EnumType;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.security.db.enums.Estado;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -29,29 +32,36 @@ public class Paso {
     @SequenceGenerator(name = "seq_paso", initialValue = 1, allocationSize = 1)
     private Integer id;
 
-    @Column(name = "paso_nombre")
+    @Column(name = "paso_nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "paso_orden")
+    @Column(name = "paso_orden", nullable = false)
     private Integer orden;
+
+    @Column(name = "paso_descripcion_paso", nullable = false)
+    private String descripcionPaso;
+
+    @Column(name = "paso_descripcion_estado")
+    private String descripcionEstado;
 
     @Column(name = "paso_fecha_inicio")
     private LocalDateTime fechaInicio;
 
+    @Column(name = "paso_estado", nullable = false)
+    private Estado estado;
+
+    @Column(name = "paso_fecha_fin")
+    private LocalDateTime fechaFin;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "proceso_id")
+    @JoinColumn(name = "proc_id", nullable = false)
     @ToString.Exclude
     @JsonIgnore
     private Proceso proceso;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "responsable_id")
+    @JoinColumn(name = "pers_id")
     @JsonIgnore
     private Persona responsable;
 
-    // UN paso tiene un estado, pero varios estados pueden compartir un estado
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "estado_id", nullable = false)
-    @ToString.Exclude
-    private Estado estado;
 }

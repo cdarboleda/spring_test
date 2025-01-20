@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 import com.security.factory.ProcesoPlantilla;
 
 @Component
-public class ProcesoPagoDocentes extends ProcesoPlantilla{
+public class ProcesoPagoDocenteConcrete extends ProcesoPlantilla{
 
-    public ProcesoPagoDocentes(){
+    public ProcesoPagoDocenteConcrete(){
         this.nombre = "Pago de Docente";
         this.descripcion = "Aqui se paga al docente descripcion arreglar";
     }

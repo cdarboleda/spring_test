@@ -35,19 +35,24 @@ public class CarpetaDocumentoController {
         return new ResponseEntity<>(this.carpetaDocumentoService.findDTOById(id), null, HttpStatus.OK);
     }
     @GetMapping(path="/proceso/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> buscarDocumentoPorIdProceso(@PathVariable Integer id){
-        return new ResponseEntity<>(this.carpetaDocumentoService.findAllByIdProceso(id), null, HttpStatus.OK);
+    public ResponseEntity<?> buscarDocumentosPorIdProceso(@PathVariable Integer id){
+        return new ResponseEntity<>(this.carpetaDocumentoService.findAllByProcesoId(id), null, HttpStatus.OK);
+    }
+
+    @GetMapping(path="/persona/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> buscarDocumentosPorIdPersona(@PathVariable Integer id){
+        return new ResponseEntity<>(this.carpetaDocumentoService.findAllByPersonaId(id), HttpStatus.OK);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> insertar(@RequestBody CarpetaDocumentoDTO documentoDTO){
-        return new ResponseEntity<>(this.gestorCarpetaDocumento.insert(documentoDTO), null, HttpStatus.OK);
+        return new ResponseEntity<>(this.gestorCarpetaDocumento.insert(documentoDTO), HttpStatus.OK);
     }
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody CarpetaDocumentoDTO carpetaDocumentoDTO){
         carpetaDocumentoDTO.setId(id);
-        return new ResponseEntity<>(this.carpetaDocumentoService.update(carpetaDocumentoDTO), null, HttpStatus.OK);
+        return new ResponseEntity<>(this.carpetaDocumentoService.updateUrl(carpetaDocumentoDTO), null, HttpStatus.OK);
     }
 
     @DeleteMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
