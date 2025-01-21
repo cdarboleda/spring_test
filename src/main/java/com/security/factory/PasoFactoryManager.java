@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.security.db.Paso;
+import com.security.db.enums.TipoProceso;
 import com.security.factory.concret.PagoDocentePasoFactory;
 import com.security.factory.concret.TitulacionPasoFactory;
 import com.security.service.dto.PasoDTO;
@@ -20,14 +21,9 @@ public class PasoFactoryManager {
     
     @Autowired
     public PasoFactoryManager(IPasoFactory procesoEspecifico) {
-        factoryMap.put("pago-docentes", new PagoDocentePasoFactory());
-        factoryMap.put("titulacion", new TitulacionPasoFactory());
+        factoryMap.put(TipoProceso.PAGO_DOCENTE.toString(), new PagoDocentePasoFactory());
+        factoryMap.put(TipoProceso.TITULACION.toString(), new TitulacionPasoFactory());
     }
-
-    // @Autowired
-    // public PasoFactoryManager(TitulacionPasoFactory pagoDocentePasoFactory) {
-    //     factoryMap.put("titulacion", pagoDocentePasoFactory);
-    // }
 
     public List<PasoDTO> generarPasosPorProceso(String proceso) {
         IPasoFactory factory = factoryMap.get(proceso);

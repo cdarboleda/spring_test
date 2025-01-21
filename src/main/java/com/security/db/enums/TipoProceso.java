@@ -4,5 +4,5 @@ public enum TipoProceso {
     //GENERICO,
     PAGO_DOCENTE,
     TITULACION,
-    DISENIO_MAESTRIA
+    DISENIO_MAESTRIA;
 }

@@ -12,9 +12,9 @@ public class ProcesoFactory {
     
     public ProcesoPlantilla createProceso(String tipo){
         switch (tipo) {
-            case "pago-docentes":
+            case "PAGO_DOCENTE":
                 return new ProcesoPagoDocenteConcrete();
-            case "titulacion":
+            case "TITULACION":
                 return new ProcesoTitulacionConcrete();       
             default:
             throw new CustomException("El tipo de proceso no existe", HttpStatus.BAD_REQUEST);

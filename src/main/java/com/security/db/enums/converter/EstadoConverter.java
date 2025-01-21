@@ -13,7 +13,7 @@ public class EstadoConverter implements AttributeConverter<Estado, String>{
         if (estado == null) {
             return null;
         }
-        return estado.name().toLowerCase();  // Convertir el enum a un string
+        return estado.name();
     }
 
     @Override
@@ -21,7 +21,7 @@ public class EstadoConverter implements AttributeConverter<Estado, String>{
         if (dbData == null) {
             return null;
         }
-        return Estado.valueOf(dbData.toUpperCase());
+        return Estado.valueOf(dbData);
     }
     
 }

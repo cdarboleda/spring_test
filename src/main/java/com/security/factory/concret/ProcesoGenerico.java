@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import com.security.db.enums.Estado;
@@ -12,22 +13,19 @@ import com.security.factory.IPasoFactory;
 import com.security.service.dto.PasoDTO;
 
 import jakarta.transaction.Transactional;
-//Crea pasos predefinidos para cada tipo de proceso,
-//Tiene el primer paso como EN_CURSO, debe tener responsable y se asigna en el service que usa este metodo
-//El resto de pasos estan en pendiente y sin responsable
+
+@Primary
 @Component
-public class TitulacionPasoFactory implements IPasoFactory {
+public class ProcesoGenerico implements IPasoFactory {
+
 
     @Override
     @Transactional
     public List<PasoDTO> generatePasos() {
         List<PasoDTO> pasos = new ArrayList<>();
-        pasos.add(this.crearPaso("Subir documentación", 1, "Aqui se sube la documentación",
-         Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), LocalDateTime.now()));
-        pasos.add(this.crearPaso("Revisión documentación", 2,  "Coordinarción me revisa la documentación",
-        Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null));
-        pasos.add(this.crearPaso("Finalzacion", 3,  "Se ha realizao el pago", 
-        Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null));
+        pasos.add(this.crearPaso("Paso 1", 1, "Paso de prueba",
+        Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), LocalDateTime.now()));
+
         return pasos;
     }
 
@@ -48,5 +46,5 @@ public class TitulacionPasoFactory implements IPasoFactory {
         return paso;
     
     }
-
+    
 }

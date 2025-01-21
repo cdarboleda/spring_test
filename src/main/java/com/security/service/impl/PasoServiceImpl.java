@@ -41,9 +41,9 @@ public class PasoServiceImpl implements IPasoService {
 
     @Override
     public Paso updateEstado(Integer idPaso, String estado) {
-        if(!Estado.isValid(estado)){
-            throw new CustomException("Estado no válido: " + estado, HttpStatus.BAD_REQUEST);
-        }
+        // if(!Estado.isValid(estado)){
+        //     throw new CustomException("Estado no válido: " + estado, HttpStatus.BAD_REQUEST);
+        // }
         Paso paso = this.findById(idPaso);
 
         paso.setEstado(Estado.valueOf(estado.toUpperCase()));
@@ -52,7 +52,7 @@ public class PasoServiceImpl implements IPasoService {
 
     @Override
     public List<String> buscarEstados() {
-        return Stream.of(Estado.values()).map((estado) -> estado.name().toLowerCase()).toList();
+        return Stream.of(Estado.values()).map((estado) -> estado.toString()).toList();
     }
 
     @Override

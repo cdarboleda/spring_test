@@ -1,26 +1,26 @@
 package com.security.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.Proceso;
-import com.security.db.Paso;
-import com.security.exception.CustomException;
+import com.security.db.ProcesoPagoDocente;
+import com.security.db.ProcesoTitulacion;
+import com.security.db.enums.TipoProceso;
 import com.security.factory.ProcesoFactory;
 import com.security.factory.ProcesoPlantilla;
 import com.security.repo.IProcesoRepository;
 import com.security.service.IGestorPasoService;
 import com.security.service.IGestorProcesoService;
-import com.security.service.IPersonaService;
 import com.security.service.IPasoService;
+import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
 import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoDTO;
@@ -84,33 +84,38 @@ public class GestorProcesoImpl implements IGestorProcesoService {
 
     @Override
     public ProcesoLigeroDTO insert(ProcesoDTO procesoDTO) {
-        if (procesoDTO == null)
-            throw new CustomException("Error en los campos enviados", HttpStatus.BAD_REQUEST);
 
-        ProcesoPlantilla procesoTipoPlantilla = procesoFactory.createProceso(procesoDTO.getNombre());
-        Persona requiriente = this.personaService.findById(procesoDTO.getRequirienteId());
-        // List<Persona> personasDelProceso =
-        // this.personaService.findPersonasByIds(procesoDTO.getPersonasId());
-
-        // List<Paso> pasos = this.gestorPasoService.crearPasos(procesoDTO.getNombre());
-        
         Proceso proceso = new Proceso();
+        ProcesoPlantilla procesoTipoPlantilla = procesoFactory.createProceso(procesoDTO.getTipoProceso());
         proceso.setNombre(procesoTipoPlantilla.getNombre());
         proceso.setDescripcion(procesoTipoPlantilla.getDescripcion());
         proceso.setFechaInicio(LocalDateTime.now());
         proceso.setFinalizado(false);
-        proceso.setRequiriente(requiriente);
+        proceso.setRequiriente(this.personaService.findById(procesoDTO.getRequirienteId()));
+        proceso.setTipoProceso(TipoProceso.valueOf(procesoDTO.getTipoProceso()));
 
+        List<Paso> pasos = this.gestorPasoService.crearPasos(procesoDTO.getTipoProceso())
+                .stream()
+                .map(pasoDTO -> {
+                    Paso paso = new Paso();
+                    convertidorPaso.convertirAEntidad(paso, pasoDTO);
+                    paso.setProceso(proceso);
+                    return paso;
+                })
+                .collect(Collectors.toList());
 
-        List<Paso> pasos = this.gestorPasoService.crearPasos(procesoDTO.getNombre())
-        .stream()
-        .map(pasoDTO -> {
-            Paso paso = new Paso();
-            convertidorPaso.convertirAEntidad(paso, pasoDTO);
-            paso.setProceso(proceso);
-            return paso;
-        })
-        .collect(Collectors.toList());
+        if (procesoDTO.getTipoProceso().equals(TipoProceso.PAGO_DOCENTE.toString())) {
+            ProcesoPagoDocente pagoDocente = new ProcesoPagoDocente();
+            pagoDocente.setProceso(proceso);
+            pagoDocente.setModalidadVirtual(procesoDTO.getModalidadVirtual());
+            pasos.get(0).setResponsable(this.personaService.findById(procesoDTO.getResponsablePrimerPaso()));
+
+            proceso.setProcesoPagoDocente(pagoDocente);
+        } else if (procesoDTO.getTipoProceso().equals(TipoProceso.TITULACION.toString())) {
+            ProcesoTitulacion titulacion = new ProcesoTitulacion();
+            titulacion.setProceso(proceso);
+            proceso.setProcesoTitulacion(titulacion);
+        }
 
         proceso.setPasos(pasos);
 
@@ -121,8 +126,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     // le deje en el gestor ya que talvez luego toque usarel de personas
     @Override
     public ProcesoLigeroDTO update(ProcesoDTO procesoDTO) {
-        if (procesoDTO == null)
-            throw new CustomException("Error en los campos enviados", HttpStatus.BAD_REQUEST);
+
         Proceso proceso = this.procesoService.findById(procesoDTO.getId());
         proceso.setFechaFin(procesoDTO.getFechaFinal());
         // proceso.setFinalizado(procesoDTO.getEstado());
@@ -131,7 +135,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
 
     @Override
     public void delete(Integer id) {
-        Proceso proceso = this.procesoService.findById(id);
+        this.procesoService.findById(id);
         // proceso.getPersonas().forEach(persona -> {
         // persona.getPersonasProceso().remove(proceso);
         // });
@@ -141,20 +145,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
 
     @Override
     public ProcesoCompletoDTO findByIdCompletoDTO(Integer id) {
-        Proceso proceso = this.procesoService.findById(id);
-        ProcesoCompletoDTO procesoDTO = convertidorProceso.convertirACompletoDTO(proceso);
-
-        procesoDTO.setCarpetasDocumento(
-                proceso.getCarpetasDocumento().stream()
-                        .map(convertidorDocumento::convertirALigeroDTO)
-                        .collect(Collectors.toList()));
-        procesoDTO.setRequiriente(convertidorPersona.convertirALigeroDTO(proceso.getRequiriente()));
-        // procesoDTO.setPersonasTitulacion(
-        // proceso.getPersonas().stream()
-        // .map(convertidorPersona::convertirALigeroDTO)
-        // .collect(Collectors.toCollection(HashSet::new))
-        // );
-        return procesoDTO;
+        return convertidorProceso.convertirACompletoDTO(this.procesoService.findById(id));
     }
 
 }

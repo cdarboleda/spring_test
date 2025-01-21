@@ -12,5 +12,8 @@ public class ProcesoLigeroDTO {
     private String descripcion;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
-    private Boolean estado;
+    private Integer requirienteId;
+    private Boolean finalizado;
+    private String tipoProceso;
+
 }

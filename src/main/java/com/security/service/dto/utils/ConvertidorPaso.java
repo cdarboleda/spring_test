@@ -20,9 +20,14 @@ public class ConvertidorPaso {
         dto.setDescripcionPaso(paso.getDescripcionPaso());
         dto.setDescripcionEstado(paso.getDescripcionEstado());
         dto.setEstado(paso.getEstado().name().toUpperCase());
+        dto.setFechaInicio(paso.getFechaInicio());
         dto.setFechaFin(paso.getFechaFin());
         dto.setIdProceso(paso.getProceso().getId());
-        dto.setIdResponsable(paso.getResponsable().getId());
+
+        if(paso.getResponsable()!=null){
+            dto.setIdResponsable(paso.getResponsable().getId());//-------------
+
+        }
         return dto;
     }
     
@@ -35,6 +40,7 @@ public class ConvertidorPaso {
         paso.setDescripcionEstado(pasoDTO.getDescripcionEstado());
         paso.setEstado(Estado.valueOf(pasoDTO.getEstado()));
         paso.setFechaFin(pasoDTO.getFechaFin());
+        paso.setFechaInicio(pasoDTO.getFechaInicio());
         //persona y proceso es fuera 
         return paso;
     }

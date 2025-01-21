@@ -12,7 +12,7 @@ public class TipoProcesoConverter implements AttributeConverter<TipoProceso, Str
         if (tipoProceso == null) {
             return null;
         }
-        return tipoProceso.name().toLowerCase();
+        return tipoProceso.name();
     }
 
     @Override
@@ -20,6 +20,6 @@ public class TipoProcesoConverter implements AttributeConverter<TipoProceso, Str
         if (dbData == null) {
             return null;
         }
-        return TipoProceso.valueOf(dbData.toUpperCase());
+        return TipoProceso.valueOf(dbData);
     }
 }

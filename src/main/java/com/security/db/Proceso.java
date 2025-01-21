@@ -42,7 +42,7 @@ public class Proceso {
     @Column(name = "proc_fecha_fin")
     private LocalDateTime fechaFin;
 
-    @Column(name = "proc_estado")
+    @Column(name = "proc_finalizado")
     private Boolean finalizado;
 
     @Column(name = "proc_nombre") //Se sobrescriben en los hijos, si no, pues al crear como generico se pone cualquier cosa
@@ -50,7 +50,7 @@ public class Proceso {
     @Column(name = "proc_descripcion") 
     private String descripcion;
 
-    @Column(name = "paso_tipo_proceso", nullable = true)//si es nulo es un generico
+    @Column(name = "proc_tipo_proceso", nullable = true)//si es nulo es un generico
     private TipoProceso tipoProceso;
     
     @OneToMany(mappedBy = "proceso", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -66,47 +66,18 @@ public class Proceso {
     @JsonIgnore
     private List<ProcesoLog> procesoLog;
 
-    // @ManyToMany(mappedBy = "procesoTitulacionPersonas", fetch = FetchType.LAZY)
-    // @JsonIgnore
-    // private Set<Persona> personas = new HashSet<>();
-
-    //Se usa para añadir persona
-    // public void addPersona(Persona persona){
-    //     this.personas.add(persona);
-    //     persona.getProcesoTitulacionPersonas().add(this);
-    // }
-
-    //Este no se usa
-    // public void removePersona(Persona persona){
-    //     this.personas.remove(persona);
-    //     persona.getPersonasProceso().remove(this);
-    // }
-
     @OneToMany(mappedBy = "proceso", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Paso> pasos; 
 
-    @OneToOne
-    @JoinColumn(name =" proc_id", unique = true)
+    @OneToOne(mappedBy = "proceso")
     @JsonIgnore
     private ProcesoPagoDocente procesoPagoDocente;
 
-    @OneToOne
-    @JoinColumn(name =" proc_id", unique = true)
+    @OneToOne(mappedBy = "proceso")
     @JsonIgnore
     private ProcesoTitulacion procesoTitulacion;
 
-    // @Override
-    // public boolean equals(Object o) {
-    //     if (this == o) return true;
-    //     if (!(o instanceof Proceso)) return false;
-    //     return id != null && id.equals(((Proceso) o).getId());
-    // }
- 
-    // @Override
-    // public int hashCode() {
-    //     return getClass().hashCode();
-    // }
 
 }
 

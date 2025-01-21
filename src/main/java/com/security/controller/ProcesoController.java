@@ -18,6 +18,8 @@ import com.security.service.IGestorProcesoService;
 import com.security.service.IProcesoService;
 import com.security.service.dto.ProcesoDTO;
 
+import jakarta.validation.Valid;
+
 
 @RestController
 @CrossOrigin
@@ -40,7 +42,7 @@ public class ProcesoController {
      }
 
      @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-     public ResponseEntity<?> insertarProceso(@RequestBody ProcesoDTO procesoDTO) {
+     public ResponseEntity<?> insertarProceso(@Valid @RequestBody ProcesoDTO procesoDTO) {
          return new ResponseEntity<>(this.gestorProceso.insert(procesoDTO), HttpStatus.OK);
      }
      @PutMapping(path="/{id}")
