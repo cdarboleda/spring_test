@@ -64,9 +64,9 @@ public class PersonaController {
         return new ResponseEntity<>(this.personaService.findAll(), null, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{id}/procesos", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> obtenerProcesosPorPersonaId(@PathVariable Integer id) {
-        return new ResponseEntity<>(this.gestorProcesoService.findProcesosByPersonaId(id), HttpStatus.OK);
+    @GetMapping("{id}/mis-procesos")
+    public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable Integer id) {
+        return ResponseEntity.ok(this.gestorProcesoService.obtenerMisProcesos(id));
     }
 
     @GetMapping(path="/{id}/roles", produces = MediaType.APPLICATION_JSON_VALUE)

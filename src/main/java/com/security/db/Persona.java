@@ -51,15 +51,15 @@ public class Persona {
     @Column(name = "pers_telefono")
     private String telefono;
 
-    @OneToMany(mappedBy = "requiriente",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "requiriente",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     private List<Proceso> procesos;
 
-    @OneToMany(mappedBy = "responsable", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "responsable", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     private List<Paso> pasos;
     
-    @OneToMany(mappedBy = "persona",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "persona",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     private List<CarpetaDocumento> carpetaDocumentos;
 

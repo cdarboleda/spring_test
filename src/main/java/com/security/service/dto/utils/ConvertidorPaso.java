@@ -23,11 +23,7 @@ public class ConvertidorPaso {
         dto.setFechaInicio(paso.getFechaInicio());
         dto.setFechaFin(paso.getFechaFin());
         dto.setIdProceso(paso.getProceso().getId());
-
-        if(paso.getResponsable()!=null){
-            dto.setIdResponsable(paso.getResponsable().getId());//-------------
-
-        }
+        dto.setIdResponsable((paso.getResponsable()!=null)?paso.getResponsable().getId():null);
         return dto;
     }
     

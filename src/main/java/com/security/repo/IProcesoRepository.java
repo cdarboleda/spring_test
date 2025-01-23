@@ -3,16 +3,40 @@ package com.security.repo;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.security.db.Proceso;
+import com.security.service.dto.MiProcesoDTO;
 
-public interface IProcesoRepository extends JpaRepository<Proceso, Integer>{
+@Repository
+public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
 
-    //@Query("SELECT p FROM Proceso p WHERE p.persona.id = :id")
-    //List<Proceso> findProcesosWherePersonaIsOwner(@Param("id") Integer id);
+    // @Query("SELECT p FROM Proceso p WHERE p.persona.id = :id")
+    // List<Proceso> findProcesosWherePersonaIsOwner(@Param("id") Integer id);
     List<Proceso> findByRequirienteId(Integer id);
 
-    //@Query("SELECT pr FROM Proceso pr JOIN pr.personas p WHERE p.id = :id")
-    //List<Proceso> findProcesosByPersonaId(@Param("id") Integer id);
-    //List<Proceso> findByPersonasId(Integer id);
+    @Query("SELECT new com.security.service.dto.MiProcesoDTO" +
+            "(p.id, p.tipoProceso, p.fechaInicio, p.finalizado, req.id, req.cedula, paso.nombre, paso.responsable.id, paso.responsable.cedula) "
+            +
+            "FROM Proceso p JOIN p.requiriente req JOIN p.pasos paso WHERE paso.estado = 'EN_CURSO'")
+    List<MiProcesoDTO> findMisProcesos();//trae los procesos donde hay un paso en_curso (no messirve)
+
+    //Trae todos los procesos donde haya almenos un paso en el que yo sea responsable (messirve con el otro metodo en el service)
+    @Query("SELECT DISTINCT p " +
+            "FROM Proceso p JOIN p.pasos paso " +
+            "WHERE paso.responsable.id = :responsableId")
+    List<Proceso> findProcesosByResponsableId(@Param("responsableId") Integer responsableId);
+
+    //Trae todos los procesos donde yo sea responsable de almenos uno, y tambien busca el paso que sea EN_curso (messirve solito, pero quiza es demasiado sql)
+    @Query("SELECT new com.security.service.dto.MiProcesoDTO" +
+            "(p.id, p.tipoProceso, p.fechaInicio, p.finalizado, req.id, req.cedula, " +
+            " pasoEnCurso.nombre, pasoEnCurso.responsable.id, pasoEnCurso.responsable.cedula) " +
+            "FROM Proceso p " +
+            "JOIN p.requiriente req " +
+            "LEFT JOIN p.pasos pasoEnCurso ON pasoEnCurso.estado = 'EN_CURSO' " +
+            "WHERE EXISTS (SELECT 1 FROM Paso paso WHERE paso.proceso.id = p.id AND paso.responsable.id = :responsableId)")
+    List<MiProcesoDTO> findMisProcesosByResponsableId(@Param("responsableId") Integer responsableId);
+
 }

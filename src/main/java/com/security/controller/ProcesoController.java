@@ -1,5 +1,7 @@
 package com.security.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.security.service.IGestorProcesoService;
 import com.security.service.IProcesoService;
+import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.ProcesoDTO;
 
 import jakarta.validation.Valid;
@@ -41,9 +44,28 @@ public class ProcesoController {
          return new ResponseEntity<>(this.gestorProceso.findByIdCompletoDTO(id), HttpStatus.OK);
      }
 
-     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    // @GetMapping("/mis-procesos")
+    // public ResponseEntity<?> obtenerMisProcesos() {
+    //     return ResponseEntity.ok(this.gestorProceso.findMisProcesos());
+    // }
+
+
+    // @GetMapping("/mis-procesos/{id}")
+    // public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable Integer id) {
+    //     return ResponseEntity.ok(this.gestorProceso.findMisProcesosByResponsableId(id));
+    // }
+
+
+    @GetMapping("/mis-procesos/{id}")
+    public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable Integer id) {
+        return ResponseEntity.ok(this.gestorProceso.obtenerMisProcesos(id));
+    }
+
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
      public ResponseEntity<?> insertarProceso(@Valid @RequestBody ProcesoDTO procesoDTO) {
-         return new ResponseEntity<>(this.gestorProceso.insert(procesoDTO), HttpStatus.OK);
+            this.gestorProceso.insert(procesoDTO);
+         return new ResponseEntity<>(null, HttpStatus.OK);
+        //  return new ResponseEntity<>(this.gestorProceso.insert(procesoDTO), HttpStatus.OK);
      }
      @PutMapping(path="/{id}")
      public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody ProcesoDTO procesoDTO) {

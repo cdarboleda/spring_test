@@ -2,15 +2,20 @@ package com.security.service;
 
 import java.util.List;
 
+import com.security.db.Proceso;
+import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoDTO;
-import com.security.service.dto.ProcesoLigeroDTO;
+import com.security.service.dto.ProcesoDTO;
 
 public interface IGestorProcesoService {
-    public List<ProcesoLigeroDTO> findProcesosByPersonaId(Integer id);
+    public List<ProcesoDTO> findProcesosByRequirienteId(Integer id);
     //public List<ProcesoLigeroDTO> findProcesosWherePersonaIsOwner(Integer id);
-    public ProcesoLigeroDTO insert(ProcesoDTO dto);
-    public ProcesoLigeroDTO update(ProcesoDTO dto);
+    public void insert(ProcesoDTO dto);
+    public ProcesoDTO update(ProcesoDTO dto);
     public void delete(Integer id);
     public ProcesoCompletoDTO findByIdCompletoDTO(Integer id);
+    public List<MiProcesoDTO> findMisProcesos();
+    public List<MiProcesoDTO> obtenerMisProcesos(Integer responsableId);
+    public List<MiProcesoDTO> findMisProcesosByResponsableId(Integer responsableId);
 }

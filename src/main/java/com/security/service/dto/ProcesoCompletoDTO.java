@@ -10,7 +10,6 @@ import lombok.Data;
 //la entidad normal no me da esto, por el fetch lazy
 public class ProcesoCompletoDTO{
     private Integer id;
-    private String nombre;
     private String descripcion;
     private String tipoProceso;
     private LocalDateTime fechaInicio;

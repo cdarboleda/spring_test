@@ -1,9 +1,14 @@
 package com.security.service.impl;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.security.db.Proceso;
+import com.security.db.enums.TipoProceso;
+import com.security.exception.CustomException;
 import com.security.repo.IProcesoRepository;
 import com.security.service.IProcesoService;
 
@@ -16,7 +21,7 @@ public class ProcesoServiceImpl implements IProcesoService{
 
     @Autowired
     private IProcesoRepository procesoRepository;
-    
+
     @Override
     public Proceso findById(Integer id) {
         Proceso proceso = procesoRepository.findById(id)

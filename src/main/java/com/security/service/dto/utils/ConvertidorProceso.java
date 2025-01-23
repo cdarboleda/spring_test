@@ -10,8 +10,8 @@ import com.security.db.enums.TipoProceso;
 import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoCompletoPagoDocenteDTO;
 import com.security.service.dto.ProcesoCompletoTitulacionDTO;
-import com.security.service.dto.ProcesoLigeroDTO;
-import com.security.service.dto.ProcesoPagoDocenteLigeroDTO;
+import com.security.service.dto.ProcesoDTO;
+import com.security.service.dto.ProcesoPagoDocenteDTO;
 
 @Component
 public class ConvertidorProceso {
@@ -27,14 +27,13 @@ public class ConvertidorProceso {
 
         ProcesoCompletoDTO procesoDTO = new ProcesoCompletoDTO();
 
-        if (proceso.getTipoProceso().equals(TipoProceso.PAGO_DOCENTE)) {
-            procesoDTO = new ProcesoCompletoPagoDocenteDTO(proceso.getProcesoPagoDocente());
-        } else if (proceso.getTipoProceso().equals(TipoProceso.TITULACION)) {
-            procesoDTO = new ProcesoCompletoTitulacionDTO(proceso.getProcesoTitulacion());
-        }
+        // if (proceso.getTipoProceso().equals(TipoProceso.PAGO_DOCENTE)) {
+        //     procesoDTO = new ProcesoCompletoPagoDocenteDTO(proceso.getProcesoPagoDocente());
+        // } else if (proceso.getTipoProceso().equals(TipoProceso.TITULACION)) {
+        //     procesoDTO = new ProcesoCompletoTitulacionDTO(proceso.getProcesoTitulacion());
+        // }
 
         procesoDTO.setId(proceso.getId());
-        procesoDTO.setNombre(proceso.getNombre());
         procesoDTO.setDescripcion(proceso.getDescripcion());
         procesoDTO.setFechaInicio(proceso.getFechaInicio());
         procesoDTO.setFechaFin(proceso.getFechaFin());
@@ -54,11 +53,10 @@ public class ConvertidorProceso {
         return procesoDTO;
     }
 
-    public ProcesoLigeroDTO convertirALigeroDTO(Proceso proceso) {
+    public ProcesoDTO convertirALigeroDTO(Proceso proceso) {
 
-        ProcesoLigeroDTO procesoDTO = new ProcesoLigeroDTO();
+        ProcesoDTO procesoDTO = new ProcesoDTO();
         procesoDTO.setId(proceso.getId());
-        procesoDTO.setNombre(proceso.getNombre());
         procesoDTO.setDescripcion(proceso.getDescripcion());
         procesoDTO.setFechaInicio(proceso.getFechaInicio());
         procesoDTO.setFechaFin(proceso.getFechaFin());
@@ -66,14 +64,13 @@ public class ConvertidorProceso {
         return procesoDTO;
     }
 
-    public ProcesoPagoDocenteLigeroDTO convertirProcesoPagoDocenteALigeroDTO(Proceso proceso) {
+    public ProcesoPagoDocenteDTO convertirProcesoPagoDocenteALigeroDTO(Proceso proceso) {
 
-        ProcesoPagoDocenteLigeroDTO procesoDTO = new ProcesoPagoDocenteLigeroDTO();
+        ProcesoPagoDocenteDTO procesoDTO = new ProcesoPagoDocenteDTO();
         procesoDTO.setId(proceso.getId());
-        procesoDTO.setNombre(proceso.getNombre());
         procesoDTO.setDescripcion(proceso.getDescripcion());
         procesoDTO.setFechaInicio(proceso.getFechaInicio());
-        procesoDTO.setModalidadVirtual(proceso.getProcesoPagoDocente().getModalidadVirtual());
+        // procesoDTO.setModalidadVirtual(proceso.getProcesoPagoDocente().getModalidadVirtual());
         procesoDTO.setFechaFin(proceso.getFechaFin());
         procesoDTO.setFinalizado(proceso.getFinalizado());
         procesoDTO.setTipoProceso(proceso.getTipoProceso().toString());
