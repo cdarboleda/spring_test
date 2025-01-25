@@ -57,7 +57,7 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
     // Aqui busco si existe por la cedula, no hay path, solo body,
     // no importa que id ponga, no debe interesar(autoincremental), la cedula es lo importante
     @Override
-    public Persona insertar(PersonaDTO personaDTO) {
+    public PersonaDTO insertar(PersonaDTO personaDTO) {
         // if (this.personaService.tieneErrores(personaDTO)) {
         //     throw new CustomException("Hay campos erróneos, por favor revise antes de enviar", HttpStatus.BAD_REQUEST);
         // }
@@ -69,11 +69,11 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
         Persona persona = new Persona();
         convertidor.convertirAPersona(persona, personaDTO);
 
-        List<Rol> roles = this.rolService.findAllByIds(personaDTO.getRoles());
+        List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
         this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
 
         persona.setRoles(new HashSet<>(roles));
-        return personaRepository.save(persona);
+        return convertidor.convertirAPersonaDTO(personaRepository.save(persona));
     }
 
     // Aqui busco si existe por el id, se supone que en el path pongo el id, no la
@@ -86,7 +86,7 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
             throw new CustomException("Hay campos erróneos, por favor revise antes de enviar", HttpStatus.BAD_REQUEST);
         }
         Persona persona = this.personaService.findById(personaDTO.getId());
-        List<Rol> roles = this.rolService.findAllByIds(personaDTO.getRoles());
+        List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
 
         this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
 
@@ -131,14 +131,14 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
         return pasos;
     }
 
-    private void rolesInvalidosMensaje(List<Rol> roles, List<Integer> rolesIds) {
+    private void rolesInvalidosMensaje(List<Rol> roles, List<String> rolesIds) {
 
         if (roles.size() != rolesIds.size()) {
-            List<Integer> foundIds = roles.stream()
-                    .map(Rol::getId)
+            List<String> foundIds = roles.stream()
+                    .map(Rol::getNombre)
                     .collect(Collectors.toList());
 
-            List<Integer> missingIds = new ArrayList<>(rolesIds);
+            List<String> missingIds = new ArrayList<>(rolesIds);
             missingIds.removeAll(foundIds);
 
             if (!missingIds.isEmpty()) {

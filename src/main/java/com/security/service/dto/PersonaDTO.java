@@ -13,6 +13,9 @@ import lombok.Data;
 public class PersonaDTO {
 
     private Integer id;
+
+    private String idKeycloak;
+
     @NotBlank
     @NotNull
     private String nombre;
@@ -21,6 +24,6 @@ public class PersonaDTO {
     private String correo;
     private String telefono;
     //Un set (no se repiten) de los ids de los roles
-    private List<Integer> roles;
+    private List<String> roles;
 
 }

@@ -1,6 +1,6 @@
 package com.security.service.dto;
 
-import java.util.Set;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +13,6 @@ public class UserDTO {
     
     private String username;
     private String email;
-    private String firstName;
-    private String lastName;
-    private String password;
-    private Set<String> roles;
+    private List<String> roles;
 
 }

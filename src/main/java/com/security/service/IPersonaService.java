@@ -16,4 +16,7 @@ public interface IPersonaService {
     public Boolean existsById(Integer id);
     public List<Persona> findPersonasByIds(List<Integer> ids);
     public Boolean tieneErrores(PersonaDTO personaDTO);
+
+    public int deleteByIdKeycloak(String idKeycloak);
+    public boolean existeRegistro(String idKeycloak);
 }

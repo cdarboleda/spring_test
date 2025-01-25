@@ -18,4 +18,6 @@ public interface IRolService {
 
     public List<Rol> findAll();
     public List<Rol> findAllByIds(List<Integer> ids);
+
+    public List<Rol> findByNombreIn(List<String> names);
 }

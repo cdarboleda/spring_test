@@ -11,6 +11,9 @@ import com.security.db.Persona;
 public interface IPersonaRepository extends JpaRepository<Persona, Integer>{
 
     public Optional<Persona> findByCedula(String cedula);
+    public int deleteByIdKeycloak(String idKeycloak);
+
+    boolean existsByIdKeycloak(String idKeycloak);
 
 }
     

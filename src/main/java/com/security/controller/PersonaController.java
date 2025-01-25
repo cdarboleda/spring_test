@@ -20,6 +20,7 @@ import com.security.db.Persona;
 import com.security.exception.CustomException;
 import com.security.service.IGestorPersonaService;
 import com.security.service.IGestorProcesoService;
+import com.security.service.IGestorUsurio;
 import com.security.service.IPersonaService;
 import com.security.service.dto.PersonaDTO;
 
@@ -28,7 +29,7 @@ import jakarta.validation.Valid;
 @RestController
 @CrossOrigin
 @RequestMapping("/persona")
-@PreAuthorize("hasAnyRole('admin_client_role', 'secretaria_client_role')")
+@PreAuthorize("hasAnyRole('administrador')")
 public class PersonaController {
 
     @Autowired
@@ -40,10 +41,13 @@ public class PersonaController {
     @Autowired
     private IGestorPersonaService gestorPersonaService;
 
+    @Autowired
+    private IGestorUsurio gestorUsurio;
+
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> insertar(@Valid @RequestBody PersonaDTO persona) {
-        return new ResponseEntity<>(this.gestorPersonaService.insertar(persona), HttpStatus.OK);
+        return new ResponseEntity<>(this.gestorUsurio.createUser(persona), HttpStatus.OK);
     }
 
     //Buscar necesita la cedula dentro del body
@@ -51,7 +55,7 @@ public class PersonaController {
     public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody PersonaDTO personaDTO) {
         personaDTO.setId(id);
         //personaDTO.setCedula(cedula);
-        return new ResponseEntity<>(this.gestorPersonaService.actualizar(personaDTO), HttpStatus.OK);
+        return new ResponseEntity<>(this.gestorUsurio.updateUser(personaDTO), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -61,7 +65,7 @@ public class PersonaController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarTodo() {
-        return new ResponseEntity<>(this.personaService.findAll(), null, HttpStatus.OK);
+        return new ResponseEntity<>(this.gestorUsurio.getUsers(), null, HttpStatus.OK);
     }
 
     @GetMapping("{id}/mis-procesos")
@@ -85,10 +89,9 @@ public class PersonaController {
         return new ResponseEntity<>("Paso "+idPaso+" added", null, HttpStatus.OK);
     }
 
-    @DeleteMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> eliminarPersona(@PathVariable Integer id){
-        this.personaService.deleteById(id);
-        return new ResponseEntity<>("Persona eliminada", null, HttpStatus.OK);
+    @DeleteMapping(path="/{idKeycloak}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> eliminarPersona(@PathVariable String idKeycloak){
+        return new ResponseEntity<>(this.gestorUsurio.deleteUser(idKeycloak), null, HttpStatus.OK);
     }
     
 }

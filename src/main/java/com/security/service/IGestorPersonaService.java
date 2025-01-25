@@ -9,7 +9,7 @@ import com.security.service.dto.PersonaDTO;
 
 public interface IGestorPersonaService {
 
-    public Persona insertar(PersonaDTO persona);
+    public PersonaDTO insertar(PersonaDTO persona);
     public Persona actualizar(PersonaDTO persona);
     public List<Rol> findRolesByPersonaId(Integer id);
     public List<Paso> findPasosByPersonaId(Integer id);

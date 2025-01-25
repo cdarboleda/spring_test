@@ -101,4 +101,14 @@ public class PersonaServiceImpl implements IPersonaService {
                 p.getRoles().isEmpty()) ? true : false;
     }
 
+    @Override
+    public boolean existeRegistro(String idKeycloak) {
+        return personaRepository.existsByIdKeycloak(idKeycloak);
+    }
+
+    @Override
+    public int deleteByIdKeycloak(String idKeycloak) {
+        return this.personaRepository.deleteByIdKeycloak(idKeycloak);
+    }
+
 }

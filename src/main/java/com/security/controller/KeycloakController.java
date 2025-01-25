@@ -2,6 +2,7 @@ package com.security.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,38 +21,20 @@ import com.security.service.dto.UserDTO;
 
 @RestController
 @RequestMapping("/keycloak/user")
-@PreAuthorize("hasAnyRole('admin_client_role', 'docente_client_role','coordinador_client_role')")
+@PreAuthorize("hasAnyRole('administrador')")
 public class KeycloakController {
 
     @Autowired
-    private IKeycloakService keycloakService;
+    private IKeycloakService iKeycloakService;
 
     @GetMapping("/search")
-    public ResponseEntity<?> findAllUsers(){
-        return ResponseEntity.ok(keycloakService.findAllUsersWithRoles());
-    }
-
-    @GetMapping("/search/{username}")
-    public ResponseEntity<?> findByUsername(@PathVariable String username){
-        return ResponseEntity.ok(keycloakService.searchUserByUsername(username));
+    public List<?> getUsers() {
+        return iKeycloakService.getUsers();
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) throws URISyntaxException{
-        String response = keycloakService.createUser(userDTO);
-        return ResponseEntity.created(new URI("/keycloak/user/create")).body(response);
+    public String createUser(@RequestBody UserDTO dto) {
+        return iKeycloakService.createUser(dto.getUsername(), dto.getEmail(), dto.getRoles());
     }
 
-    @PutMapping("/update/{userId}")
-    public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody UserDTO userDTO){ 
-        keycloakService.updateUser(userId, userDTO);
-        return ResponseEntity.ok("User updated successfully!!");
-    }
-
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable String userId){ 
-        keycloakService.deleteUser(userId);
-        return ResponseEntity.noContent().build();
-    }
-    
 }

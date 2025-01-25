@@ -63,6 +63,11 @@ public class RolServiceImpl implements IRolService {
 
     }
 
+    @Override
+    public List<Rol> findByNombreIn(List<String> names) {
+        return this.rolRepository.findByNombreIn(names);
+    }
+
 
 
 }

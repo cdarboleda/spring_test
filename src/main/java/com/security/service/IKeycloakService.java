@@ -8,10 +8,15 @@ import com.security.service.dto.UserDTO;
 
 public interface IKeycloakService {
 
-    List<UserRepresentation> findAllUsers();
-    List<UserDTO> findAllUsersWithRoles();
-    List<UserRepresentation> searchUserByUsername(String username);
-    String createUser(UserDTO userDTO);
-    void deleteUser(String userId);
-    void updateUser(String userId, UserDTO userDTO);
+    public String createUser(String username, String email, List<String> roles);
+
+    public List<UserDTO> getUsers();
+
+    public UserDTO findUserByUsername(String username);
+
+    public Boolean updateUser(String userId, String username, String email, List<String> rolesToAssign);
+    public String updateUserDetails(String userId, String newUsername, String newEmail);
+    public String updateUserRoles(String userId, List<String> newRoles);
+
+    public Boolean deleteUser(String userId);
 }
