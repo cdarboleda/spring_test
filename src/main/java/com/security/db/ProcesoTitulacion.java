@@ -27,11 +27,7 @@ import lombok.Data;
 @Data
 public class ProcesoTitulacion {
 
-    // @Id
-    // @Column(name = "titu_id")
-    // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="seq_pago")
-    // @SequenceGenerator(name = "seq_pago", initialValue = 1, allocationSize = 1)
-    // private Integer id;
+
     @Id
     private Integer id;
 

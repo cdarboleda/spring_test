@@ -36,7 +36,7 @@ public class PasoController {
     }*/
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> buscarPorId(@PathVariable Integer id){
+    public ResponseEntity<?> buscarPorId(@PathVariable(name="id") Integer id){
         return new ResponseEntity<>(this.pasoService.findById(id), null, HttpStatus.OK);
     }
 
@@ -47,7 +47,7 @@ public class PasoController {
 
     
     @PutMapping(path = "/{idPaso}/{estado}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> actualizarEstadoPorId(@PathVariable Integer idPaso, @PathVariable String estado){
+    public ResponseEntity<?> actualizarEstadoPorId(@PathVariable(name="idPaso") Integer idPaso, @PathVariable(name="estado")  String estado){
         return new ResponseEntity<>(this.pasoService.updateEstado(idPaso, estado), null, HttpStatus.OK);
     }
 

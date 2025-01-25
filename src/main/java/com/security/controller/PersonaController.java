@@ -52,14 +52,14 @@ public class PersonaController {
 
     //Buscar necesita la cedula dentro del body
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody PersonaDTO personaDTO) {
+    public ResponseEntity<?> actualizar(@PathVariable(name="id") Integer id, @RequestBody PersonaDTO personaDTO) {
         personaDTO.setId(id);
         //personaDTO.setCedula(cedula);
         return new ResponseEntity<>(this.gestorUsurio.updateUser(personaDTO), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
+    public ResponseEntity<?> buscarPorId(@PathVariable(name="id") Integer id) {
         return new ResponseEntity<>(this.personaService.findById(id), HttpStatus.OK);
     }
 
@@ -69,28 +69,28 @@ public class PersonaController {
     }
 
     @GetMapping("{id}/mis-procesos")
-    public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable Integer id) {
+    public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable(name="id") Integer id) {
         return ResponseEntity.ok(this.gestorProcesoService.obtenerMisProcesos(id));
     }
 
     @GetMapping(path="/{id}/roles", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> obtenerRolesPorPersonaId(@PathVariable Integer id) {
+    public ResponseEntity<?> obtenerRolesPorPersonaId(@PathVariable(name="id") Integer id) {
         return new ResponseEntity<>(this.gestorPersonaService.findRolesByPersonaId(id), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}/pasos", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> obtenerPasosPorPersonaId(@PathVariable Integer id){
+    public ResponseEntity<?> obtenerPasosPorPersonaId(@PathVariable(name="id") Integer id){
         return new ResponseEntity<>(this.gestorPersonaService.findPasosByPersonaId(id), HttpStatus.OK);
     }
 
     @PostMapping(path="/{id}/addPaso", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> anadirPaso(@PathVariable Integer id, @RequestParam Integer idPaso) {
+    public ResponseEntity<?> anadirPaso(@PathVariable(name="id") Integer id, @RequestParam(name="idPaso") Integer idPaso) {
         this.gestorPersonaService.anadirPaso(id, idPaso);
         return new ResponseEntity<>("Paso "+idPaso+" added", null, HttpStatus.OK);
     }
 
     @DeleteMapping(path="/{idKeycloak}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> eliminarPersona(@PathVariable String idKeycloak){
+    public ResponseEntity<?> eliminarPersona(@PathVariable(name="idKeycloak") String idKeycloak){
         return new ResponseEntity<>(this.gestorUsurio.deleteUser(idKeycloak), null, HttpStatus.OK);
     }
     

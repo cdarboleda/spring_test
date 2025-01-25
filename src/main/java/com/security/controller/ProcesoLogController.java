@@ -36,7 +36,7 @@ public class ProcesoLogController {
     }
 
     @GetMapping(path = "/{id}/proceso")
-    public ResponseEntity<?> obtenerLogPorProcesoId(@PathVariable Integer id) {
+    public ResponseEntity<?> obtenerLogPorProcesoId(@PathVariable(name = "id") Integer id) {
         return new ResponseEntity<>(this.procesoLogService.findByProcesoId(id), null, HttpStatus.OK);
     }
 

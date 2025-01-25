@@ -6,8 +6,11 @@ import java.util.List;
 import com.security.db.ObservacionLector;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
+
 public class ProcesoTitulacionDTO extends ProcesoDTO{
 
     private Boolean grupo;

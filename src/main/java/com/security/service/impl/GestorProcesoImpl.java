@@ -172,16 +172,15 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         return convertidorProceso.convertirALigeroDTO(proceso);
     }
 
+    //Me toco borrar uno a uno sin el cascade all sino se iba alv aaaaaaasdasdasdasd
     @Override
-    @Transactional
-    @Modifying
     public void delete(Integer id) {
         this.procesoPagoDocenteRepository.deleteById(id);
         this.procesoTitulacionRepository.deleteById(id);
         carpetaDocumentoRepository.deleteByProcesoId(id);
         pasoRepository.deleteByProcesoId(id);
         procesoLogRepository.deleteByProcesoId(id);
-        
+
         this.procesoRepository.deleteById(id);
     }
 

@@ -30,17 +30,17 @@ public class CarpetaDocumentoController {
     private IGestorCarpetaDocumento gestorCarpetaDocumento;
 
     @GetMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> buscarPorId(@PathVariable Integer id){
+    public ResponseEntity<?> buscarPorId(@PathVariable(name="id") Integer id){
         //return new ResponseEntity<>(this.documentoService.findById(id), null, HttpStatus.OK);
-        return new ResponseEntity<>(this.carpetaDocumentoService.findDTOById(id), null, HttpStatus.OK);
+        return new ResponseEntity<>(this.carpetaDocumentoService.findDTOById(id), HttpStatus.OK);
     }
     @GetMapping(path="/proceso/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> buscarDocumentosPorIdProceso(@PathVariable Integer id){
+    public ResponseEntity<?> buscarDocumentosPorIdProceso(@PathVariable(name="id") Integer id){
         return new ResponseEntity<>(this.carpetaDocumentoService.findAllByProcesoId(id), null, HttpStatus.OK);
     }
 
     @GetMapping(path="/persona/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> buscarDocumentosPorIdPersona(@PathVariable Integer id){
+    public ResponseEntity<?> buscarDocumentosPorIdPersona(@PathVariable(name="id") Integer id){
         return new ResponseEntity<>(this.carpetaDocumentoService.findAllByPersonaId(id), HttpStatus.OK);
     }
 
@@ -50,13 +50,13 @@ public class CarpetaDocumentoController {
     }
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody CarpetaDocumentoDTO carpetaDocumentoDTO){
+    public ResponseEntity<?> actualizar(@PathVariable(name="id") Integer id, @RequestBody CarpetaDocumentoDTO carpetaDocumentoDTO){
         carpetaDocumentoDTO.setId(id);
         return new ResponseEntity<>(this.carpetaDocumentoService.updateUrl(carpetaDocumentoDTO), null, HttpStatus.OK);
     }
 
     @DeleteMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> eliminar(@PathVariable Integer id){
+    public ResponseEntity<?> eliminar(@PathVariable(name="id") Integer id){
         this.carpetaDocumentoService.deleteById(id);
         return new ResponseEntity<>("Carpeta documento con id: "+id+" eliminado", null, HttpStatus.OK);
     }
