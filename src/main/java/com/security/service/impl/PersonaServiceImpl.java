@@ -16,6 +16,7 @@ import com.security.repo.IProcesoRepository;
 import com.security.service.IGestorProcesoService;
 import com.security.service.IPersonaService;
 import com.security.service.dto.PersonaDTO;
+import com.security.service.dto.PersonaLigeroDTO;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -50,6 +51,11 @@ public class PersonaServiceImpl implements IPersonaService {
     @Override
     public List<Persona> findAll() {
         return this.personaRepository.findAll();
+    }
+
+    @Override
+    public List<PersonaLigeroDTO> findAllPersonaLigeroDTO() {
+        return this.personaRepository.findAllPersonaLigeroDTO();
     }
 
     @Override

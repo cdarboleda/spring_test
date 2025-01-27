@@ -67,6 +67,11 @@ public class PersonaController {
     public ResponseEntity<?> buscarTodo() {
         return new ResponseEntity<>(this.gestorUsurio.getUsers(), null, HttpStatus.OK);
     }
+    //todos, (id, cedula, nombre, apellido)
+    @GetMapping(path="/todos-min",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerTodasLasPersonasMin() {
+        return new ResponseEntity<>(this.personaService.findAllPersonaLigeroDTO(), HttpStatus.OK);
+    }
 
     @GetMapping("{id}/mis-procesos")
     public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable(name="id") Integer id) {

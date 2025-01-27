@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class KeycloakServiceImpl implements IKeycloakService {
 
     private static final String REALM_NAME = "proyect-realm";
-    private static final String CLIENT_NAME = "2916a8a6-f355-412a-9d4b-84cce416fe43";
+    private static final String CLIENT_NAME = "d3d3adbc-6d88-4a72-b3c2-f15a40153d78";
 
     @Autowired
     private KeycloakProvider keycloakProvider;
@@ -69,6 +69,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
         try {
             response = getKeycloak().users().create(user);
+            System.out.println("reponse: "+ response);
 
             if (response.getStatus() != 201) {
                 // throw new CustomException("Error keycloak: ",

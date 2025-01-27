@@ -10,4 +10,12 @@ public class PersonaLigeroDTO {
     private String cedula;
     private String correo;
     private String telefono;
+    public PersonaLigeroDTO(){}
+
+    public PersonaLigeroDTO(Integer id, String cedula, String nombre, String apellido){
+        this.id=id;
+        this.cedula=cedula;
+        this.nombre=nombre;
+        this.apellido=apellido;
+    }
 }

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.security.db.Persona;
 import com.security.service.dto.PersonaDTO;
+import com.security.service.dto.PersonaLigeroDTO;
 
 public interface IPersonaService {
     public Optional<Persona> findByIdOptional(Integer id);
@@ -13,6 +14,7 @@ public interface IPersonaService {
     public Persona findById(Integer id);
     public void deleteById(Integer id);
     public List<Persona> findAll();
+    public List<PersonaLigeroDTO> findAllPersonaLigeroDTO();
     public Boolean existsById(Integer id);
     public List<Persona> findPersonasByIds(List<Integer> ids);
     public Boolean tieneErrores(PersonaDTO personaDTO);
