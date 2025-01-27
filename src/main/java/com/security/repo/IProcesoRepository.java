@@ -9,34 +9,52 @@ import org.springframework.stereotype.Repository;
 
 import com.security.db.Proceso;
 import com.security.service.dto.MiProcesoDTO;
+import com.security.service.dto.ProcesoPasoDocumentoDTO;
 
 @Repository
 public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
 
-    // @Query("SELECT p FROM Proceso p WHERE p.persona.id = :id")
-    // List<Proceso> findProcesosWherePersonaIsOwner(@Param("id") Integer id);
-    List<Proceso> findByRequirienteId(Integer id);
+        // @Query("SELECT p FROM Proceso p WHERE p.persona.id = :id")
+        // List<Proceso> findProcesosWherePersonaIsOwner(@Param("id") Integer id);
+        List<Proceso> findByRequirienteId(Integer id);
 
-    @Query("SELECT new com.security.service.dto.MiProcesoDTO" +
-            "(p.id, p.tipoProceso, p.fechaInicio, p.finalizado, req.id, req.cedula, paso.nombre, paso.responsable.id, paso.responsable.cedula) "
-            +
-            "FROM Proceso p JOIN p.requiriente req JOIN p.pasos paso WHERE paso.estado = 'EN_CURSO'")
-    List<MiProcesoDTO> findMisProcesos();//trae los procesos donde hay un paso en_curso (no messirve)
+        @Query("SELECT new com.security.service.dto.MiProcesoDTO" +
+                        "(p.id, p.tipoProceso, p.fechaInicio, p.finalizado, req.id, req.cedula, paso.nombre, paso.responsable.id, paso.responsable.cedula) "
+                        +
+                        "FROM Proceso p JOIN p.requiriente req JOIN p.pasos paso WHERE paso.estado = 'EN_CURSO'")
+        List<MiProcesoDTO> findMisProcesos();// trae los procesos donde hay un paso en_curso (no messirve)
 
-    //Trae todos los procesos donde haya almenos un paso en el que yo sea responsable (messirve con el otro metodo en el service)
-    @Query("SELECT DISTINCT p " +
-            "FROM Proceso p JOIN p.pasos paso " +
-            "WHERE paso.responsable.id = :responsableId")
-    List<Proceso> findProcesosByResponsableId(@Param("responsableId") Integer responsableId);
+        // Trae todos los procesos donde haya almenos un paso en el que yo sea
+        // responsable (messirve con el otro metodo en el service)
+        @Query("SELECT DISTINCT p " +
+                        "FROM Proceso p JOIN p.pasos paso " +
+                        "WHERE paso.responsable.id = :responsableId")
+        List<Proceso> findProcesosByResponsableId(@Param("responsableId") Integer responsableId);
 
-    //Trae todos los procesos donde yo sea responsable de almenos uno, y tambien busca el paso que sea EN_curso (messirve solito, pero quiza es demasiado sql)
-    @Query("SELECT new com.security.service.dto.MiProcesoDTO" +
-            "(p.id, p.tipoProceso, p.fechaInicio, p.finalizado, req.id, req.cedula, " +
-            " pasoEnCurso.nombre, pasoEnCurso.responsable.id, pasoEnCurso.responsable.cedula) " +
-            "FROM Proceso p " +
-            "JOIN p.requiriente req " +
-            "LEFT JOIN p.pasos pasoEnCurso ON pasoEnCurso.estado = 'EN_CURSO' " +
-            "WHERE EXISTS (SELECT 1 FROM Paso paso WHERE paso.proceso.id = p.id AND paso.responsable.id = :responsableId)")
-    List<MiProcesoDTO> findMisProcesosByResponsableId(@Param("responsableId") Integer responsableId);
+        // Trae todos los procesos donde yo sea responsable de almenos uno, y tambien
+        // busca el paso que sea EN_curso (messirve solito, pero quiza es demasiado sql)
+        @Query("SELECT new com.security.service.dto.MiProcesoDTO" +
+                        "(p.id, p.tipoProceso, p.fechaInicio, p.finalizado, req.id, req.cedula, " +
+                        " pasoEnCurso.nombre, pasoEnCurso.responsable.id, pasoEnCurso.responsable.cedula) " +
+                        "FROM Proceso p " +
+                        "JOIN p.requiriente req " +
+                        "LEFT JOIN p.pasos pasoEnCurso ON pasoEnCurso.estado = 'EN_CURSO' " +
+                        "WHERE EXISTS (SELECT 1 FROM Paso paso WHERE paso.proceso.id = p.id AND paso.responsable.id = :responsableId)")
+        List<MiProcesoDTO> findMisProcesosByResponsableId(@Param("responsableId") Integer responsableId);
+
+        // Trea un proceso especifico con sus pasos y los documentos en cada uno de
+        // ellos
+        @Query("SELECT new com.security.service.dto.ProcesoPasoDocumentoDTO(" +
+                        "p.id, p.descripcion, " +
+                        "pa.id, pa.nombre, pa.descripcionPaso, pa.estado, pa.fechaInicio, pa.fechaFin, pa.orden, " +
+                        "per.id, per.nombre, per.cedula, per.apellido,"+
+                        "cd.id, cd.url) " +
+                        "FROM Proceso p " +
+                        "LEFT JOIN p.pasos pa " +
+                        "LEFT JOIN pa.responsable per " +
+                        "LEFT JOIN p.carpetasDocumento cd " +
+                        "WHERE p.id = :procesoId " +
+                        "ORDER BY p.id, pa.orden")
+        List<ProcesoPasoDocumentoDTO> findProcesoDetalleById(@Param("procesoId") Integer procesoId);
 
 }

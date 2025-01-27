@@ -61,6 +61,11 @@ public class ProcesoController {
         return ResponseEntity.ok(this.gestorProceso.obtenerMisProcesos(id));
     }
 
+    @GetMapping("/{id}/pasos")
+    public ResponseEntity<?> obtenerDetalleProcesoId(@PathVariable Integer id) {
+        return ResponseEntity.ok(this.gestorProceso.obtenerDetalleProcesoId(id));
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
      public ResponseEntity<?> insertarProceso(@Valid @RequestBody ProcesoDTO procesoDTO) {
             this.gestorProceso.insert(procesoDTO);
