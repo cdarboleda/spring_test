@@ -35,6 +35,7 @@ import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteDTO;
+import com.security.service.dto.ProcesoPasoDocumentoDTO;
 import com.security.service.dto.ProcesoTitulacionDTO;
 import com.security.service.dto.utils.ConvertidorCarpetaDocumento;
 import com.security.service.dto.utils.ConvertidorPaso;
@@ -239,6 +240,12 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         }
 
         return resultado;
+    }
+
+
+    @Override
+    public List<ProcesoPasoDocumentoDTO> obtenerDetalleProcesoId(Integer procesoId) {
+        return this.procesoRepository.findProcesoDetalleById(procesoId);
     }
 
 }
