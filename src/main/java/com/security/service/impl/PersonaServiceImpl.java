@@ -59,39 +59,19 @@ public class PersonaServiceImpl implements IPersonaService {
     }
 
     @Override
-    public List<Persona> findPersonasByIds(List<Integer> ids) {
-        List<Persona> personas;
-        try {
-            personas = personaRepository.findAllById(ids);
-        } catch (Exception e) {
-            throw new CustomException("No se encontraron personas con los IDs proporcionados.", HttpStatus.BAD_REQUEST);
-        }
-
-        if (personas.isEmpty()) {
-            throw new EntityNotFoundException("No se encontraron personas con los IDs proporcionados.");
-        }
-        return personas;
-    }
-
-    @Override
-    public Persona findByCedula(String cedula) {
-        return this.personaRepository.findByCedula(cedula)
-                .orElseThrow(() -> new EntityNotFoundException("No se encontro la persona con cedula: " + cedula));
-    }
-
     public Optional<Persona> findByCedulaOptional(String cedula) {
         return this.personaRepository.findByCedula(cedula);
     }
 
     @Override
+    public Persona findByIdKeycloak(String idKeycloak) {
+        return this.personaRepository.findByIdKeycloak(idKeycloak)
+        .orElseThrow(()-> new EntityNotFoundException("No se encontró un usuario con ese ID de keycloak"));
+    }
+
+    @Override
     public void deleteById(Integer id) {
         Persona persona = this.findById(id);
-        // persona.getPersonasProceso().forEach(proceso -> {
-
-        // proceso.getPersonas().remove(persona);
-        // });
-        // persona.getPersonasProceso().clear();
-
         this.personaRepository.deleteById(id);
     }
 
