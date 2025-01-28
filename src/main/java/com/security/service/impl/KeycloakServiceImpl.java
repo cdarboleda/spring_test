@@ -1,15 +1,11 @@
 package com.security.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.UserResource;
-import org.keycloak.admin.client.resource.UsersResource;
-import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.security.service.IKeycloakService;
@@ -19,41 +15,40 @@ import com.security.util.KeycloakProvider;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class KeycloakServiceImpl implements IKeycloakService {
 
-    private static final String REALM_NAME = "proyect-realm";
-    private static final String CLIENT_NAME = "d3d3adbc-6d88-4a72-b3c2-f15a40153d78";
+    @Value("${keycloak.realm.name}")
+    private String realmName;
+
+    @Value("${keycloak.client.name}")
+    private String clientName;
 
     @Autowired
     private KeycloakProvider keycloakProvider;
 
     private RealmResource getKeycloak() {
-        return keycloakProvider.getKeycloak().realm(REALM_NAME);
+        return keycloakProvider.getKeycloak().realm(realmName);
     }
 
     private List<RoleRepresentation> getClientRoles() {
-        return getKeycloak().clients().get(CLIENT_NAME).roles().list();
+        return getKeycloak().clients().get(clientName).roles().list();
     }
 
     private List<RoleRepresentation> getUserClientRoles(String userId) {
-        return getKeycloak().users().get(userId).roles().clientLevel(CLIENT_NAME).listEffective();
+        return getKeycloak().users().get(userId).roles().clientLevel(clientName).listEffective();
     }
 
     private void assignRolesToUser(String userId, List<RoleRepresentation> roles) {
-        getKeycloak().users().get(userId).roles().clientLevel(CLIENT_NAME).add(roles);
+        getKeycloak().users().get(userId).roles().clientLevel(clientName).add(roles);
     }
 
     private void removeRolesFromUser(String userId, List<RoleRepresentation> roles) {
-        getKeycloak().users().get(userId).roles().clientLevel(CLIENT_NAME).remove(roles);
+        getKeycloak().users().get(userId).roles().clientLevel(clientName).remove(roles);
     }
 
     @Override
