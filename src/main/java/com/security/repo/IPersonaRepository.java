@@ -16,6 +16,7 @@ import com.security.service.dto.PersonaLigeroDTO;
 public interface IPersonaRepository extends JpaRepository<Persona, Integer> {
 
     public Optional<Persona> findByCedula(String cedula);
+    public Optional<Persona> findByIdKeycloak(String idKeycloak);
 
     public int deleteByIdKeycloak(String idKeycloak);
 

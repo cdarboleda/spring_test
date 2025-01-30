@@ -38,7 +38,7 @@ public class Persona {
     @SequenceGenerator(name = "seq_pers", initialValue = 1, allocationSize = 1)
     private Integer id;
 
-    @Column(name = "pers_id_keycloak")
+    @Column(name = "pers_id_keycloak", unique = true)
     private String idKeycloak;
 
     @NotBlank

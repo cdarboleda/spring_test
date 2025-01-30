@@ -63,6 +63,16 @@ public class PersonaController {
         return new ResponseEntity<>(this.personaService.findById(id), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/idKeycloak/{idKeycloak}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> buscarPorIdKeycloak(@PathVariable(name="idKeycloak") String idKeycloak) {
+        return new ResponseEntity<>(this.personaService.findByIdKeycloak(idKeycloak), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/cedula/{cedula}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> buscarPorCedula(@PathVariable(name="cedula") String cedula) {
+        return new ResponseEntity<>(this.personaService.findByCedulaOptional(cedula), HttpStatus.OK);
+    }
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarTodo() {
         return new ResponseEntity<>(this.gestorUsurio.getUsers(), null, HttpStatus.OK);
