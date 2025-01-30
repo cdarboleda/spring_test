@@ -15,7 +15,9 @@ import com.security.util.KeycloakProvider;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +55,10 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
     @Override
     public String createUser(String username, String email, List<String> rolesToAssign) {
+        System.out.println("hola");
+        // Usar un Set para evitar roles duplicados
+        Set<String> keycloakRolesToAssign = mapRolesToKeycloakRoles(rolesToAssign);
+
         UserRepresentation user = new UserRepresentation();
         user.setUsername(username);
         user.setEmail(email);
@@ -64,12 +70,9 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
         try {
             response = getKeycloak().users().create(user);
-            System.out.println("reponse: "+ response);
+            System.out.println("reponse: " + response);
 
             if (response.getStatus() != 201) {
-                // throw new CustomException("Error keycloak: ",
-                // HttpStatus.valueOf(response.getStatus()));
-                // System.out.println("Error al crear el usuario: " + response.getStatus());
                 return null;
             }
 
@@ -77,7 +80,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
                     .substring(response.getLocation().getPath().lastIndexOf("/") + 1);
 
             List<RoleRepresentation> roles = getClientRoles().stream()
-                    .filter(role -> rolesToAssign.contains(role.getName()))
+                    .filter(role -> keycloakRolesToAssign.contains(role.getName()))
                     .collect(Collectors.toList());
 
             assignRolesToUser(userId, roles);
@@ -138,6 +141,19 @@ public class KeycloakServiceImpl implements IKeycloakService {
                 .build();
     }
 
+    @Override
+    public Boolean deleteUser(String userId) {
+        try {
+            getKeycloak().users().get(userId).remove();
+            return true;
+        } catch (NotFoundException e) {
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public Boolean updateUser(String userId, String username, String email, List<String> rolesToAssign) {
         System.out.println(userId + " " + email + " " + rolesToAssign.toString());
         try {
@@ -148,19 +164,6 @@ public class KeycloakServiceImpl implements IKeycloakService {
             System.out.println(updateRolesMessage);
 
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public Boolean deleteUser(String userId) {
-        try {
-            getKeycloak().users().get(userId).remove();
-            return true;
-        } catch (NotFoundException e) {
-            return false;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -179,9 +182,12 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
     @Override
     public String updateUserRoles(String userId, List<String> newRoles) {
+
+        Set<String> keycloakRolesToAssign = mapRolesToKeycloakRoles(newRoles);
+
         List<RoleRepresentation> availableRoles = getClientRoles();
         List<RoleRepresentation> rolesToAssign = availableRoles.stream()
-                .filter(role -> newRoles.contains(role.getName()))
+                .filter(role -> keycloakRolesToAssign.contains(role.getName()))
                 .collect(Collectors.toList());
 
         List<RoleRepresentation> currentRoles = getUserClientRoles(userId);
@@ -189,6 +195,18 @@ public class KeycloakServiceImpl implements IKeycloakService {
         assignRolesToUser(userId, rolesToAssign);
 
         return "Roles del usuario actualizados con éxito";
+    }
+
+    private Set<String> mapRolesToKeycloakRoles(List<String> roles) {
+        Set<String> keycloakRoles = new HashSet<>();
+        for (String role : roles) {
+            if ("secretaria".equalsIgnoreCase(role)) {
+                keycloakRoles.add("administrador");
+            } else {
+                keycloakRoles.add("usuario");
+            }
+        }
+        return keycloakRoles;
     }
 
 }
