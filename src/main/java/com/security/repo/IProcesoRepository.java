@@ -44,17 +44,31 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
 
         // Trea un proceso especifico con sus pasos y los documentos en cada uno de
         // ellos
+        // @Query("SELECT new com.security.service.dto.ProcesoPasoDocumentoDTO(" +
+        // "p.id, p.descripcion, " +
+        // "pa.id, pa.nombre, pa.descripcionPaso, pa.estado, pa.fechaInicio,
+        // pa.fechaFin, pa.orden, " +
+        // "per.id, per.nombre, per.cedula, per.apellido,"+
+        // "cd.id, cd.url) " +
+        // "FROM Proceso p " +
+        // "LEFT JOIN p.pasos pa " +
+        // "LEFT JOIN pa.responsable per " +
+        // "LEFT JOIN p.carpetasDocumento cd " +
+        // "WHERE p.id = :procesoId " +
+        // "ORDER BY p.id, pa.orden")
+        // List<ProcesoPasoDocumentoDTO> findProcesoDetalleById(@Param("procesoId")
+        // Integer procesoId);
+
         @Query("SELECT new com.security.service.dto.ProcesoPasoDocumentoDTO(" +
                         "p.id, p.descripcion, " +
                         "pa.id, pa.nombre, pa.descripcionPaso, pa.estado, pa.fechaInicio, pa.fechaFin, pa.orden, " +
-                        "per.id, per.nombre, per.cedula, per.apellido,"+
+                        "per.id, per.nombre, per.cedula, per.apellido, " +
                         "cd.id, cd.url) " +
                         "FROM Proceso p " +
                         "LEFT JOIN p.pasos pa " +
                         "LEFT JOIN pa.responsable per " +
-                        "LEFT JOIN p.carpetasDocumento cd " +
+                        "LEFT JOIN pa.carpetaDocumentos cd " + // Cambiado de `p.carpetasDocumento` a `pa.carpetasDocumento`
                         "WHERE p.id = :procesoId " +
-                        "ORDER BY p.id, pa.orden")
+                        "ORDER BY pa.orden")
         List<ProcesoPasoDocumentoDTO> findProcesoDetalleById(@Param("procesoId") Integer procesoId);
-
 }

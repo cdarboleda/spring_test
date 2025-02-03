@@ -15,6 +15,7 @@ import com.security.util.KeycloakProvider;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -86,11 +87,11 @@ public class KeycloakServiceImpl implements IKeycloakService {
             assignRolesToUser(userId, roles);
 
             // Enviar correo para que el usuario configure su contraseña
-            // keycloakProvider.getKeycloak()
-            // .realm(REALM_NAME)
-            // .users()
-            // .get(userId)
-            // .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
+            keycloakProvider.getKeycloak()
+            .realm(realmName)
+            .users()
+            .get(userId)
+            .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
 
             return userId;
 

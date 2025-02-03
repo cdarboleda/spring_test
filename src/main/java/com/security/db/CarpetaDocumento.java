@@ -41,4 +41,9 @@ public class CarpetaDocumento {
     @JsonIgnore
     private Persona persona;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="paso_id")
+    @JsonIgnore
+    private Paso paso;
+
 }
