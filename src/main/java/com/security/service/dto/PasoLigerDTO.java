@@ -22,6 +22,7 @@ public class PasoLigerDTO {
     private LocalDateTime fechaInicio;
     private String estado;
     private LocalDateTime fechaFin;
+    private String observacion;
     private Proceso idProceso;
     private Persona idResponsable;
     

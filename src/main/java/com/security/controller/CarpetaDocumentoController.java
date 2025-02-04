@@ -39,10 +39,10 @@ public class CarpetaDocumentoController {
         return new ResponseEntity<>(this.carpetaDocumentoService.findAllByProcesoId(id), null, HttpStatus.OK);
     }
 
-    @GetMapping(path="/persona/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> buscarDocumentosPorIdPersona(@PathVariable(name="id") Integer id){
-        return new ResponseEntity<>(this.carpetaDocumentoService.findAllByPersonaId(id), HttpStatus.OK);
-    }
+    // @GetMapping(path="/persona/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    // public ResponseEntity<?> buscarDocumentosPorIdPersona(@PathVariable(name="id") Integer id){
+    //     return new ResponseEntity<>(this.carpetaDocumentoService.findAllByPersonaId(id), HttpStatus.OK);
+    // }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> insertar(@RequestBody CarpetaDocumentoDTO documentoDTO){

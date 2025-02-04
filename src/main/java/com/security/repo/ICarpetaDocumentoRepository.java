@@ -16,7 +16,9 @@ public interface ICarpetaDocumentoRepository extends JpaRepository<CarpetaDocume
 
     public List<CarpetaDocumento> findByProcesoId(Integer procesoId);
 
-    public List<CarpetaDocumento> findByPersonaId(Integer personaId);
+    //public List<CarpetaDocumento> findByPersonaId(Integer personaId);
+
+    public List<CarpetaDocumento> findByPasoId(Integer pasoId);
 
     @Transactional
     @Modifying

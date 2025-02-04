@@ -17,6 +17,7 @@ public class PasoDTO {
     private LocalDateTime fechaInicio;
     private String estado;
     private LocalDateTime fechaFin;
+    private String observacion;
 
     
     private Integer idProceso;

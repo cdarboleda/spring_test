@@ -56,6 +56,9 @@ public class Paso {
     @Column(name = "paso_fecha_fin")
     private LocalDateTime fechaFin;
 
+    @Column(name = "paso_observacion")
+    private String observacion;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proc_id", nullable = false)
     @ToString.Exclude

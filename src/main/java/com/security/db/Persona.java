@@ -62,9 +62,9 @@ public class Persona {
     @JsonIgnore
     private List<Paso> pasos;
     
-    @OneToMany(mappedBy = "persona",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonIgnore
-    private List<CarpetaDocumento> carpetaDocumentos;
+    // @OneToMany(mappedBy = "persona",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    // @JsonIgnore
+    // private List<CarpetaDocumento> carpetaDocumentos;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
