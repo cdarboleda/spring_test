@@ -232,8 +232,8 @@ public class GestorProcesoImpl implements IGestorProcesoService {
                     proceso.getRequiriente().getId(),
                     proceso.getRequiriente().getCedula(),
                     pasoEnCurso != null ? pasoEnCurso.getNombre() : null,
-                    pasoEnCurso != null ? pasoEnCurso.getResponsable().getId() : null,
-                    pasoEnCurso != null ? pasoEnCurso.getResponsable().getCedula() : null);
+                    pasoEnCurso.getResponsable() !=null? pasoEnCurso.getResponsable().getId() : null,
+                    pasoEnCurso.getResponsable() !=null? pasoEnCurso.getResponsable().getCedula() : null);
 
             // Agregar a la lista de resultados
             resultado.add(dto);
