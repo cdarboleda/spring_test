@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.security.db.Paso;
+import com.security.service.dto.PasoDTO;
 
 public interface IPasoService {
 
@@ -14,7 +15,7 @@ public interface IPasoService {
 
     public Paso insert(Paso paso);
 
-    public Paso updateEstado(Integer idPaso, String estado);
+    public Paso updatePaso(Integer idPaso, PasoDTO pasoDTO);
 
     public List<String> buscarEstados();
 

@@ -1,5 +1,7 @@
 package com.security.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.db.Persona;
-import com.security.exception.CustomException;
 import com.security.service.IGestorPersonaService;
 import com.security.service.IGestorProcesoService;
 import com.security.service.IGestorUsurio;
@@ -75,7 +75,9 @@ public class PersonaController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarTodo() {
-        return new ResponseEntity<>(this.gestorUsurio.getUsers(), null, HttpStatus.OK);
+        List<PersonaDTO> result = this.gestorUsurio.getUsers();
+        System.out.println("result en buscarTodos: "+ result);
+        return new ResponseEntity<>(result, null, HttpStatus.OK);
     }
     //todos, (id, cedula, nombre, apellido)
     @GetMapping(path="/todos-min",produces = MediaType.APPLICATION_JSON_VALUE)

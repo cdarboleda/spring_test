@@ -23,11 +23,11 @@ public class TitulacionPasoFactory implements IPasoFactory {
     public List<PasoDTO> generatePasos() {
         List<PasoDTO> pasos = new ArrayList<>();
         pasos.add(this.crearPaso("Subir documentación", 1, "Aqui se sube la documentación",
-         Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), LocalDateTime.now()));
+         Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), LocalDateTime.now(),"docente"));
         pasos.add(this.crearPaso("Revisión documentación", 2,  "Coordinarción me revisa la documentación",
-        Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null));
+        Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,"coordinador"));
         pasos.add(this.crearPaso("Finalzacion", 3,  "Se ha realizao el pago", 
-        Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null));
+        Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,"secretaria"));
         return pasos;
     }
 
@@ -36,15 +36,17 @@ public class TitulacionPasoFactory implements IPasoFactory {
             String descripcionPaso,
             Estado estado, 
             String descripcionEstado,
-            LocalDateTime fechaInicio) {
+            LocalDateTime fechaInicio,
+            String rol) {
                 
         PasoDTO paso = new PasoDTO();
         paso.setNombre(nombre);
         paso.setOrden(orden);
-        paso.setDescripcionPaso(nombre);
-        paso.setDescripcionEstado(nombre);
+        paso.setDescripcionPaso(descripcionPaso);
+        paso.setDescripcionEstado(descripcionEstado);
         paso.setEstado(estado.toString());
         paso.setFechaInicio(fechaInicio);
+        paso.setRol(rol);
         return paso;
     
     }

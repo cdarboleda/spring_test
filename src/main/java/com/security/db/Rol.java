@@ -24,6 +24,7 @@ import lombok.ToString;
 public class Rol {
 
     @Id
+    @Column(name = "rol_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_rol")
     @SequenceGenerator(name = "seq_rol", initialValue = 1, allocationSize = 1)
     private Integer id;

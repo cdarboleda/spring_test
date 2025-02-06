@@ -70,6 +70,7 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
         convertidor.convertirAPersona(persona, personaDTO);
 
         List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
+        
         this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
 
         persona.setRoles(new HashSet<>(roles));

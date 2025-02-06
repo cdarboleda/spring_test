@@ -46,7 +46,16 @@ public class GestorUsuarioImpl implements IGestorUsurio {
         }
 
         personaDTO.setIdKeycloak(idUser);
-        return this.gestorPersonaService.insertar(personaDTO);
+        try {
+            return this.gestorPersonaService.insertar(personaDTO);
+        } catch (Exception e) {
+            try {
+                this.keycloakService.deleteUser(idUser); // Intentar eliminar en Keycloak
+            } catch (Exception rollbackError) {
+                throw new RuntimeException("Error al insertar en la base de datos. Además, falló el rollback en Keycloak.", rollbackError);
+            }
+            throw new RuntimeException("Error al insertar en la base de datos. Se ha revertido la creación en Keycloak.", e);
+        }
     }
 
     @Override

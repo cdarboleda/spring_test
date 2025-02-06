@@ -10,14 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.db.Paso;
 import com.security.service.IGestorPasoService;
 import com.security.service.IPasoService;
-
-import jakarta.websocket.server.PathParam;
+import com.security.service.dto.PasoDTO;
 
 @RestController
 @CrossOrigin
@@ -46,9 +43,9 @@ public class PasoController {
     // }
 
     
-    @PutMapping(path = "/{idPaso}/{estado}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> actualizarEstadoPorId(@PathVariable(name="idPaso") Integer idPaso, @PathVariable(name="estado")  String estado){
-        return new ResponseEntity<>(this.pasoService.updateEstado(idPaso, estado), null, HttpStatus.OK);
+    @PutMapping(path = "/{idPaso}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> actualizarPasoById(@PathVariable(name="idPaso") Integer idPaso, @RequestBody PasoDTO pasoDTO){
+        return new ResponseEntity<>(this.pasoService.updatePaso(idPaso, pasoDTO), HttpStatus.OK);
     }
 
     @GetMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)

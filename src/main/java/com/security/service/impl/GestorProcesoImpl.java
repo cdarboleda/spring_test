@@ -7,7 +7,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +15,12 @@ import com.security.db.Persona;
 import com.security.db.Proceso;
 import com.security.db.ProcesoPagoDocente;
 import com.security.db.ProcesoTitulacion;
+import com.security.db.Rol;
 import com.security.db.enums.Estado;
 import com.security.db.enums.TipoProceso;
 import com.security.exception.CustomException;
 import com.security.repo.ICarpetaDocumentoRepository;
 import com.security.repo.IPasoRepository;
-import com.security.repo.IPersonaRepository;
 import com.security.repo.IProcesoLogRepository;
 import com.security.repo.IProcesoPagoDocenteRepository;
 import com.security.repo.IProcesoRepository;
@@ -31,6 +30,7 @@ import com.security.service.IGestorProcesoService;
 import com.security.service.IPasoService;
 import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
+import com.security.service.IRolService;
 import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoDTO;
@@ -58,6 +58,10 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     private IPersonaService personaService;
     @Autowired
     private ICarpetaDocumentoRepository carpetaDocumentoRepository;
+
+    @Autowired
+    private IRolService rolService;
+
     @Autowired
     private IPasoRepository pasoRepository;
     @Autowired
@@ -128,6 +132,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         proceso.setTipoProceso(TipoProceso.valueOf(procesoDTO.getTipoProceso()));
         Persona requiriente = this.personaService.findById(procesoDTO.getRequirienteId());
         proceso.setRequiriente(requiriente);
+        
 
         List<Paso> pasos = this.gestorPasoService.crearPasos(procesoDTO.getTipoProceso())
                 .stream()
@@ -135,6 +140,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
                     Paso paso = new Paso();
                     convertidorPaso.convertirAEntidad(paso, pasoDTO);
                     paso.setProceso(proceso);
+                    paso.setRol(this.rolService.buscarPorNombre(pasoDTO.getRol()).get());
                     return paso;
                 }).collect(Collectors.toList());
 
@@ -232,8 +238,8 @@ public class GestorProcesoImpl implements IGestorProcesoService {
                     proceso.getRequiriente().getId(),
                     proceso.getRequiriente().getCedula(),
                     pasoEnCurso != null ? pasoEnCurso.getNombre() : null,
-                    pasoEnCurso.getResponsable() !=null? pasoEnCurso.getResponsable().getId() : null,
-                    pasoEnCurso.getResponsable() !=null? pasoEnCurso.getResponsable().getCedula() : null);
+                    pasoEnCurso != null && pasoEnCurso.getResponsable() !=null? pasoEnCurso.getResponsable().getId() : null,
+                    pasoEnCurso != null && pasoEnCurso.getResponsable() !=null? pasoEnCurso.getResponsable().getCedula() : null);
 
             // Agregar a la lista de resultados
             resultado.add(dto);
