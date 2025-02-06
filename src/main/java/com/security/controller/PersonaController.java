@@ -29,7 +29,7 @@ import jakarta.validation.Valid;
 @RestController
 @CrossOrigin
 @RequestMapping("/persona")
-@PreAuthorize("hasAnyRole('administrador')")
+//@PreAuthorize("hasAnyRole('administrador')")
 public class PersonaController {
 
     @Autowired
