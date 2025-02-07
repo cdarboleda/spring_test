@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.security.db.Proceso;
+import com.security.db.ProcesoPagoDocente;
+import com.security.db.ProcesoTitulacion;
 import com.security.db.enums.TipoProceso;
 import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoCompletoPagoDocenteDTO;
@@ -23,35 +25,79 @@ public class ConvertidorProceso {
     @Autowired
     private ConvertidorPaso convertidorPaso;
 
-    public ProcesoCompletoDTO convertirACompletoDTO(Proceso proceso) {
+    public Object convertirACompletoDTO(Object procesoEspecifico) {
 
-        ProcesoCompletoDTO procesoDTO = new ProcesoCompletoDTO();
+        ProcesoCompletoDTO procesoDTO = null;
 
-        // if (proceso.getTipoProceso().equals(TipoProceso.PAGO_DOCENTE)) {
-        //     procesoDTO = new ProcesoCompletoPagoDocenteDTO(proceso.getProcesoPagoDocente());
-        // } else if (proceso.getTipoProceso().equals(TipoProceso.TITULACION)) {
-        //     procesoDTO = new ProcesoCompletoTitulacionDTO(proceso.getProcesoTitulacion());
-        // }
+        // Verificamos el tipo del proceso específico
+        if (procesoEspecifico instanceof ProcesoPagoDocente) {
+            ProcesoPagoDocente pagoDocente = (ProcesoPagoDocente) procesoEspecifico;
+            procesoDTO = new ProcesoCompletoPagoDocenteDTO(pagoDocente);
 
-        procesoDTO.setId(proceso.getId());
-        procesoDTO.setDescripcion(proceso.getDescripcion());
-        procesoDTO.setFechaInicio(proceso.getFechaInicio());
-        procesoDTO.setFechaFin(proceso.getFechaFin());
-        procesoDTO.setFinalizado(proceso.getFinalizado());
-        procesoDTO.setTipoProceso(proceso.getTipoProceso().toString());
-        procesoDTO.setCarpetasDocumento(
-                proceso.getCarpetasDocumento().stream()
-                        .map(convertidorCarpetaDocumento::convertirALigeroDTO)
-                        .collect(Collectors.toList()));
+        } else if (procesoEspecifico instanceof ProcesoTitulacion) {
+            ProcesoTitulacion titulacion = (ProcesoTitulacion) procesoEspecifico;
+            procesoDTO = new ProcesoCompletoTitulacionDTO(titulacion);
 
-        procesoDTO.setPasos(
-                proceso.getPasos().stream()
-                        .map(convertidorPaso::convertirAPasoDTO)
-                        .collect(Collectors.toList()));
-        procesoDTO.setRequiriente(convertidorPersona.convertirALigeroDTO(proceso.getRequiriente()));
+        } else {
+            throw new IllegalArgumentException("Tipo de proceso desconocido");
+        }
+
+        // Seteamos los campos comunes
+        if (procesoDTO != null) {
+            Proceso proceso = procesoEspecifico instanceof ProcesoPagoDocente
+                    ? ((ProcesoPagoDocente) procesoEspecifico).getProceso()
+                    : ((ProcesoTitulacion) procesoEspecifico).getProceso();
+
+            procesoDTO.setId(proceso.getId());
+            procesoDTO.setDescripcion(proceso.getDescripcion());
+            procesoDTO.setFechaInicio(proceso.getFechaInicio());
+            procesoDTO.setFechaFin(proceso.getFechaFin());
+            procesoDTO.setFinalizado(proceso.getFinalizado());
+            procesoDTO.setTipoProceso(proceso.getTipoProceso().toString());
+
+            procesoDTO.setCarpetasDocumento(
+                    proceso.getCarpetasDocumento()!=null?
+                    proceso.getCarpetasDocumento().stream()
+                            .map(convertidorCarpetaDocumento::convertirALigeroDTO)
+                            .collect(Collectors.toList())
+                            :null);
+
+            procesoDTO.setPasos(
+                    proceso.getPasos()!=null?
+                    proceso.getPasos().stream()
+                            .map(convertidorPaso::convertirAPasoDTO)
+                            .collect(Collectors.toList())
+                            :null);
+            procesoDTO.setRequiriente(convertidorPersona.convertirALigeroDTO(proceso.getRequiriente()));
+
+        }
 
         return procesoDTO;
     }
+
+    // public ProcesoCompletoDTO convertirACompletoDTO(Proceso proceso) {
+
+    // ProcesoCompletoDTO procesoDTO = new ProcesoCompletoDTO();
+    // procesoDTO.setId(proceso.getId());
+    // procesoDTO.setDescripcion(proceso.getDescripcion());
+    // procesoDTO.setFechaInicio(proceso.getFechaInicio());
+    // procesoDTO.setFechaFin(proceso.getFechaFin());
+    // procesoDTO.setFinalizado(proceso.getFinalizado());
+    // procesoDTO.setTipoProceso(proceso.getTipoProceso().toString());
+
+    // procesoDTO.setCarpetasDocumento(
+    // proceso.getCarpetasDocumento().stream()
+    // .map(convertidorCarpetaDocumento::convertirALigeroDTO)
+    // .collect(Collectors.toList()));
+
+    // procesoDTO.setPasos(
+    // proceso.getPasos().stream()
+    // .map(convertidorPaso::convertirAPasoDTO)
+    // .collect(Collectors.toList()));
+    // procesoDTO.setRequiriente(convertidorPersona.convertirALigeroDTO(proceso.getRequiriente()));
+
+    // return procesoDTO;
+    // }
 
     public ProcesoDTO convertirALigeroDTO(Proceso proceso) {
 

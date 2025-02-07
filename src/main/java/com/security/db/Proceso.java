@@ -20,6 +20,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name = "proceso")
@@ -60,6 +61,7 @@ public class Proceso {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
+        @ToString.Exclude
     @JoinColumn(name = "pers_id")
     private Persona requiriente;
 
@@ -69,6 +71,7 @@ public class Proceso {
 
     @OneToMany(mappedBy = "proceso", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
+    @ToString.Exclude
     private List<Paso> pasos; 
 }
 

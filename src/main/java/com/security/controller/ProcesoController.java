@@ -68,9 +68,9 @@ public class ProcesoController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
      public ResponseEntity<?> insertarProceso(@Valid @RequestBody ProcesoDTO procesoDTO) {
-            this.gestorProceso.insert(procesoDTO);
-         return new ResponseEntity<>(null, HttpStatus.OK);
-        //  return new ResponseEntity<>(this.gestorProceso.insert(procesoDTO), HttpStatus.OK);
+        //     this.gestorProceso.insert(procesoDTO);
+        //  return new ResponseEntity<>(null, HttpStatus.OK);
+         return new ResponseEntity<>(this.gestorProceso.insert(procesoDTO), HttpStatus.OK);
      }
      @PutMapping(path="/{id}")
      public ResponseEntity<?> actualizar(@PathVariable(name = "id") Integer id, @RequestBody ProcesoDTO procesoDTO) {

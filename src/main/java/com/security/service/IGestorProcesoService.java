@@ -12,10 +12,10 @@ import com.security.service.dto.ProcesoDTO;
 public interface IGestorProcesoService {
     public List<ProcesoDTO> findProcesosByRequirienteId(Integer id);
     //public List<ProcesoLigeroDTO> findProcesosWherePersonaIsOwner(Integer id);
-    public void insert(ProcesoDTO dto);
+    public Object  insert(ProcesoDTO procesoDTO);
     public ProcesoDTO update(ProcesoDTO dto);
     public void delete(Integer id);
-    public ProcesoCompletoDTO findByIdCompletoDTO(Integer id);
+    public Object  findByIdCompletoDTO(Integer id);
     public List<MiProcesoDTO> findMisProcesos();
     public List<MiProcesoDTO> obtenerMisProcesos(Integer responsableId);
     public List<MiProcesoDTO> findMisProcesosByResponsableId(Integer responsableId);

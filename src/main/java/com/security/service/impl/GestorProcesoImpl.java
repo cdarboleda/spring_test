@@ -3,6 +3,7 @@ package com.security.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,6 @@ import com.security.db.Persona;
 import com.security.db.Proceso;
 import com.security.db.ProcesoPagoDocente;
 import com.security.db.ProcesoTitulacion;
-import com.security.db.Rol;
 import com.security.db.enums.Estado;
 import com.security.db.enums.TipoProceso;
 import com.security.exception.CustomException;
@@ -32,7 +32,6 @@ import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
 import com.security.service.IRolService;
 import com.security.service.dto.MiProcesoDTO;
-import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteDTO;
 import com.security.service.dto.ProcesoPasoDocumentoDTO;
@@ -102,15 +101,16 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         return procesosLigeros;
     }
 
-    private void insertarProcesoEspecifico(Proceso proceso, ProcesoDTO procesoDTO) {
+    @SuppressWarnings("unchecked")
+    private Object insertarProcesoEspecifico(Proceso proceso, ProcesoDTO procesoDTO) {
         if (procesoDTO.getTipoProceso().equals(TipoProceso.PAGO_DOCENTE.toString())) {
             ProcesoPagoDocenteDTO procesoPDDTO = (ProcesoPagoDocenteDTO) procesoDTO;
             ProcesoPagoDocente pagoDocente = new ProcesoPagoDocente();
             pagoDocente.setProceso(proceso);
             pagoDocente.setModalidadVirtual(procesoPDDTO.getModalidadVirtual());
-
-            procesoPagoDocenteRepository.save(pagoDocente);
-        } else if (procesoDTO.getTipoProceso().equals(TipoProceso.TITULACION.toString())) {
+            return procesoPagoDocenteRepository.save(pagoDocente);
+        } 
+        else if (procesoDTO.getTipoProceso().equals(TipoProceso.TITULACION.toString())) {
             ProcesoTitulacionDTO procesoTDTO = (ProcesoTitulacionDTO) procesoDTO;
             ProcesoTitulacion titulacion = new ProcesoTitulacion();
             titulacion.setProceso(proceso);
@@ -119,12 +119,15 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             titulacion.setFechaDefensa(procesoTDTO.getFechaDefensa());
             titulacion.setNotaLector1(procesoTDTO.getNotaLector1());
             titulacion.setNotaLector2(procesoTDTO.getNotaLector2());
-            procesoTitulacionRepository.save(titulacion);
+            return procesoTitulacionRepository.save(titulacion);
         }
+        return null;
     }
+    
+    
 
     @Override
-    public void insert(ProcesoDTO procesoDTO) {
+    public Object insert(ProcesoDTO procesoDTO) {
 
         Proceso proceso = new Proceso();
         proceso.setFinalizado(false);
@@ -166,8 +169,11 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         proceso.setPasos(pasos);
         this.procesoRepository.save(proceso);
 
-        this.insertarProcesoEspecifico(proceso, procesoDTO);
-        // return convertidorProceso.convertirALigeroDTO(procesoGuardado);
+        //Este me devuelve un <T>
+        var procesoEspecifico = this.insertarProcesoEspecifico(proceso, procesoDTO);
+        System.out.println("response: "+ procesoEspecifico);
+        return convertidorProceso.convertirACompletoDTO(procesoEspecifico);
+
     }
 
     @Override
@@ -192,8 +198,18 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     }
 
     @Override
-    public ProcesoCompletoDTO findByIdCompletoDTO(Integer id) {
-        return convertidorProceso.convertirACompletoDTO(this.procesoService.findById(id));
+    public Object findByIdCompletoDTO(Integer id) {       
+        Optional<ProcesoPagoDocente> pago = this.procesoPagoDocenteRepository.findById(id);
+        Optional<ProcesoTitulacion> titulacion = this.procesoTitulacionRepository.findById(id);
+        Object proceso;
+        if(pago.isPresent()){
+            proceso = pago.get();
+        }else if(titulacion.isPresent()){
+            proceso = titulacion.get();
+        }else{
+            throw new IllegalArgumentException("findByIdCompletoDTO Tipo de proceso desconocido");
+        }
+        return convertidorProceso.convertirACompletoDTO(proceso);
     }
 
     @Override
