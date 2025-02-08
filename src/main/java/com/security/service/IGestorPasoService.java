@@ -12,4 +12,5 @@ public interface IGestorPasoService {
     public List<Paso> insertarMultipleConResponsable(List<PasoDTO> pasosDTO, Integer idProceso);
     public List<Paso> insertarMultipleAProceso(List<PasoDTO> pasosDTO, Integer idProceso);
     public List<PasoDTO> crearPasos(String proceso);
+    public Paso updatePasoResponsable(Integer idPaso, Integer idResponsable);
 }

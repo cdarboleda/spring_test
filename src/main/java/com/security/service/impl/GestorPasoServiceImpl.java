@@ -1,7 +1,9 @@
 package com.security.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,7 @@ import com.security.service.IProcesoService;
 import com.security.service.dto.PasoDTO;
 import com.security.service.dto.utils.ConvertidorPaso;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -50,7 +53,24 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     public List<PasoDTO> crearPasos(String proceso) {
         return this.factoryManager.generarPasosPorProceso(proceso);
     }
+    
+    @Override
+    public Paso updatePasoResponsable(Integer idPaso, Integer idResponsable) {
+        Paso paso = this.pasoService.findById(idPaso);
+        Persona responsable = this.personaService.findById(idResponsable);
 
+        // if(responsable.activo!=null){
+        //     paso.setResponsable(responsable);
+        // }
+        //el filtro de rol de un responsable le hacemos en el front
+        if(responsable.getRoles().contains(paso.getRol())){
+            paso.setResponsable(responsable);
+        }else{
+            throw new RuntimeException("El responsable no tiene el rol");
+        }
+
+        return paso;
+    }
 
     // inserta un paso con responsable y proceso
     // el orden no verifica
@@ -96,7 +116,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
 
     // }
 
-    //es el que guarda los pasos de golpe al inicio de crear un proceso
+    // es el que guarda los pasos de golpe al inicio de crear un proceso
     @Override
     public List<Paso> insertarMultipleAProceso(List<PasoDTO> pasosDTO, Integer idProceso) {
         // Verificar que el proceso exista
@@ -106,7 +126,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
                 .map(pasoDTO -> {
                     Paso paso = new Paso();
                     convertidorPaso.convertirAEntidad(paso, pasoDTO);
-                    //paso.setResponsable(null);
+                    // paso.setResponsable(null);
                     paso.setProceso(proceso);
                     return this.pasoRepository.save(paso);
                 })
@@ -115,7 +135,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         return pasosInsertados;
     }
 
-    //porsiacaso, si ya tuvieran responsable y necesitase insertarlos de golpe
+    // porsiacaso, si ya tuvieran responsable y necesitase insertarlos de golpe
     @Override
     public List<Paso> insertarMultipleConResponsable(List<PasoDTO> pasosDTO, Integer idProceso) {
         // Verificar que el proceso exista

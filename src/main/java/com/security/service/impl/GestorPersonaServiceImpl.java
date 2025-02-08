@@ -24,6 +24,7 @@ import com.security.service.IPasoService;
 import com.security.service.IPersonaService;
 import com.security.service.IRolService;
 import com.security.service.dto.PersonaDTO;
+import com.security.service.dto.PersonaLigeroDTO;
 import com.security.service.dto.utils.Convertidor;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -55,11 +56,13 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
     private IPasoRepository pasoRepository;
 
     // Aqui busco si existe por la cedula, no hay path, solo body,
-    // no importa que id ponga, no debe interesar(autoincremental), la cedula es lo importante
+    // no importa que id ponga, no debe interesar(autoincremental), la cedula es lo
+    // importante
     @Override
     public PersonaDTO insertar(PersonaDTO personaDTO) {
         // if (this.personaService.tieneErrores(personaDTO)) {
-        //     throw new CustomException("Hay campos erróneos, por favor revise antes de enviar", HttpStatus.BAD_REQUEST);
+        // throw new CustomException("Hay campos erróneos, por favor revise antes de
+        // enviar", HttpStatus.BAD_REQUEST);
         // }
         if (this.personaService.findByCedulaOptional(personaDTO.getCedula()).isPresent()) {
             throw new CustomException("Ya existe una persona con la cedula: " + personaDTO.getCedula(),
@@ -70,7 +73,7 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
         convertidor.convertirAPersona(persona, personaDTO);
 
         List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
-        
+
         this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
 
         persona.setRoles(new HashSet<>(roles));
@@ -126,10 +129,23 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
     @Override
     public List<Paso> findPasosByPersonaId(Integer id) {
         List<Paso> pasos = this.pasoRepository.findByResponsableId(id);
-        if(pasos.isEmpty()){
+        if (pasos.isEmpty()) {
             throw new EntityNotFoundException("No hay pasos con responsable de id " + id);
         }
         return pasos;
+    }
+    
+    @Override
+    public List<PersonaLigeroDTO> findAllWithRoles() {
+        List<PersonaLigeroDTO> dtos = this.personaRepository.findAllWithRoles().stream()
+                .map(p -> new PersonaLigeroDTO(
+                        p.getId(),
+                        p.getCedula(),
+                        p.getNombre(),
+                        p.getApellido(),
+                        p.getRoles().stream().map(Rol::getNombre).collect(Collectors.toList())))
+                .collect(Collectors.toList());
+                return dtos;
     }
 
     private void rolesInvalidosMensaje(List<Rol> roles, List<String> rolesIds) {

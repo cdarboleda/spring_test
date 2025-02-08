@@ -16,6 +16,7 @@ import com.security.service.dto.PersonaLigeroDTO;
 public interface IPersonaRepository extends JpaRepository<Persona, Integer> {
 
     public Optional<Persona> findByCedula(String cedula);
+
     public Optional<Persona> findByIdKeycloak(String idKeycloak);
 
     public int deleteByIdKeycloak(String idKeycloak);
@@ -23,8 +24,11 @@ public interface IPersonaRepository extends JpaRepository<Persona, Integer> {
     boolean existsByIdKeycloak(String idKeycloak);
 
     @Query("SELECT new com.security.service.dto.PersonaLigeroDTO " +
-            "(p.id, p.cedula, p.nombre, p.apellido)"+
+            "(p.id, p.cedula, p.nombre, p.apellido)" +
             "FROM Persona p")
     public List<PersonaLigeroDTO> findAllPersonaLigeroDTO();
+
+    @Query("SELECT p FROM Persona p LEFT JOIN FETCH p.roles")
+    List<Persona> findAllWithRoles();
 
 }
