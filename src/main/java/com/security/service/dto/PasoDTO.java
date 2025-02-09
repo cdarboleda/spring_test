@@ -2,9 +2,6 @@ package com.security.service.dto;
 
 import java.time.LocalDateTime;
 
-import com.security.db.Persona;
-import com.security.db.Proceso;
-
 import lombok.Data;
 
 @Data
@@ -23,5 +20,13 @@ public class PasoDTO {
     
     private Integer idProceso;
     private Integer idResponsable;
+
+    public PasoDTO(){}
+    public PasoDTO(Integer id, String nombre, Integer idResponsable, String rol){
+        this.id = id;
+        this.nombre = nombre;
+        this.idResponsable = idResponsable;
+        this.rol = rol;
+    }
     
 }

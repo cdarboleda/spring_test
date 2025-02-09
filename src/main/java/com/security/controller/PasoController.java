@@ -37,6 +37,11 @@ public class PasoController {
         return new ResponseEntity<>(this.pasoService.findById(id), null, HttpStatus.OK);
     }
 
+    @GetMapping(path = "proceso/{idProceso}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> buscarPasosDTOPorProcesoId(@PathVariable(name="idProceso") Integer idProceso){
+        return new ResponseEntity<>(this.gestorPasoService.findPasosDTOByProcesoId(idProceso), null, HttpStatus.OK);
+    }
+
     // @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     // public ResponseEntity<?> actualizarEstadoPorId(@RequestParam Integer idPaso, @RequestParam String estado){
     //     return new ResponseEntity<>(this.pasoService.updateEstado(idPaso, estado), null, HttpStatus.OK);

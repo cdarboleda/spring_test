@@ -55,7 +55,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     }
     
     @Override
-    public Paso updatePasoResponsable(Integer idPaso, Integer idResponsable) {
+    public PasoDTO updatePasoResponsable(Integer idPaso, Integer idResponsable) {
         Paso paso = this.pasoService.findById(idPaso);
         Persona responsable = this.personaService.findById(idResponsable);
 
@@ -68,8 +68,13 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         }else{
             throw new RuntimeException("El responsable no tiene el rol");
         }
+        return convertidorPaso.convertirAPasoDTO(paso);
 
-        return paso;
+    }
+
+    @Override
+    public List<PasoDTO> findPasosDTOByProcesoId(Integer procesoId){
+        return this.pasoRepository.findPasosDTOByProcesoId(procesoId);
     }
 
     // inserta un paso con responsable y proceso
@@ -88,83 +93,6 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         paso.setProceso(proceso);
         paso.setResponsable(persona);
         return this.pasoRepository.save(paso);
-    }
-
-    // @Override
-    // public List<Paso> insertarMultiple(List<PasoDTO> pasosDTO, Integer idProceso)
-    // {
-
-    // Proceso proceso = this.procesoService.findById(idProceso);
-    // Map<Integer, Persona> personasMapa = new HashMap<>();
-    // List<Paso> pasosInsertados= new ArrayList<>();
-    // pasosDTO.stream().forEach((pasoDTO)->{
-    // Paso paso = new Paso();
-    // convertidorPaso.convertirAEntidad(paso, pasoDTO);
-    // if(!personasMapa.containsKey(pasoDTO.getIdResponsable())){
-    // Persona persona = this.personaService.findById(pasoDTO.getIdResponsable());
-    // personasMapa.put(pasoDTO.getIdResponsable(), persona);
-    // paso.setResponsable(persona);
-    // }else{
-    // paso.setResponsable(personasMapa.get(pasoDTO.getIdResponsable()));
-    // }
-    // paso.setProceso(proceso);
-    // pasosInsertados.add(this.pasoRepository.save(paso));
-
-    // });
-
-    // return pasosInsertados;
-
-    // }
-
-    // es el que guarda los pasos de golpe al inicio de crear un proceso
-    @Override
-    public List<Paso> insertarMultipleAProceso(List<PasoDTO> pasosDTO, Integer idProceso) {
-        // Verificar que el proceso exista
-        Proceso proceso = this.procesoService.findById(idProceso);
-        // Convertir y guardar los pasos
-        List<Paso> pasosInsertados = pasosDTO.stream()
-                .map(pasoDTO -> {
-                    Paso paso = new Paso();
-                    convertidorPaso.convertirAEntidad(paso, pasoDTO);
-                    // paso.setResponsable(null);
-                    paso.setProceso(proceso);
-                    return this.pasoRepository.save(paso);
-                })
-                .collect(Collectors.toList());
-
-        return pasosInsertados;
-    }
-
-    // porsiacaso, si ya tuvieran responsable y necesitase insertarlos de golpe
-    @Override
-    public List<Paso> insertarMultipleConResponsable(List<PasoDTO> pasosDTO, Integer idProceso) {
-        // Verificar que el proceso exista
-        Proceso proceso = this.procesoService.findById(idProceso);
-
-        // Extraer IDs únicos de responsables
-        Set<Integer> idsResponsables = pasosDTO.stream()
-                .map(PasoDTO::getIdResponsable)
-                .collect(Collectors.toSet());
-
-        // Validar que todos los IDs de responsables existan
-        Map<Integer, Persona> personasMapa = idsResponsables.stream()
-                .collect(Collectors.toMap(
-                        id -> id,
-                        id -> this.personaService.findById(id) // Lanza excepción si un ID no existe
-                ));
-
-        // Convertir y guardar los pasos
-        List<Paso> pasosInsertados = pasosDTO.stream()
-                .map(pasoDTO -> {
-                    Paso paso = new Paso();
-                    convertidorPaso.convertirAEntidad(paso, pasoDTO);
-                    paso.setResponsable(personasMapa.get(pasoDTO.getIdResponsable()));
-                    paso.setProceso(proceso);
-                    return this.pasoRepository.save(paso);
-                })
-                .collect(Collectors.toList());
-
-        return pasosInsertados;
     }
 
 }

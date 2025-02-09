@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.security.db.Paso;
 import com.security.db.Proceso;
+import com.security.service.dto.PasoDTO;
 
 public interface IPasoRepository extends JpaRepository<Paso, Integer>{
     public Optional<Paso> findByOrden(Integer orden);
@@ -21,5 +22,10 @@ public interface IPasoRepository extends JpaRepository<Paso, Integer>{
     @Modifying
     @Query("DELETE FROM Paso p WHERE p.proceso.id = :procesoId")
     void deleteByProcesoId(@Param("procesoId") Integer procesoId);
+
+    @Query("SELECT new com.security.service.dto.PasoDTO("+
+    "p.id, p.nombre, p.responsable.id, p.rol.nombre)"+
+    "FROM Paso p WHERE p.proceso.id = :procesoId")
+    List<PasoDTO> findPasosDTOByProcesoId(@Param("procesoId") Integer procesoId);
 
 }
