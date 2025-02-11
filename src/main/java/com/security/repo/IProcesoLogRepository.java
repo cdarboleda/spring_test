@@ -12,10 +12,11 @@ import com.security.db.ProcesoLog;
 
 public interface IProcesoLogRepository extends JpaRepository<ProcesoLog, Integer>{
 
-    public List<ProcesoLog> findByProcesoId(Integer id);
+    @Query("SELECT l FROM ProcesoLog l WHERE l.procesoId = :procesoId")
+    public List<ProcesoLog> findByProcesoId(@Param("procesoId") Integer procesoId);    
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM ProcesoLog l WHERE l.proceso.id = :procesoId")
+    @Query("DELETE FROM ProcesoLog l WHERE l.procesoId = :procesoId")
     void deleteByProcesoId(@Param("procesoId") Integer procesoId);    
 }

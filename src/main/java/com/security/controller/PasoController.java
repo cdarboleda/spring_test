@@ -50,7 +50,7 @@ public class PasoController {
     
     @PutMapping(path = "/{idPaso}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> actualizarPasoById(@PathVariable(name="idPaso") Integer idPaso, @RequestBody PasoDTO pasoDTO){
-        return new ResponseEntity<>(this.pasoService.updatePaso(idPaso, pasoDTO), HttpStatus.OK);
+        return new ResponseEntity<>(this.gestorPasoService.updatePaso(idPaso, pasoDTO), HttpStatus.OK);
     }
     
     @PutMapping(path = "/{idPaso}/{idResponsable}", produces = MediaType.APPLICATION_JSON_VALUE)

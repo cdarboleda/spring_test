@@ -71,7 +71,7 @@ public class PersonaServiceImpl implements IPersonaService {
 
     @Override
     public void deleteById(Integer id) {
-        Persona persona = this.findById(id);
+        // Persona persona = this.findById(id);
         this.personaRepository.deleteById(id);
     }
 

@@ -10,7 +10,10 @@ import com.security.db.ProcesoLog;
 import com.security.repo.IProcesoLogRepository;
 import com.security.service.IProcesoLogService;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class ProcesoLogServiceImpl implements IProcesoLogService{
 
     @Autowired

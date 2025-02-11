@@ -2,6 +2,8 @@ package com.security.db;
 
 import java.time.LocalDateTime;
 
+import com.security.db.enums.Evento;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,14 +40,23 @@ public class ProcesoLog {
     @Column(name = "proc_log_responsable_nombre")
     private String responsableNombre;
 
+    // @Column(name = "proc_log_paso_id")
+    // private Integer pasoId;
+
     @Column(name = "proc_log_paso_orden")
     private Integer pasoOrden;
 
     @Column(name = "proc_log_paso_nombre")
     private String pasoNombre;
 
-    @Column(name = "proc_log_nuevo_estado")
-    private String nuevoEstado;
+    @Column(name = "proc_log_paso_estado")
+    private String pasoEstado;
+
+    @Column(name = "proc_log_tipo_evento")
+    private Evento tipoEvento;
+    
+    @Column(name = "proc_log_paso_estado_descripcion")
+    private String pasoEstadoDescripcion;
 
     @Column(name = "proc_log_fecha_cambio")
     private LocalDateTime fechaCambio;

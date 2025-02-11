@@ -7,16 +7,13 @@ import org.springframework.stereotype.Service;
 import com.security.db.CarpetaDocumento;
 import com.security.exception.CustomException;
 import com.security.repo.ICarpetaDocumentoRepository;
-import com.security.repo.IPasoRepository;
 import com.security.service.IGestorCarpetaDocumento;
 import com.security.service.IPasoService;
-import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
 import com.security.service.dto.CarpetaDocumentoDTO;
 import com.security.service.dto.CarpetaDocumentoLigeroDTO;
 import com.security.service.dto.utils.ConvertidorCarpetaDocumento;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -30,16 +27,10 @@ public class GestorCarpetaDocumentoServiceImpl implements IGestorCarpetaDocument
     private IProcesoService procesoService;
 
     @Autowired
-    private IPersonaService personaService;
-
-    @Autowired
     private ConvertidorCarpetaDocumento convertidorDocumento;
 
     @Autowired
     private IPasoService pasoService;
-
-    @Autowired
-    private IPasoRepository pasoRepository;
 
     @Override
     public CarpetaDocumentoLigeroDTO insert(CarpetaDocumentoDTO documentoDTO) {
@@ -57,10 +48,6 @@ public class GestorCarpetaDocumentoServiceImpl implements IGestorCarpetaDocument
 
         CarpetaDocumento documentoActual = this.documentoRepository.save(documento);
 
-        System.out.println(
-                "---------------------------------------------------------------------------------------------------");
-        System.out.println(" HOlaa ---------------------------------------------------------------------------------");
-        System.out.println("paso id: " + documentoDTO.getPasoId() + " Estado del paso: " + documentoDTO.getEstado());
         // this.pasoService.updateEstado(documentoDTO.getPasoId(),
         // documentoDTO.getEstado());
 

@@ -2,10 +2,6 @@ package com.security.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,17 +10,20 @@ import org.springframework.stereotype.Service;
 import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.Proceso;
+import com.security.db.enums.Estado;
+import com.security.db.enums.EstadoHelper;
+import com.security.db.enums.Evento;
 import com.security.exception.CustomException;
 import com.security.factory.PasoFactoryManager;
 import com.security.repo.IPasoRepository;
 import com.security.service.IGestorPasoService;
+import com.security.service.IGestorProcesoLogService;
 import com.security.service.IPasoService;
 import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
 import com.security.service.dto.PasoDTO;
 import com.security.service.dto.utils.ConvertidorPaso;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -47,6 +46,9 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     private IPasoService pasoService;
 
     @Autowired
+    private IGestorProcesoLogService gestorProcesoLogService;
+
+    @Autowired
     private PasoFactoryManager factoryManager;
 
     @Override
@@ -66,11 +68,39 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         if(responsable.getRoles().contains(paso.getRol())){
             paso.setResponsable(responsable);
             //agregar procesoLog TODO
+            this.gestorProcesoLogService.insertarProcesoLog(paso, Evento.RESPONSABLE);
         }else{
             throw new RuntimeException("El responsable no tiene el rol");
         }
         return convertidorPaso.convertirAPasoDTO(paso);
 
+    }
+
+    
+    @Override
+    public Paso updatePaso(Integer idPaso, PasoDTO pasoDTO) {
+        Paso paso = this.pasoService.findById(idPaso);
+
+        paso.setEstado(Estado.valueOf(pasoDTO.getEstado()));
+
+        if (pasoDTO.getObservacion() != null)
+            paso.setObservacion(pasoDTO.getObservacion());
+        paso.setDescripcionEstado(pasoDTO.getDescripcionEstado() == null
+                ? EstadoHelper.getDescripcionPorIndice(Estado.valueOf(pasoDTO.getEstado()), 0)
+                : pasoDTO.getDescripcionEstado());
+
+        if (pasoDTO.getEstado().equalsIgnoreCase("FINALIZADO")) {
+            paso.setFechaFin(LocalDateTime.now());
+        } else if (pasoDTO.getEstado().equalsIgnoreCase("EN_CURSO")) {
+            paso.setFechaInicio(LocalDateTime.now());
+            paso.setFechaFin(null);
+        } else if (pasoDTO.getEstado().equalsIgnoreCase("PENDIENTE")) {
+            paso.setFechaInicio(null);
+            paso.setFechaFin(null);
+        }
+
+        this.gestorProcesoLogService.insertarProcesoLog(paso, Evento.ESTADO);
+        return paso; // Guarda los cambios
     }
 
     @Override

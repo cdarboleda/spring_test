@@ -65,9 +65,9 @@ public class Proceso {
     @JoinColumn(name = "pers_id")
     private Persona requiriente;
 
-    @OneToMany(mappedBy = "proceso", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonIgnore
-    private List<ProcesoLog> procesoLog;
+    // @OneToMany(mappedBy = "proceso", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    // @JsonIgnore
+    // private List<ProcesoLog> procesoLog;
 
     @OneToMany(mappedBy = "proceso", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
