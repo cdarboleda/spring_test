@@ -19,7 +19,7 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
         List<Proceso> findByRequirienteId(Integer id);
 
         @Query("SELECT new com.security.service.dto.MiProcesoDTO" +
-                        "(p.id, p.tipoProceso, p.fechaInicio, p.finalizado, req.id, req.cedula, paso.nombre, paso.responsable.id, paso.responsable.cedula) "
+                        "(p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, req.id, req.cedula, paso.nombre, paso.responsable.id, paso.responsable.cedula) "
                         +
                         "FROM Proceso p JOIN p.requiriente req JOIN p.pasos paso WHERE paso.estado = 'EN_CURSO'")
         List<MiProcesoDTO> findMisProcesos();// trae los procesos donde hay un paso en_curso (no messirve)
@@ -34,7 +34,7 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
         // Trae todos los procesos donde yo sea responsable de almenos uno, y tambien
         // busca el paso que sea EN_curso (messirve solito, pero quiza es demasiado sql)
         @Query("SELECT new com.security.service.dto.MiProcesoDTO" +
-                        "(p.id, p.tipoProceso, p.fechaInicio, p.finalizado, req.id, req.cedula, " +
+                        "(p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, req.id, req.cedula, " +
                         " pasoEnCurso.nombre, pasoEnCurso.responsable.id, pasoEnCurso.responsable.cedula) " +
                         "FROM Proceso p " +
                         "JOIN p.requiriente req " +

@@ -13,6 +13,7 @@ public class MiProcesoDTO {
     private Integer procesoId;
     private TipoProceso tipoProceso;
     private LocalDateTime fechaInicio;
+    private LocalDateTime fechaFin;
     private Boolean finalizado;
 
     private Integer requirienteId;
@@ -26,6 +27,7 @@ public class MiProcesoDTO {
             Integer procesoId,
             TipoProceso tipoProceso,
             LocalDateTime fechaInicio,
+            LocalDateTime fechaFin,
             Boolean finalizado,
             Integer personaId,
             String personaCedula,
@@ -35,6 +37,7 @@ public class MiProcesoDTO {
         this.procesoId = procesoId;
         this.tipoProceso = tipoProceso;
         this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
         this.finalizado = finalizado;
         this.requirienteId = personaId;
         this.requirienteCedula = personaCedula;

@@ -26,6 +26,7 @@ public class Convertidor {
                 .collect(Collectors.toList());
 
         dto.setRoles(nombreRoles);
+        dto.setActivo(persona.getActivo());
 
         return dto;
 
@@ -39,6 +40,7 @@ public class Convertidor {
         persona.setCedula(dto.getCedula());
         persona.setCorreo(dto.getCorreo());
         persona.setTelefono(dto.getTelefono());
+        persona.setActivo(dto.getActivo());
         
         return persona;
 

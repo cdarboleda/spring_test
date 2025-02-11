@@ -62,7 +62,7 @@ public class ProcesoController {
     }
 
     @GetMapping("/{id}/pasos")
-    public ResponseEntity<?> obtenerDetalleProcesoId(@PathVariable Integer id) {
+    public ResponseEntity<?> obtenerDetalleProcesoId(@PathVariable(name = "id") Integer id) {
         return ResponseEntity.ok(this.gestorProceso.obtenerDetalleProcesoId(id));
     }
 

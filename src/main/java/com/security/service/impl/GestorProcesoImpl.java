@@ -250,6 +250,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
                     proceso.getId(),
                     proceso.getTipoProceso(),
                     proceso.getFechaInicio(),
+                    proceso.getFechaFin(),
                     proceso.getFinalizado(),
                     proceso.getRequiriente().getId(),
                     proceso.getRequiriente().getCedula(),

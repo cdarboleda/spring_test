@@ -53,6 +53,8 @@ public class Persona {
     private String cedula;
     @Column(name = "pers_telefono")
     private String telefono;
+    @Column(name = "pers_activo")
+    private Boolean activo;
 
     @OneToMany(mappedBy = "requiriente",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore

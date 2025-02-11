@@ -23,6 +23,7 @@ public class PersonaDTO {
     private String cedula;
     private String correo;
     private String telefono;
+    private Boolean activo;
     //Un set (no se repiten) de los ids de los roles
     private List<String> roles;
 
