@@ -13,8 +13,6 @@ public interface IPasoService {
 
     public Optional<Paso> findByIdOptional(Integer id);
 
-    public Paso insert(Paso paso);
-
     public Paso updatePaso(Integer idPaso, PasoDTO pasoDTO);
 
     public List<String> buscarEstados();

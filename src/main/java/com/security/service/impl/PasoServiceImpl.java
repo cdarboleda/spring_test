@@ -6,15 +6,11 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.security.db.Paso;
 import com.security.db.enums.Estado;
 import com.security.db.enums.EstadoHelper;
-import com.security.exception.CustomException;
-import com.security.factory.PasoFactoryManager;
 import com.security.repo.IPasoRepository;
 import com.security.service.IPasoService;
 import com.security.service.dto.PasoDTO;
@@ -66,12 +62,6 @@ public class PasoServiceImpl implements IPasoService {
     @Override
     public List<String> buscarEstados() {
         return Stream.of(Estado.values()).map((estado) -> estado.toString()).toList();
-    }
-
-    @Override
-    public Paso insert(Paso paso) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insert'");
     }
 
 }

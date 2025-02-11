@@ -65,6 +65,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         //el filtro de rol de un responsable le hacemos en el front
         if(responsable.getRoles().contains(paso.getRol())){
             paso.setResponsable(responsable);
+            //agregar procesoLog TODO
         }else{
             throw new RuntimeException("El responsable no tiene el rol");
         }
