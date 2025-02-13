@@ -18,11 +18,15 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
         // List<Proceso> findProcesosWherePersonaIsOwner(@Param("id") Integer id);
         List<Proceso> findByRequirienteId(Integer id);
 
-        @Query("SELECT new com.security.service.dto.MiProcesoDTO" +
-                        "(p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, req.id, req.cedula, paso.nombre, paso.responsable.id, paso.responsable.cedula) "
-                        +
-                        "FROM Proceso p JOIN p.requiriente req JOIN p.pasos paso WHERE paso.estado = 'EN_CURSO'")
-        List<MiProcesoDTO> findMisProcesos();// trae los procesos donde hay un paso en_curso (no messirve)
+        @Query("SELECT new com.security.service.dto.MiProcesoDTO( " +
+                        "p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, " +
+                        "req.id, req.cedula, " +
+                        "paso.nombre, paso.responsable.id, paso.responsable.cedula) " +
+                        "FROM Proceso p " +
+                        "LEFT JOIN p.requiriente req " +
+                        "LEFT JOIN p.pasos paso ON paso.estado = 'EN_CURSO' " +
+                        "LEFT JOIN paso.responsable ")
+        List<MiProcesoDTO> findMisProcesos();
 
         // Trae todos los procesos donde haya almenos un paso en el que yo sea
         // responsable (messirve con el otro metodo en el service)
@@ -61,13 +65,15 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
 
         @Query("SELECT new com.security.service.dto.ProcesoPasoDocumentoDTO(" +
                         "p.id, p.descripcion, " +
-                        "pa.id, pa.nombre, pa.descripcionPaso, pa.estado, pa.descripcionEstado, pa.fechaInicio, pa.fechaFin, pa.orden, pa.observacion, pa.rol.nombre, " +
+                        "pa.id, pa.nombre, pa.descripcionPaso, pa.estado, pa.descripcionEstado, pa.fechaInicio, pa.fechaFin, pa.orden, pa.observacion, pa.rol.nombre, "
+                        +
                         "per.id, per.nombre, per.cedula, per.apellido, per.telefono, per.correo, " +
                         "cd.id, cd.url) " +
                         "FROM Proceso p " +
                         "LEFT JOIN p.pasos pa " +
                         "LEFT JOIN pa.responsable per " +
-                        "LEFT JOIN pa.carpetaDocumentos cd " + // Cambiado de `p.carpetasDocumento` a `pa.carpetasDocumento`
+                        "LEFT JOIN pa.carpetaDocumentos cd " + // Cambiado de `p.carpetasDocumento` a
+                                                               // `pa.carpetasDocumento`
                         "WHERE p.id = :procesoId " +
                         "ORDER BY pa.orden")
         List<ProcesoPasoDocumentoDTO> findProcesoDetalleById(@Param("procesoId") Integer procesoId);

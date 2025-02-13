@@ -174,7 +174,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         var procesoEspecifico = this.insertarProcesoEspecifico(proceso, procesoDTO);
 
         // aqui generar los logs de los pasos
-        pasos.forEach(paso -> gestorProcesoLogService.insertarProcesoLog(paso, Evento.ESTADO));
+        pasos.forEach(paso -> gestorProcesoLogService.insertarProcesoLog(paso, Evento.CREACION));
 
         System.out.println("response: " + procesoEspecifico);
         return convertidorProceso.convertirACompletoDTO(procesoEspecifico);
