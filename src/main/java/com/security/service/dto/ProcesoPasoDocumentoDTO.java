@@ -24,6 +24,8 @@ public class ProcesoPasoDocumentoDTO {
     private String responsableNombre;
     private String responsableCedula;
     private String responsableApellido;
+    private String responsableTelefono;
+    private String responsableCorreo;
     private Integer carpetaId;
     private String carpetaUrl;
     private String observacion;
@@ -34,7 +36,7 @@ public class ProcesoPasoDocumentoDTO {
             Estado pasoEstado, String descripcionEstado, LocalDateTime pasoFechaInicio,
             LocalDateTime pasoFechaFin, Integer pasoOrden, String observacion, String rol,
             Integer responsableId, String responsableNombre,
-            String responsableCedula, String responsableApellido,
+            String responsableCedula, String responsableApellido,String responsableTelefono,String responsableCorreo,
             Integer carpetaId, String carpetaUrl) {
         this.procesoId = procesoId;
         this.procesoDescripcion = procesoDescripcion;
@@ -49,6 +51,8 @@ public class ProcesoPasoDocumentoDTO {
         this.responsableNombre = responsableNombre;
         this.responsableCedula = responsableCedula;
         this.responsableApellido = responsableApellido;
+        this.responsableTelefono = responsableTelefono;
+        this.responsableCorreo = responsableCorreo;
         this.carpetaId = carpetaId;
         this.carpetaUrl = carpetaUrl;
         this.rol = rol;
