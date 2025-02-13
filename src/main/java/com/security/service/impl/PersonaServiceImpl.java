@@ -65,8 +65,9 @@ public class PersonaServiceImpl implements IPersonaService {
 
     @Override
     public Persona findByIdKeycloak(String idKeycloak) {
-        return this.personaRepository.findByIdKeycloak(idKeycloak)
-        .orElseThrow(()-> new EntityNotFoundException("No se encontró un usuario con ese ID de keycloak"));
+        // return this.personaRepository.findByIdKeycloak(idKeycloak)
+        // .orElseThrow(()-> new EntityNotFoundException("No se encontró un usuario con ese ID de keycloak"));
+        return this.personaRepository.findByIdKeycloak(idKeycloak).orElse(null);
     }
 
     @Override
