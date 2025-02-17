@@ -18,14 +18,27 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
         // List<Proceso> findProcesosWherePersonaIsOwner(@Param("id") Integer id);
         List<Proceso> findByRequirienteId(Integer id);
 
+        // @Query("SELECT new com.security.service.dto.MiProcesoDTO( " +
+        // "p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, " +
+        // "req.id, req.cedula, " +
+        // "paso.nombre, paso.estado.toString(), paso.descripcionEstado, " +
+        // "resp.id, resp.cedula) " +
+        // "FROM Proceso p " +
+        // "LEFT JOIN p.requiriente req " +
+        // "LEFT JOIN p.pasos paso ON paso.estado = 'EN_CURSO' " +
+        // "LEFT JOIN paso.responsable resp")
+        // List<MiProcesoDTO> findMisProcesos();
+
         @Query("SELECT new com.security.service.dto.MiProcesoDTO( " +
                         "p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, " +
                         "req.id, req.cedula, " +
-                        "paso.nombre, paso.responsable.id, paso.responsable.cedula) " +
+                        "paso.nombre, CAST(paso.estado AS string), paso.descripcionEstado, " +
+                        "resp.id, resp.cedula) " +
                         "FROM Proceso p " +
                         "LEFT JOIN p.requiriente req " +
-                        "LEFT JOIN p.pasos paso ON paso.estado = 'EN_CURSO' " +
-                        "LEFT JOIN paso.responsable ")
+                        "LEFT JOIN p.pasos paso " +
+                        "LEFT JOIN paso.responsable resp " +
+                        "WHERE paso.estado = 'EN_CURSO'") // <--- Se compara con el string directamente
         List<MiProcesoDTO> findMisProcesos();
 
         // Trae todos los procesos donde haya almenos un paso en el que yo sea

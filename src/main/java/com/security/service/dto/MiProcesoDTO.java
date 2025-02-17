@@ -20,8 +20,14 @@ public class MiProcesoDTO {
     private String requirienteCedula;
 
     private String pasoNombre;
+    private String pasoEstado;
+    private String pasoDescripcionEstado;
     private Integer responsablePasoId;
     private String responsablePasoCedula;
+
+public MiProcesoDTO(){
+
+}
 
     public MiProcesoDTO(
             Integer procesoId,
@@ -45,6 +51,33 @@ public class MiProcesoDTO {
         this.responsablePasoId = responsablePasoId;
         this.responsablePasoCedula = responsablePasoCedula;
     }
+
+    public MiProcesoDTO(
+        Integer procesoId,
+        TipoProceso tipoProceso,
+        LocalDateTime fechaInicio,
+        LocalDateTime fechaFin,
+        Boolean finalizado,
+        Integer personaId,
+        String personaCedula,
+        String pasoNombre,
+        String pasoEstado,
+        String pasoDescripcionEstado,
+        Integer responsablePasoId,
+        String responsablePasoCedula) {
+    this.procesoId = procesoId;
+    this.tipoProceso = tipoProceso;
+    this.fechaInicio = fechaInicio;
+    this.fechaFin = fechaFin;
+    this.finalizado = finalizado;
+    this.requirienteId = personaId;
+    this.requirienteCedula = personaCedula;
+    this.pasoNombre = pasoNombre;
+    this.pasoEstado = pasoEstado;
+    this.pasoDescripcionEstado = pasoDescripcionEstado;
+    this.responsablePasoId = responsablePasoId;
+    this.responsablePasoCedula = responsablePasoCedula;
+}
 
     // Getters y Setters
 }
