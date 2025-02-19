@@ -111,12 +111,14 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         if (procesoDTO.getTipoProceso().equals(TipoProceso.PAGO_DOCENTE.toString())) {
             ProcesoPagoDocenteDTO procesoPDDTO = (ProcesoPagoDocenteDTO) procesoDTO;
             ProcesoPagoDocente pagoDocente = new ProcesoPagoDocente();
+            proceso.setDescripcion("En este proceso se realiza el trámite de pago para un docente");
             pagoDocente.setProceso(proceso);
             pagoDocente.setModalidadVirtual(procesoPDDTO.getModalidadVirtual());
             return procesoPagoDocenteRepository.save(pagoDocente);
         } else if (procesoDTO.getTipoProceso().equals(TipoProceso.TITULACION.toString())) {
             ProcesoTitulacionDTO procesoTDTO = (ProcesoTitulacionDTO) procesoDTO;
             ProcesoTitulacion titulacion = new ProcesoTitulacion();
+            proceso.setDescripcion("En este proceso se realiza el trámite titulación de un estudiante de maestría");
             titulacion.setProceso(proceso);
             titulacion.setGrupo(procesoTDTO.getGrupo());
             titulacion.setCalificacionFinal(procesoTDTO.getCalificacionFinal());
@@ -128,6 +130,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         return null;
     }
 
+    //Método para insertar un nuevo registro de Proceso
     @Override
     public Object insert(ProcesoDTO procesoDTO) {
 
@@ -149,37 +152,12 @@ public class GestorProcesoImpl implements IGestorProcesoService {
                     return paso;
                 }).collect(Collectors.toList());
 
-        // Lo que tenia en el factory
-        switch (procesoDTO.getTipoProceso()) {
-            case "PAGO_DOCENTE": {
-                proceso.setDescripcion("En este proceso se realiza el trámite de pago para un docente");
-
-                break;
-            }
-            case "TITULACION": {
-                proceso.setDescripcion("En este proceso se realiza el trámite titulación de un estudiante de maestría");
-                break;
-            }
-            default:
-                throw new CustomException("El tipo de proceso no existe", HttpStatus.BAD_REQUEST);
-        }
-
-        // Esta para ambos, en este caso los dos procesos necesitan que el primer paso
-        // el requiriente sea el responsable
         pasos.get(0).setResponsable(requiriente);
-
         proceso.setPasos(pasos);
         this.procesoRepository.save(proceso);
-
-        // Este me devuelve un <T>
         var procesoEspecifico = this.insertarProcesoEspecifico(proceso, procesoDTO);
-
-        // aqui generar los logs de los pasos
         pasos.forEach(paso -> gestorProcesoLogService.insertarProcesoLog(paso, Evento.CREACION));
-
-        System.out.println("response: " + procesoEspecifico);
         return convertidorProceso.convertirACompletoDTO(procesoEspecifico);
-
     }
 
     @Override

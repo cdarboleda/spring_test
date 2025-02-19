@@ -36,9 +36,9 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         "resp.id, resp.cedula) " +
                         "FROM Proceso p " +
                         "LEFT JOIN p.requiriente req " +
-                        "LEFT JOIN p.pasos paso " +
-                        "LEFT JOIN paso.responsable resp " +
-                        "WHERE paso.estado = 'EN_CURSO'") // <--- Se compara con el string directamente
+                        "LEFT JOIN p.pasos paso ON paso.estado = 'EN_CURSO' " +
+                        "LEFT JOIN paso.responsable resp ")
+                        //+ "WHERE paso.estado = 'EN_CURSO'") 
         List<MiProcesoDTO> findMisProcesos();
 
         // Trae todos los procesos donde haya almenos un paso en el que yo sea
