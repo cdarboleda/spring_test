@@ -33,6 +33,7 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     @Autowired
     private Convertidor convertidor;
 
+    //Metodo para ingresar un nuevo registro de usuario
     @Override
     public PersonaDTO createUser(PersonaDTO personaDTO) {
 

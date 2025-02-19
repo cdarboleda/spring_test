@@ -30,7 +30,7 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
         // List<MiProcesoDTO> findMisProcesos();
 
         @Query("SELECT new com.security.service.dto.MiProcesoDTO( " +
-                        "p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, " +
+                        "p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, p.cancelado, " +
                         "req.id, req.cedula, " +
                         "paso.nombre, CAST(paso.estado AS string), paso.descripcionEstado, " +
                         "resp.id, resp.cedula) " +
@@ -51,7 +51,7 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
         // Trae todos los procesos donde yo sea responsable de almenos uno, y tambien
         // busca el paso que sea EN_curso (messirve solito, pero quiza es demasiado sql)
         @Query("SELECT new com.security.service.dto.MiProcesoDTO" +
-                        "(p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, req.id, req.cedula, " +
+                        "(p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, p.cancelado, req.id, req.cedula, " +
                         " pasoEnCurso.nombre, pasoEnCurso.responsable.id, pasoEnCurso.responsable.cedula) " +
                         "FROM Proceso p " +
                         "JOIN p.requiriente req " +

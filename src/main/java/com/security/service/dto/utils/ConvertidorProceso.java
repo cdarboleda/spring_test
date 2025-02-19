@@ -107,6 +107,7 @@ public class ConvertidorProceso {
         procesoDTO.setFechaInicio(proceso.getFechaInicio());
         procesoDTO.setFechaFin(proceso.getFechaFin());
         procesoDTO.setFinalizado(proceso.getFinalizado());
+        procesoDTO.setCancelado(proceso.getCancelado());
         return procesoDTO;
     }
 

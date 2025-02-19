@@ -49,6 +49,10 @@ public class Proceso {
     @Column(name = "proc_finalizado")
     private Boolean finalizado;// = false;
 
+    @Column(name = "proc_cancelado")
+    private Boolean cancelado;// = false;
+
+
     @Column(name = "proc_descripcion") 
     private String descripcion;
 

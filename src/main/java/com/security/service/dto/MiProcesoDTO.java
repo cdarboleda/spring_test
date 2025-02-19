@@ -15,6 +15,7 @@ public class MiProcesoDTO {
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
     private Boolean finalizado;
+    private Boolean cancelado;
 
     private Integer requirienteId;
     private String requirienteCedula;
@@ -35,6 +36,7 @@ public MiProcesoDTO(){
             LocalDateTime fechaInicio,
             LocalDateTime fechaFin,
             Boolean finalizado,
+            Boolean cancelado,
             Integer personaId,
             String personaCedula,
             String pasoNombre,
@@ -45,6 +47,7 @@ public MiProcesoDTO(){
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.finalizado = finalizado;
+        this.cancelado = cancelado;
         this.requirienteId = personaId;
         this.requirienteCedula = personaCedula;
         this.pasoNombre = pasoNombre;
@@ -58,6 +61,7 @@ public MiProcesoDTO(){
         LocalDateTime fechaInicio,
         LocalDateTime fechaFin,
         Boolean finalizado,
+        Boolean cancelado,
         Integer personaId,
         String personaCedula,
         String pasoNombre,
@@ -70,6 +74,7 @@ public MiProcesoDTO(){
     this.fechaInicio = fechaInicio;
     this.fechaFin = fechaFin;
     this.finalizado = finalizado;
+    this.cancelado = cancelado;
     this.requirienteId = personaId;
     this.requirienteCedula = personaCedula;
     this.pasoNombre = pasoNombre;

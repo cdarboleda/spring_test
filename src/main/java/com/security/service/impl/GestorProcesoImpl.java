@@ -133,6 +133,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
 
         Proceso proceso = new Proceso();
         proceso.setFinalizado(false);
+        proceso.setCancelado(false);
         proceso.setFechaInicio(LocalDateTime.now());
         proceso.setTipoProceso(TipoProceso.valueOf(procesoDTO.getTipoProceso()));
         Persona requiriente = this.personaService.findById(procesoDTO.getRequirienteId());
@@ -187,6 +188,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         Proceso proceso = this.procesoService.findById(procesoDTO.getId());
         proceso.setFechaFin(procesoDTO.getFechaFin());
         proceso.setFinalizado(true);
+        proceso.setCancelado(procesoDTO.getCancelado());
         return convertidorProceso.convertirALigeroDTO(proceso);
     }
 
@@ -258,6 +260,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
                     proceso.getFechaInicio(),
                     proceso.getFechaFin(),
                     proceso.getFinalizado(),
+                    proceso.getCancelado(),
                     proceso.getRequiriente().getId(),
                     proceso.getRequiriente().getCedula(),
                     pasoEnCurso != null ? pasoEnCurso.getNombre() : null,
