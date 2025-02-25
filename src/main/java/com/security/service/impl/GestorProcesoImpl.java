@@ -151,8 +151,16 @@ public class GestorProcesoImpl implements IGestorProcesoService {
                     paso.setRol(this.rolService.buscarPorNombre(pasoDTO.getRol()).get());
                     return paso;
                 }).collect(Collectors.toList());
-
-        pasos.get(0).setResponsable(requiriente);
+        
+        // pasos.get(0).setResponsable(requiriente);
+        if (procesoDTO.getTipoProceso().equals(TipoProceso.PAGO_DOCENTE.toString())) {
+            pasos.stream().filter(paso -> paso.getNombre() == "documentacion_docente" || paso.getNombre() == "factura_docente")
+            .forEach((paso -> paso.setResponsable(requiriente)));
+        }else if(procesoDTO.getTipoProceso().equals(TipoProceso.TITULACION.toString())){
+            pasos.stream().filter(paso -> paso.getNombre() == "titu_paso1")
+            .forEach((paso -> paso.setResponsable(requiriente)));
+        }
+        
         proceso.setPasos(pasos);
         this.procesoRepository.save(proceso);
         var procesoEspecifico = this.insertarProcesoEspecifico(proceso, procesoDTO);

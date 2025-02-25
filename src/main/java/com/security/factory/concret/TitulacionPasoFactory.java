@@ -22,11 +22,9 @@ public class TitulacionPasoFactory implements IPasoFactory {
     @Transactional
     public List<PasoDTO> generatePasos() {
         List<PasoDTO> pasos = new ArrayList<>();
-        pasos.add(this.crearPaso("Subir documentación", 1, "Aqui se sube la documentación",
-         Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), LocalDateTime.now(),"docente"));
-        pasos.add(this.crearPaso("Revisión documentación", 2,  "Coordinarción me revisa la documentación",
-        Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,"coordinador"));
-        pasos.add(this.crearPaso("Finalzacion", 3,  "Se ha realizao el pago", 
+        pasos.add(this.crearPaso("titu_paso1", 1, "paso1",
+         Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), LocalDateTime.now(),"estudiante"));
+        pasos.add(this.crearPaso("titu_paso2", 2,  "paso2",
         Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,"secretaria"));
         return pasos;
     }
