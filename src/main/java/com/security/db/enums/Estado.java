@@ -3,9 +3,9 @@ package com.security.db.enums;
 import java.util.List;
 
 public enum Estado {
-    PENDIENTE(List.of("Pendiente", "Esperando confirmación")),
+    PENDIENTE(List.of("Pendiente", "Rechazado")),
     EN_CURSO(List.of("En curso","Corrigiendo")),
-    FINALIZADO(List.of("Completado","Rechazado"));
+    FINALIZADO(List.of("Completado","Cancelado"));
 
     private final List<String> descripciones;
 

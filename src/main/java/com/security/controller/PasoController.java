@@ -82,6 +82,14 @@ public class PasoController {
         return new ResponseEntity<>(this.gestorPasoService.updatePasoResponsable(idPaso, idResponsable), HttpStatus.OK);
     }
 
+    @PutMapping(path = "actualizar-multiple-responsable/{idResponsable}/{rol}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> actualizarPasoResponsable(@PathVariable(name = "idResponsable") Integer idResponsable,
+            @PathVariable(name = "rol") String rol,
+            @RequestBody List<Integer> pasosIds) {
+        return new ResponseEntity<>(this.gestorPasoService.updatePasosMismoResponsable(pasosIds, idResponsable, rol),
+                HttpStatus.OK);
+    }
+
     @GetMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarTodosEstados() {
         return new ResponseEntity<>(this.pasoService.buscarEstados(), HttpStatus.OK);

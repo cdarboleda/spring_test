@@ -1,7 +1,9 @@
 package com.security.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.Proceso;
+import com.security.db.Rol;
 import com.security.db.enums.Estado;
 import com.security.db.enums.EstadoHelper;
 import com.security.db.enums.Evento;
@@ -55,28 +58,46 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     public List<PasoDTO> crearPasos(String proceso) {
         return this.factoryManager.generarPasosPorProceso(proceso);
     }
-    
+
     @Override
     public PasoDTO updatePasoResponsable(Integer idPaso, Integer idResponsable) {
         Paso paso = this.pasoService.findById(idPaso);
         Persona responsable = this.personaService.findById(idResponsable);
 
         // if(responsable.activo!=null){
-        //     paso.setResponsable(responsable);
+        // paso.setResponsable(responsable);
         // }
-        //el filtro de rol de un responsable le hacemos en el front
-        if(responsable.getRoles().contains(paso.getRol())){
+        // el filtro de rol de un responsable le hacemos en el front
+        if (responsable.getRoles().contains(paso.getRol())) {
             paso.setResponsable(responsable);
-            //agregar procesoLog TODO
+            // agregar procesoLog TODO
             this.gestorProcesoLogService.insertarProcesoLog(paso, Evento.RESPONSABLE);
-        }else{
+        } else {
             throw new RuntimeException("El responsable no tiene el rol");
         }
         return convertidorPaso.convertirAPasoDTO(paso);
 
     }
 
-    
+    @Override
+    public List<PasoDTO> updatePasosMismoResponsable(List<Integer> pasosIds, Integer idResponsable, String rol) {
+        Persona responsable = this.personaService.findById(idResponsable);
+
+        // Validar si el responsable tiene el rol
+        if (!responsable.getRoles().stream().map(Rol::getNombre).toList().contains(rol)) {
+            throw new RuntimeException("El responsable no tiene el rol");
+        }
+
+        return pasosIds.stream()
+                .map(pasoId -> {
+                    Paso paso = this.pasoService.findById(pasoId);
+                    paso.setResponsable(responsable);
+                    this.gestorProcesoLogService.insertarProcesoLog(paso, Evento.RESPONSABLE);
+                    return convertidorPaso.convertirAPasoDTO(paso);
+                })
+                .collect(Collectors.toList());
+    }
+
     @Override
     public Paso updatePaso(Integer idPaso, PasoDTO pasoDTO) {
         Paso paso = this.pasoService.findById(idPaso);
@@ -104,7 +125,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     }
 
     @Override
-    public List<PasoDTO> findPasosDTOByProcesoId(Integer procesoId){
+    public List<PasoDTO> findPasosDTOByProcesoId(Integer procesoId) {
         return this.pasoRepository.findPasosDTOByProcesoId(procesoId);
     }
 

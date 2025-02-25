@@ -1,6 +1,7 @@
 package com.security.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.security.db.Paso;
 import com.security.service.dto.PasoDTO;
@@ -10,6 +11,7 @@ public interface IGestorPasoService {
     public Paso insertarUnico(PasoDTO pasoDTO);
     public List<PasoDTO> crearPasos(String proceso);
     public PasoDTO updatePasoResponsable(Integer idPaso, Integer idResponsable);
+    public List<PasoDTO> updatePasosMismoResponsable(List<Integer> pasoIds, Integer idResponsable, String rol);
     public List<PasoDTO> findPasosDTOByProcesoId(Integer procesoId);
     public Paso updatePaso(Integer idPaso, PasoDTO pasoDTO);
 }
