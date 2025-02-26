@@ -9,7 +9,6 @@ public class PasoDTO {
     private Integer id;
     private String nombre;
     private Integer orden;
-    private String descripcionPaso;
     private String descripcionEstado;
     private LocalDateTime fechaInicio;
     private String estado;

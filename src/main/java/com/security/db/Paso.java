@@ -43,9 +43,6 @@ public class Paso {
     @Column(name = "paso_orden", nullable = false)
     private Integer orden;
 
-    @Column(name = "paso_descripcion_paso", nullable = false)
-    private String descripcionPaso;
-
     @Column(name = "paso_descripcion_estado")
     private String descripcionEstado;
 

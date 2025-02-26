@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,16 +39,19 @@ public class PasoController {
      */
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
     public ResponseEntity<?> buscarPorId(@PathVariable(name = "id") Integer id) {
         return new ResponseEntity<>(this.pasoService.findById(id), null, HttpStatus.OK);
     }
 
     @GetMapping(path = "proceso/{idProceso}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
     public ResponseEntity<?> buscarPasosDTOPorProcesoId(@PathVariable(name = "idProceso") Integer idProceso) {
         return new ResponseEntity<>(this.gestorPasoService.findPasosDTOByProcesoId(idProceso), null, HttpStatus.OK);
     }
 
     @GetMapping(path = "proceso/{idProceso}/ultimo", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
     public ResponseEntity<?> buscarUltimoPasoPorProcesoId(@PathVariable(name = "idProceso") Integer idProceso) {
         List<PasoDTO> pasos = this.gestorPasoService.findPasosDTOByProcesoId(idProceso);
 
@@ -71,18 +75,21 @@ public class PasoController {
     // }
 
     @PutMapping(path = "/{idPaso}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
     public ResponseEntity<?> actualizarPasoById(@PathVariable(name = "idPaso") Integer idPaso,
             @RequestBody PasoDTO pasoDTO) {
         return new ResponseEntity<>(this.gestorPasoService.updatePaso(idPaso, pasoDTO), HttpStatus.OK);
     }
 
     @PutMapping(path = "/{idPaso}/{idResponsable}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('administrador')")
     public ResponseEntity<?> actualizarPasoResponsable(@PathVariable(name = "idPaso") Integer idPaso,
             @PathVariable(name = "idResponsable") Integer idResponsable) {
         return new ResponseEntity<>(this.gestorPasoService.updatePasoResponsable(idPaso, idResponsable), HttpStatus.OK);
     }
 
     @PutMapping(path = "actualizar-multiple-responsable/{idResponsable}/{rol}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
     public ResponseEntity<?> actualizarPasoResponsable(@PathVariable(name = "idResponsable") Integer idResponsable,
             @PathVariable(name = "rol") String rol,
             @RequestBody List<Integer> pasosIds) {
@@ -91,6 +98,7 @@ public class PasoController {
     }
 
     @GetMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
     public ResponseEntity<?> buscarTodosEstados() {
         return new ResponseEntity<>(this.pasoService.buscarEstados(), HttpStatus.OK);
     }

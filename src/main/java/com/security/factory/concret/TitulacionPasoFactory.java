@@ -22,16 +22,15 @@ public class TitulacionPasoFactory implements IPasoFactory {
     @Transactional
     public List<PasoDTO> generatePasos() {
         List<PasoDTO> pasos = new ArrayList<>();
-        pasos.add(this.crearPaso("titu_paso1", 1, "paso1",
+        pasos.add(this.crearPaso("titu_paso1", 1, 
          Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), LocalDateTime.now(),"estudiante"));
-        pasos.add(this.crearPaso("titu_paso2", 2,  "paso2",
+        pasos.add(this.crearPaso("titu_paso2", 2,  
         Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,"secretaria"));
         return pasos;
     }
 
     private PasoDTO crearPaso(String nombre,
             Integer orden, 
-            String descripcionPaso,
             Estado estado, 
             String descripcionEstado,
             LocalDateTime fechaInicio,
@@ -40,7 +39,6 @@ public class TitulacionPasoFactory implements IPasoFactory {
         PasoDTO paso = new PasoDTO();
         paso.setNombre(nombre);
         paso.setOrden(orden);
-        paso.setDescripcionPaso(descripcionPaso);
         paso.setDescripcionEstado(descripcionEstado);
         paso.setEstado(estado.toString());
         paso.setFechaInicio(fechaInicio);

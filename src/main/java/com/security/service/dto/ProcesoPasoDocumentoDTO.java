@@ -1,6 +1,5 @@
 package com.security.service.dto;
 
-
 import java.time.LocalDateTime;
 
 import com.security.db.enums.Estado;
@@ -14,7 +13,6 @@ public class ProcesoPasoDocumentoDTO {
     private String procesoDescripcion;
     private Integer pasoId;
     private String pasoNombre;
-    private String pasoDescripcion;
     private Estado pasoEstado;
     private String descripcionEstado;
     private LocalDateTime pasoFechaInicio;
@@ -32,17 +30,16 @@ public class ProcesoPasoDocumentoDTO {
     private String rol;
 
     public ProcesoPasoDocumentoDTO(Integer procesoId, String procesoDescripcion,
-            Integer pasoId, String pasoNombre, String pasoDescripcion,
+            Integer pasoId, String pasoNombre,
             Estado pasoEstado, String descripcionEstado, LocalDateTime pasoFechaInicio,
             LocalDateTime pasoFechaFin, Integer pasoOrden, String observacion, String rol,
             Integer responsableId, String responsableNombre,
-            String responsableCedula, String responsableApellido,String responsableTelefono,String responsableCorreo,
+            String responsableCedula, String responsableApellido, String responsableTelefono, String responsableCorreo,
             Integer carpetaId, String carpetaUrl) {
         this.procesoId = procesoId;
         this.procesoDescripcion = procesoDescripcion;
         this.pasoId = pasoId;
         this.pasoNombre = pasoNombre;
-        this.pasoDescripcion = pasoDescripcion;
         this.pasoEstado = pasoEstado;
         this.pasoFechaInicio = pasoFechaInicio;
         this.pasoFechaFin = pasoFechaFin;

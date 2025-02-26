@@ -17,7 +17,6 @@ public class ConvertidorPaso {
         dto.setId(paso.getId());
         dto.setNombre(paso.getNombre());
         dto.setOrden(paso.getOrden());
-        dto.setDescripcionPaso(paso.getDescripcionPaso());
         dto.setDescripcionEstado(paso.getDescripcionEstado());
         dto.setEstado(paso.getEstado().name().toUpperCase());
         dto.setFechaInicio(paso.getFechaInicio());
@@ -33,7 +32,6 @@ public class ConvertidorPaso {
         paso.setId(pasoDTO.getId());
         paso.setNombre(pasoDTO.getNombre());
         paso.setOrden(pasoDTO.getOrden());
-        paso.setDescripcionPaso(pasoDTO.getDescripcionPaso());
         paso.setDescripcionEstado(pasoDTO.getDescripcionEstado());
         paso.setEstado(Estado.valueOf(pasoDTO.getEstado()));
         paso.setFechaFin(pasoDTO.getFechaFin());

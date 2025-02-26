@@ -78,7 +78,7 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
 
         @Query("SELECT new com.security.service.dto.ProcesoPasoDocumentoDTO(" +
                         "p.id, p.descripcion, " +
-                        "pa.id, pa.nombre, pa.descripcionPaso, pa.estado, pa.descripcionEstado, pa.fechaInicio, pa.fechaFin, pa.orden, pa.observacion, pa.rol.nombre, "
+                        "pa.id, pa.nombre, pa.estado, pa.descripcionEstado, pa.fechaInicio, pa.fechaFin, pa.orden, pa.observacion, pa.rol.nombre, "
                         +
                         "per.id, per.nombre, per.cedula, per.apellido, per.telefono, per.correo, " +
                         "cd.id, cd.url) " +
