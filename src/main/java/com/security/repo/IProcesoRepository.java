@@ -39,4 +39,8 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
             "WHERE EXISTS (SELECT 1 FROM Paso paso WHERE paso.proceso.id = p.id AND paso.responsable.id = :responsableId)")
     List<MiProcesoDTO> findMisProcesosByResponsableId(@Param("responsableId") Integer responsableId);
 
+
+    
+   
+
 }

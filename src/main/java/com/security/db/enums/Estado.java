@@ -4,8 +4,8 @@ import java.util.List;
 
 public enum Estado {
     PENDIENTE(List.of("Pendiente", "Esperando confirmación")),
-    EN_CURSO(List.of("Procesando","Revisando documentación", "Enviando documentación", "Corrigiendo archivos")),
-    FINALIZADO(List.of("Completado","Proceso completado", "Documentación aceptada"));
+    EN_CURSO(List.of("Procesando", "Revisando documentación", "Enviando documentación", "Corrigiendo archivos")),
+    FINALIZADO(List.of("Completado", "Proceso completado", "Documentación aceptada"));
 
     private final List<String> descripciones;
 
@@ -20,7 +20,8 @@ public enum Estado {
                 .orElseThrow(() -> new IllegalArgumentException("Descripción no encontrada con criterio: " + criterio));
     }
 
-    //String descripcion = Estado.EN_CURSO.buscarDescripcionPorCriterio("documentación");
+    // String descripcion =
+    // Estado.EN_CURSO.buscarDescripcionPorCriterio("documentación");
 
     public String getDescripcionPorIndice(int indice) {
         if (indice < 0 || indice >= descripciones.size()) {
@@ -36,6 +37,7 @@ public enum Estado {
                 .orElseThrow(() -> new IllegalArgumentException("Descripción no encontrada: " + nombre));
     }
 
-    //String descripcion = Estado.EN_CURSO.getDescripcionPorNombre("Corrigiendo archivos");
+    // String descripcion = Estado.EN_CURSO.getDescripcionPorNombre("Corrigiendo
+    // archivos");
 
 }

@@ -23,38 +23,37 @@ import com.security.service.dto.ProcesoDTO;
 
 import jakarta.validation.Valid;
 
-
 @RestController
 @CrossOrigin
 @RequestMapping("/proceso")
 public class ProcesoController {
 
-     @Autowired
-     private IProcesoService procesoService;
+    @Autowired
+    private IProcesoService procesoService;
 
-     @Autowired
-     private IGestorProcesoService gestorProceso;
+    @Autowired
+    private IGestorProcesoService gestorProceso;
 
-    //  @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    //  public ResponseEntity<?> obtenerProcesoById(@PathVariable Integer id) {
-    //      return new ResponseEntity<>(this.procesoService.findById(id), HttpStatus.OK);
-    //  }
-     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-     public ResponseEntity<?> obtenerProcesoDTOById(@PathVariable Integer id) {
-         return new ResponseEntity<>(this.gestorProceso.findByIdCompletoDTO(id), HttpStatus.OK);
-     }
-
-    // @GetMapping("/mis-procesos")
-    // public ResponseEntity<?> obtenerMisProcesos() {
-    //     return ResponseEntity.ok(this.gestorProceso.findMisProcesos());
+    // @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    // public ResponseEntity<?> obtenerProcesoById(@PathVariable Integer id) {
+    // return new ResponseEntity<>(this.procesoService.findById(id), HttpStatus.OK);
     // }
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerProcesoDTOById(@PathVariable Integer id) {
+        return new ResponseEntity<>(this.gestorProceso.findByIdCompletoDTO(id), HttpStatus.OK);
+    }
 
+    @GetMapping("/mis-procesos")
+    public ResponseEntity<?> obtenerMisProcesos() {
+        return ResponseEntity.ok(this.gestorProceso.findMisProcesos());
+    }
 
     // @GetMapping("/mis-procesos/{id}")
-    // public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable Integer id) {
-    //     return ResponseEntity.ok(this.gestorProceso.findMisProcesosByResponsableId(id));
+    // public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable
+    // Integer id) {
+    // return
+    // ResponseEntity.ok(this.gestorProceso.findMisProcesosByResponsableId(id));
     // }
-
 
     @GetMapping("/mis-procesos/{id}")
     public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable Integer id) {
@@ -62,21 +61,23 @@ public class ProcesoController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-     public ResponseEntity<?> insertarProceso(@Valid @RequestBody ProcesoDTO procesoDTO) {
-            this.gestorProceso.insert(procesoDTO);
-         return new ResponseEntity<>(null, HttpStatus.OK);
-        //  return new ResponseEntity<>(this.gestorProceso.insert(procesoDTO), HttpStatus.OK);
-     }
-     @PutMapping(path="/{id}")
-     public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody ProcesoDTO procesoDTO) {
-         procesoDTO.setId(id);         
-         return new ResponseEntity<>(this.gestorProceso.update(procesoDTO), HttpStatus.OK);
-     }
+    public ResponseEntity<?> insertarProceso(@Valid @RequestBody ProcesoDTO procesoDTO) {
+        this.gestorProceso.insert(procesoDTO);
+        return new ResponseEntity<>(null, HttpStatus.OK);
+        // return new ResponseEntity<>(this.gestorProceso.insert(procesoDTO),
+        // HttpStatus.OK);
+    }
 
-     @DeleteMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-     public ResponseEntity<?> eliminarProcesoById(@PathVariable Integer id){
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody ProcesoDTO procesoDTO) {
+        procesoDTO.setId(id);
+        return new ResponseEntity<>(this.gestorProceso.update(procesoDTO), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> eliminarProcesoById(@PathVariable Integer id) {
         this.gestorProceso.delete(id);
-        return new ResponseEntity<>("Proceso con id: "+id+" eliminado", null, HttpStatus.OK);
-     }
+        return new ResponseEntity<>("Proceso con id: " + id + " eliminado", null, HttpStatus.OK);
+    }
 
 }

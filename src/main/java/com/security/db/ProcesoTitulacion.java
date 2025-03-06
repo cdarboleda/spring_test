@@ -48,20 +48,23 @@ public class ProcesoTitulacion {
     @Nullable
     @Column(name = "titu_grupo")
     private Boolean grupo;
-    @Nullable
+
     @Column(name = "titu_calificacion_final")
     private Double calificacionFinal;
-    @Nullable
+
     @Column(name = "titu_fecha_defensa")
     private LocalDateTime fechaDefensa;
-    @Nullable
+
     @Column(name = "titu_nota_lector_1")
     private Double notaLector1;
-    @Nullable
+
     @Column(name = "titu_nota_lector_2")
     private Double notaLector2;
 
-    @OneToMany(mappedBy = "procesoTitulacion", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @Column(name = "titu_nota_propuesta_proyecto")
+    private Double notaPropuestaProyecto;
+
+    @OneToMany(mappedBy = "procesoTitulacion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<ObservacionLector> observaciones; 
+    private List<ObservacionLector> observaciones;
 }

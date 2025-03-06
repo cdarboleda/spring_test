@@ -12,10 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.security.db.Paso;
 import com.security.db.Proceso;
 
-public interface IPasoRepository extends JpaRepository<Paso, Integer>{
+public interface IPasoRepository extends JpaRepository<Paso, Integer> {
     public Optional<Paso> findByOrden(Integer orden);
+
     List<Paso> findByResponsableId(Integer idResponsable);
-    List<Proceso> findByProcesoId(Integer idProceso);
+
+    List<Paso> findByProcesoId(Integer idProceso);
 
     @Transactional
     @Modifying

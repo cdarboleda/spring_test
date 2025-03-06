@@ -25,9 +25,6 @@ public class PasoServiceImpl implements IPasoService {
     @Autowired
     private IPasoRepository pasoRepository;
 
-
-
-
     @Override
     public Paso findById(Integer id) {
         return this.pasoRepository.findById(id)
@@ -42,12 +39,13 @@ public class PasoServiceImpl implements IPasoService {
     @Override
     public Paso updateEstado(Integer idPaso, String estado) {
         // if(!Estado.isValid(estado)){
-        //     throw new CustomException("Estado no válido: " + estado, HttpStatus.BAD_REQUEST);
+        // throw new CustomException("Estado no válido: " + estado,
+        // HttpStatus.BAD_REQUEST);
         // }
         Paso paso = this.findById(idPaso);
 
         paso.setEstado(Estado.valueOf(estado.toUpperCase()));
-        return paso; 
+        return paso;
     }
 
     @Override
@@ -61,6 +59,10 @@ public class PasoServiceImpl implements IPasoService {
         throw new UnsupportedOperationException("Unimplemented method 'insert'");
     }
 
-
+    @Override
+    public List<Paso> findByProcesoId(Integer idProceso) {
+        // TODO Auto-generated method stub
+        return this.pasoRepository.findByProcesoId(idProceso);
+    }
 
 }

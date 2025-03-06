@@ -29,31 +29,39 @@ public class PasoController {
     @Autowired
     private IGestorPasoService gestorPasoService;
 
-
-    /*@GetMapping(path = "/{proceso}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> crearPasos(@PathVariable String proceso){
-        return new ResponseEntity<>(this.procesoPasoService.crearPasos(proceso), null, HttpStatus.OK);
-    }*/
+    /*
+     * @GetMapping(path = "/{proceso}", produces = MediaType.APPLICATION_JSON_VALUE)
+     * public ResponseEntity<?> crearPasos(@PathVariable String proceso){
+     * return new ResponseEntity<>(this.procesoPasoService.crearPasos(proceso),
+     * null, HttpStatus.OK);
+     * }
+     */
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> buscarPorId(@PathVariable Integer id){
+    public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
         return new ResponseEntity<>(this.pasoService.findById(id), null, HttpStatus.OK);
     }
 
     // @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    // public ResponseEntity<?> actualizarEstadoPorId(@RequestParam Integer idPaso, @RequestParam String estado){
-    //     return new ResponseEntity<>(this.pasoService.updateEstado(idPaso, estado), null, HttpStatus.OK);
+    // public ResponseEntity<?> actualizarEstadoPorId(@RequestParam Integer idPaso,
+    // @RequestParam String estado){
+    // return new ResponseEntity<>(this.pasoService.updateEstado(idPaso, estado),
+    // null, HttpStatus.OK);
     // }
 
-    
     @PutMapping(path = "/{idPaso}/{estado}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> actualizarEstadoPorId(@PathVariable Integer idPaso, @PathVariable String estado){
+    public ResponseEntity<?> actualizarEstadoPorId(@PathVariable Integer idPaso, @PathVariable String estado) {
         return new ResponseEntity<>(this.pasoService.updateEstado(idPaso, estado), null, HttpStatus.OK);
     }
 
     @GetMapping(path = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> buscarTodosEstados(){
+    public ResponseEntity<?> buscarTodosEstados() {
         return new ResponseEntity<>(this.pasoService.buscarEstados(), HttpStatus.OK);
     }
-    
+
+    @GetMapping(path = "/proceso/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> buscarPorIdProceso(@PathVariable Integer id) {
+        return new ResponseEntity<>(this.pasoService.findByProcesoId(id), null, HttpStatus.OK);
+    }
+
 }

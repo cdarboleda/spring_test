@@ -51,7 +51,6 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         return this.factoryManager.generarPasosPorProceso(proceso);
     }
 
-
     // inserta un paso con responsable y proceso
     // el orden no verifica
     @Override
@@ -96,7 +95,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
 
     // }
 
-    //es el que guarda los pasos de golpe al inicio de crear un proceso
+    // es el que guarda los pasos de golpe al inicio de crear un proceso
     @Override
     public List<Paso> insertarMultipleAProceso(List<PasoDTO> pasosDTO, Integer idProceso) {
         // Verificar que el proceso exista
@@ -106,7 +105,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
                 .map(pasoDTO -> {
                     Paso paso = new Paso();
                     convertidorPaso.convertirAEntidad(paso, pasoDTO);
-                    //paso.setResponsable(null);
+                    // paso.setResponsable(null);
                     paso.setProceso(proceso);
                     return this.pasoRepository.save(paso);
                 })
@@ -115,7 +114,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         return pasosInsertados;
     }
 
-    //porsiacaso, si ya tuvieran responsable y necesitase insertarlos de golpe
+    // porsiacaso, si ya tuvieran responsable y necesitase insertarlos de golpe
     @Override
     public List<Paso> insertarMultipleConResponsable(List<PasoDTO> pasosDTO, Integer idProceso) {
         // Verificar que el proceso exista

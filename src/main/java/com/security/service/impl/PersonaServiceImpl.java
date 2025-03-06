@@ -89,8 +89,9 @@ public class PersonaServiceImpl implements IPersonaService {
         this.personaRepository.deleteById(id);
     }
 
-    //nomas revisa si estan nulos o vacio, 
-    //si por ejemplo se mandan letras en ves de numeros en roles, igual sale 400 pero sin mensaje personalziado pero no salta este if
+    // nomas revisa si estan nulos o vacio,
+    // si por ejemplo se mandan letras en ves de numeros en roles, igual sale 400
+    // pero sin mensaje personalziado pero no salta este if
     @Override
     public Boolean tieneErrores(PersonaDTO p) {
         return (p.getNombre() == null ||
@@ -100,5 +101,12 @@ public class PersonaServiceImpl implements IPersonaService {
                 p.getRoles() == null ||
                 p.getRoles().isEmpty()) ? true : false;
     }
+
+    @Override
+    public Persona findByEmail(String email) {
+
+        return personaRepository.findByEmail(email);
+    }
+
 
 }

@@ -15,4 +15,5 @@ public interface IGestorPersonaService {
     public List<Paso> findPasosByPersonaId(Integer id);
        
     public void anadirPaso(Integer idPersona, Integer idPaso);
+    public List<Persona> findPersonasByRol(String rol);
 }

@@ -28,7 +28,8 @@ import jakarta.validation.Valid;
 @RestController
 @CrossOrigin
 @RequestMapping("/persona")
-@PreAuthorize("hasAnyRole('admin_client_role', 'secretaria_client_role')")
+// @PreAuthorize("hasAnyRole('admin_client_role', 'secretaria_client_role')")
+// //Quitar comentario
 public class PersonaController {
 
     @Autowired
@@ -40,17 +41,16 @@ public class PersonaController {
     @Autowired
     private IGestorPersonaService gestorPersonaService;
 
-
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> insertar(@Valid @RequestBody PersonaDTO persona) {
         return new ResponseEntity<>(this.gestorPersonaService.insertar(persona), HttpStatus.OK);
     }
 
-    //Buscar necesita la cedula dentro del body
+    // Buscar necesita la cedula dentro del body
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody PersonaDTO personaDTO) {
         personaDTO.setId(id);
-        //personaDTO.setCedula(cedula);
+        // personaDTO.setCedula(cedula);
         return new ResponseEntity<>(this.gestorPersonaService.actualizar(personaDTO), HttpStatus.OK);
     }
 
@@ -69,26 +69,37 @@ public class PersonaController {
         return ResponseEntity.ok(this.gestorProcesoService.obtenerMisProcesos(id));
     }
 
-    @GetMapping(path="/{id}/roles", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{id}/roles", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> obtenerRolesPorPersonaId(@PathVariable Integer id) {
         return new ResponseEntity<>(this.gestorPersonaService.findRolesByPersonaId(id), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}/pasos", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> obtenerPasosPorPersonaId(@PathVariable Integer id){
+    public ResponseEntity<?> obtenerPasosPorPersonaId(@PathVariable Integer id) {
         return new ResponseEntity<>(this.gestorPersonaService.findPasosByPersonaId(id), HttpStatus.OK);
     }
 
-    @PostMapping(path="/{id}/addPaso", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/{id}/addPaso", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> anadirPaso(@PathVariable Integer id, @RequestParam Integer idPaso) {
         this.gestorPersonaService.anadirPaso(id, idPaso);
-        return new ResponseEntity<>("Paso "+idPaso+" added", null, HttpStatus.OK);
+        return new ResponseEntity<>("Paso " + idPaso + " added", null, HttpStatus.OK);
     }
 
-    @DeleteMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> eliminarPersona(@PathVariable Integer id){
+    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> eliminarPersona(@PathVariable Integer id) {
         this.personaService.deleteById(id);
         return new ResponseEntity<>("Persona eliminada", null, HttpStatus.OK);
     }
-    
+
+    @GetMapping(path = "/{cedula}/pasos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> buscarPorCedula(@PathVariable String cedula) {
+
+        return new ResponseEntity<>(this.personaService.findByCedula(cedula), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/roles/{rol}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> buscarPorRol(@PathVariable String rol) {
+        return new ResponseEntity<>(this.gestorPersonaService.findPersonasByRol(rol), HttpStatus.OK);
+    }
+
 }

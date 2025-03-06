@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.security.db.CarpetaDocumento;
 import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.Proceso;
@@ -47,6 +48,9 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class GestorProcesoImpl implements IGestorProcesoService {
+
+    private static final Boolean FINALIZADO_ESTADO_INICIAL = false;
+    private static final LocalDateTime FECHA_FIN_INICIAL = null;
 
     @Autowired
     private IProcesoRepository procesoRepository;
@@ -104,7 +108,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             pagoDocente.setProceso(proceso);
             pagoDocente.setModalidadVirtual(procesoPDDTO.getModalidadVirtual());
 
-            procesoPagoDocenteRepository.save(pagoDocente);
+            this.procesoPagoDocenteRepository.save(pagoDocente);
         } else if (procesoDTO.getTipoProceso().equals(TipoProceso.TITULACION.toString())) {
             ProcesoTitulacionDTO procesoTDTO = (ProcesoTitulacionDTO) procesoDTO;
             ProcesoTitulacion titulacion = new ProcesoTitulacion();
@@ -114,7 +118,38 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             titulacion.setFechaDefensa(procesoTDTO.getFechaDefensa());
             titulacion.setNotaLector1(procesoTDTO.getNotaLector1());
             titulacion.setNotaLector2(procesoTDTO.getNotaLector2());
-            procesoTitulacionRepository.save(titulacion);
+
+            // Agrega los compañeros al proceso en caso de ser modo GRUPAL
+            if (procesoTDTO.getGrupo() != null && procesoTDTO.getIdInvolucrados() != null) {
+                asociarCompañerosAlProceso(proceso, procesoTDTO.getIdInvolucrados());
+
+            }
+            this.procesoTitulacionRepository.save(titulacion);
+        }
+    }
+
+    private void asociarCompañerosAlProceso(Proceso proceso, List<Integer> idsCompañeros) {
+
+        // Asegura que el requiriente también sea parte del de Involucrados
+        if (!idsCompañeros.contains(proceso.getRequiriente().getId())) {
+            idsCompañeros.add(proceso.getRequiriente().getId());
+        }
+
+        // Validar que los IDs de los compañeros
+
+        List<Persona> compañeros = idsCompañeros.stream()
+                .map(this.personaService::findById)
+                .collect(Collectors.toList());
+
+        // Asociar cada compañero al proceso con pasos y carpetas
+        for (Persona compañero : compañeros) {
+
+            CarpetaDocumento carpeta = new CarpetaDocumento();
+            carpeta.setPersona(compañero);
+            carpeta.setProceso(proceso);
+            carpeta.setUrl("test"); // resolver este campo
+            this.carpetaDocumentoRepository.save(carpeta);
+
         }
     }
 
@@ -122,7 +157,8 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     public void insert(ProcesoDTO procesoDTO) {
 
         Proceso proceso = new Proceso();
-        proceso.setFinalizado(false);
+        proceso.setFinalizado(FINALIZADO_ESTADO_INICIAL);
+        proceso.setFechaFin(FECHA_FIN_INICIAL);
         proceso.setFechaInicio(LocalDateTime.now());
         proceso.setTipoProceso(TipoProceso.valueOf(procesoDTO.getTipoProceso()));
         Persona requiriente = this.personaService.findById(procesoDTO.getRequirienteId());
@@ -160,6 +196,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         this.procesoRepository.save(proceso);
 
         this.insertarProcesoEspecifico(proceso, procesoDTO);
+
         // return convertidorProceso.convertirALigeroDTO(procesoGuardado);
     }
 
@@ -181,7 +218,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         carpetaDocumentoRepository.deleteByProcesoId(id);
         pasoRepository.deleteByProcesoId(id);
         procesoLogRepository.deleteByProcesoId(id);
-        
+
         this.procesoRepository.deleteById(id);
     }
 
