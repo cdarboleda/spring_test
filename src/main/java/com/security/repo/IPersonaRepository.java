@@ -31,4 +31,13 @@ public interface IPersonaRepository extends JpaRepository<Persona, Integer> {
     @Query("SELECT p FROM Persona p LEFT JOIN FETCH p.roles")
     List<Persona> findAllWithRoles();
 
+    @Query("SELECT p FROM Persona p WHERE p.correo = :email")
+    public Persona findByEmail(@Param("email") String email);
+
+    @Query("SELECT p FROM Persona p JOIN p.roles r WHERE r.id = :rolId")
+    public List<Persona> findByRolId(Integer rolId);
+
+    @Query("SELECT p FROM Persona p WHERE p.nombre = :name")
+    public List<Persona> findByName(String name);
+
 }

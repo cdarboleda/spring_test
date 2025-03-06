@@ -17,8 +17,19 @@
 #     command: ["start-dev"]
 
 version: '3.8'
-
+ 
 services:
+
+  postgres:
+    container_name: postgres_db
+    image: postgres:17
+    ports:
+      - "5433:5432" # Cambié el puerto del host a 5433 por el 5432 lo tengo ocupado 
+    environment:
+      POSTGRES_DB: proyecto_v1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
   keycloak:
     container_name: keycloak
     image: quay.io/keycloak/keycloak:latest
@@ -26,38 +37,14 @@ services:
       - "8080:8080"
     environment:
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://host.docker.internal:5432/proyecto_db
+      KC_DB_URL: jdbc:postgresql://postgres_db:5432/proyecto_v1
       KC_DB_SCHEMA: keycloak_schema
       KC_DB_USERNAME: postgres
       KC_DB_PASSWORD: postgres
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-    command: [ "start-dev" ]
     volumes:
-      - ./themes:/opt/keycloak/themes/
-    # entrypoint: /opt/keycloak/bin/kc.sh --verbose start-dev --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false
-
-
-# version: '3.8'
-
-# services:
-#   keycloak:
-#     container_name: keycloak
-#     image: quay.io/keycloak/keycloak:latest
-#     ports:
-#       - "8080:8080"
-#     environment:
-#       KC_DB: postgres
-#       KC_DB_URL: jdbc:postgresql://host.docker.internal:5432/proyecto_db
-#       KC_DB_SCHEMA: keycloak_schema
-#       KC_DB_USERNAME: postgres
-#       KC_DB_PASSWORD: postgres
-#       KEYCLOAK_ADMIN: admin
-#       KEYCLOAK_ADMIN_PASSWORD: admin
-#     command: 
-#       - start-dev
-#       - --spi-theme-static-max-age=-1
-#       - --spi-theme-cache-themes=false
-#       - --spi-theme-cache-templates=false
-#     volumes:
-#       - ./themes:/opt/keycloak/themes
+      - ./realm-export.json:/opt/keycloak/data/import/realm-export.json
+    command: ["start-dev", "--import-realm"]
+    depends_on:
+      - postgres

@@ -23,17 +23,16 @@ import com.security.service.dto.ProcesoDTO;
 
 import jakarta.validation.Valid;
 
-
 @RestController
 @CrossOrigin
 @RequestMapping("/proceso")
 public class ProcesoController {
 
-     @Autowired
-     private IProcesoService procesoService;
+    @Autowired
+    private IProcesoService procesoService;
 
-     @Autowired
-     private IGestorProcesoService gestorProceso;
+    @Autowired
+    private IGestorProcesoService gestorProceso;
 
     //  @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     //  public ResponseEntity<?> obtenerProcesoById(@PathVariable Integer id) {
@@ -51,10 +50,11 @@ public class ProcesoController {
 
 
     // @GetMapping("/mis-procesos/{id}")
-    // public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable Integer id) {
-    //     return ResponseEntity.ok(this.gestorProceso.findMisProcesosByResponsableId(id));
+    // public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable
+    // Integer id) {
+    // return
+    // ResponseEntity.ok(this.gestorProceso.findMisProcesosByResponsableId(id));
     // }
-
 
     @GetMapping("/mis-procesos/{id}")
     public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable(name = "id") Integer id) {
@@ -81,7 +81,7 @@ public class ProcesoController {
      @DeleteMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
      public ResponseEntity<?> eliminarProcesoById(@PathVariable(name = "id") Integer id){
         this.gestorProceso.delete(id);
-        return new ResponseEntity<>("Proceso con id: "+id+" eliminado", null, HttpStatus.OK);
-     }
+        return new ResponseEntity<>("Proceso con id: " + id + " eliminado", null, HttpStatus.OK);
+    }
 
 }

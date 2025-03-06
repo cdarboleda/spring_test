@@ -20,7 +20,8 @@ public enum Estado {
                 .orElseThrow(() -> new IllegalArgumentException("Descripción no encontrada con criterio: " + criterio));
     }
 
-    //String descripcion = Estado.EN_CURSO.buscarDescripcionPorCriterio("documentación");
+    // String descripcion =
+    // Estado.EN_CURSO.buscarDescripcionPorCriterio("documentación");
 
     public String getDescripcionPorIndice(int indice) {
         if (indice < 0 || indice >= descripciones.size()) {
@@ -36,6 +37,7 @@ public enum Estado {
                 .orElseThrow(() -> new IllegalArgumentException("Descripción no encontrada: " + nombre));
     }
 
-    //String descripcion = Estado.EN_CURSO.getDescripcionPorNombre("Corrigiendo archivos");
+    // String descripcion = Estado.EN_CURSO.getDescripcionPorNombre("Corrigiendo
+    // archivos");
 
 }

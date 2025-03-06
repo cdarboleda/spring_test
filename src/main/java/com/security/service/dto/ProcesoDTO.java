@@ -18,23 +18,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Data
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.EXISTING_PROPERTY,
-    property = "tipoProceso",
-    visible = true
-)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "tipoProceso", visible = true)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = ProcesoPagoDocenteDTO.class, name = "PAGO_DOCENTE"),
-    @JsonSubTypes.Type(value = ProcesoTitulacionDTO.class, name = "TITULACION")
+        @JsonSubTypes.Type(value = ProcesoPagoDocenteDTO.class, name = "PAGO_DOCENTE"),
+        @JsonSubTypes.Type(value = ProcesoTitulacionDTO.class, name = "TITULACION")
 })
 public class ProcesoDTO {
     private Integer id;
-    @NotEmpty //para strings
-    @Pattern(
-        regexp = "PAGO_DOCENTE|TITULACION|DISENIO_MAESTRIA",
-        message = "El tipo de proceso no es válido. Debe ser uno de: PAGO_DOCENTE, TITULACION, DISENIO_MAESTRIA"
-    )
+    @NotEmpty // para strings
+    @Pattern(regexp = "PAGO_DOCENTE|TITULACION|DISENIO_MAESTRIA", message = "El tipo de proceso no es válido. Debe ser uno de: PAGO_DOCENTE, TITULACION, DISENIO_MAESTRIA")
     private String tipoProceso;
     @NotNull
     @Min(value = 1)

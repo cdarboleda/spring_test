@@ -86,5 +86,5 @@ public class PasoController {
     public ResponseEntity<?> buscarTodosEstados() {
         return new ResponseEntity<>(this.pasoService.buscarEstados(), HttpStatus.OK);
     }
-
+    
 }

@@ -26,6 +26,7 @@ import com.security.service.IRolService;
 import com.security.service.dto.PersonaDTO;
 import com.security.service.dto.PersonaLigeroDTO;
 import com.security.service.dto.utils.Convertidor;
+import com.security.service.dto.utils.ConvertidorPersona;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -48,6 +49,9 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
 
     @Autowired
     private Convertidor convertidor;
+
+    @Autowired
+    private ConvertidorPersona convertidorPersona;
 
     @Autowired
     private IPasoService pasoService;
@@ -163,6 +167,25 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
                         HttpStatus.BAD_REQUEST);
             }
 
+        }
+
+    }
+
+    public PersonaLigeroDTO getDatosPersonaByEmail(String email) {
+        Persona persona = this.personaService.findByEmail(email);
+        return this.convertidorPersona.convertirALigeroDTO(persona);
+
+    }
+
+    @Override
+    public List<Persona> findPersonasByRol(String nombreRol) {
+
+        Optional<Rol> rol = this.rolService.buscarPorNombre(nombreRol);
+
+        if (rol.isEmpty()) {
+            throw new CustomException("No existe el rol con nombre: " + nombreRol, HttpStatus.BAD_REQUEST);
+        } else {
+            return new ArrayList<>(rol.get().getPersonas());
         }
 
     }

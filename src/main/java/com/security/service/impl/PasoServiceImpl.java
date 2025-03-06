@@ -38,4 +38,13 @@ public class PasoServiceImpl implements IPasoService {
         return Stream.of(Estado.values()).map((estado) -> estado.toString()).toList();
     }
 
+
+    @Override
+    public List<Paso> findByProcesoId(Integer idProceso) {
+        // TODO Auto-generated method stub
+        return this.pasoRepository.findByProcesoId(idProceso);
+    }
+
+
+
 }

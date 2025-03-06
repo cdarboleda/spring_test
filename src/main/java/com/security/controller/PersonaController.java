@@ -120,4 +120,15 @@ public class PersonaController {
         return new ResponseEntity<>(this.gestorUsurio.deleteUser(idKeycloak), null, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/{cedula}/pasos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> buscarPasosPorCedula(@PathVariable String cedula) {
+
+        return new ResponseEntity<>(this.personaService.findByCedula(cedula), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/roles/{rol}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> buscarPorRol(@PathVariable String rol) {
+        return new ResponseEntity<>(this.gestorPersonaService.findPersonasByRol(rol), HttpStatus.OK);
+    }
+
 }
