@@ -130,5 +130,5 @@ public class PersonaController {
     public ResponseEntity<?> buscarPorRol(@PathVariable String rol) {
         return new ResponseEntity<>(this.gestorPersonaService.findPersonasByRol(rol), HttpStatus.OK);
     }
-
+    
 }

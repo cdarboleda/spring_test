@@ -86,5 +86,10 @@ public class PasoController {
     public ResponseEntity<?> buscarTodosEstados() {
         return new ResponseEntity<>(this.pasoService.buscarEstados(), HttpStatus.OK);
     }
-    
+
+    @GetMapping(path = "/proceso/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> buscarPorIdProceso(@PathVariable Integer id) {
+        return new ResponseEntity<>(this.pasoService.findByProcesoId(id), null, HttpStatus.OK);
+    }
+
 }

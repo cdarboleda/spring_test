@@ -22,6 +22,7 @@ public interface IPersonaService {
     public List<PersonaLigeroDTO> findAllPersonaLigeroDTO();
 
     public Boolean existsById(Integer id);
+
     public List<Persona> findPersonasByIds(List<Integer> ids);
 
     public Boolean tieneErrores(PersonaDTO personaDTO);

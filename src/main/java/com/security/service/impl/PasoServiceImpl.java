@@ -45,6 +45,4 @@ public class PasoServiceImpl implements IPasoService {
         return this.pasoRepository.findByProcesoId(idProceso);
     }
 
-
-
 }
