@@ -28,19 +28,27 @@ public class PagoDocentePasoFactory implements IPasoFactory {
                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "coordinador"));
         pasos.add(this.crearPaso("revision_secretaria", 3, 
                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
-        pasos.add(this.crearPaso("autorizacion_director", 4, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "director"));
-        pasos.add(this.crearPaso("aprobacion_decano", 5, 
+        pasos.add(this.crearPaso("pedido_asistencia", 4, 
                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
-        pasos.add(this.crearPaso("factura_docente", 6, 
+
+        pasos.add(this.crearPaso("validacion_asistencia_docente", 5, 
                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "docente"));
-        // pasos.add(this.crearPaso("revision_factura_financiero", 7, 
-        //         Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
-        pasos.add(this.crearPaso("revision_factura_director", 8, 
+
+        pasos.add(this.crearPaso("validacion_asistencia_coordinador", 6, 
+                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "coordinador"));
+        
+        
+        pasos.add(this.crearPaso("autorizacion_director", 7, 
                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "director"));
-        pasos.add(this.crearPaso("desembolso_financiero", 9, 
+        pasos.add(this.crearPaso("aprobacion_decano", 8, 
                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
-        pasos.add(this.crearPaso("finalizacion_tramite", 10, 
+        pasos.add(this.crearPaso("factura_docente", 9, 
+                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "docente"));
+        pasos.add(this.crearPaso("revision_factura_director", 10, 
+                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "director"));
+        pasos.add(this.crearPaso("desembolso_financiero", 11, 
+                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
+        pasos.add(this.crearPaso("finalizacion_tramite", 12, 
                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
         return pasos;
     }

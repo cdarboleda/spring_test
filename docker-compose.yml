@@ -8,15 +8,15 @@
 #       - "8080:8080"
 #     environment:
 #       KC_DB: postgres
-#       KC_DB_URL: jdbc:postgresql://dpg-cubplj5ds78s73ae8tb0-a.oregon-postgres.render.com:5432/proyecto_db_kw3a
+#       KC_DB_URL: jdbc:postgresql://servidor-titulacion.postgres.database.azure.com:5432/proyecto_db
 #       KC_DB_SCHEMA: keycloak_schema
-#       KC_DB_USERNAME: proyecto_db_kw3a_user
-#       KC_DB_PASSWORD: CoN1RN09U05huCy62t3PoOvmzMzwcdKo
+#       KC_DB_USERNAME: administrador
+#       KC_DB_PASSWORD: 2U~3:iFNy3Qs,>;
 #       KEYCLOAK_ADMIN: admin
 #       KEYCLOAK_ADMIN_PASSWORD: admin
 #     command: ["start-dev"]
 
-version: '3.8'
+# version: '3.8'
 
 services:
   keycloak:
@@ -33,8 +33,8 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     command: [ "start-dev" ]
-    volumes:
-      - ./themes:/opt/keycloak/themes/
+#     volumes:
+#       - ./themes:/opt/keycloak/themes/
     # entrypoint: /opt/keycloak/bin/kc.sh --verbose start-dev --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false
 
 

@@ -155,7 +155,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         // pasos.get(0).setResponsable(requiriente);
         if (procesoDTO.getTipoProceso().equals(TipoProceso.PAGO_DOCENTE.toString())) {
             pasos.stream().filter(
-                    paso -> paso.getNombre() == "documentacion_docente" || paso.getNombre() == "factura_docente")
+                    paso -> paso.getNombre() == "documentacion_docente" || paso.getNombre() == "factura_docente" || paso.getNombre() == "validacion_asistencia_docente")
                     .forEach((paso -> paso.setResponsable(requiriente)));
         } else if (procesoDTO.getTipoProceso().equals(TipoProceso.TITULACION.toString())) {
             pasos.stream().filter(paso -> paso.getNombre() == "titu_paso1")
