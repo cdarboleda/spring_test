@@ -148,6 +148,10 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
                 return dtos;
     }
 
+    // public PersonaDTO findWithRoles(){
+
+    // }
+
     private void rolesInvalidosMensaje(List<Rol> roles, List<String> rolesIds) {
 
         if (roles.size() != rolesIds.size()) {

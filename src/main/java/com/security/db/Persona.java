@@ -74,7 +74,7 @@ public class Persona {
         joinColumns = @JoinColumn(name = "pers_id"), // Columna que referencia a Persona
         inverseJoinColumns = @JoinColumn(name = "rol_id") // Columna que referencia a Rol
     )
-    @JsonIgnore
+    // @JsonIgnore
     private Set<Rol> roles = new HashSet<>();
 
     // @Override
