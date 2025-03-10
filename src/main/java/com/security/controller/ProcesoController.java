@@ -47,20 +47,8 @@ public class ProcesoController {
      }
 
     @GetMapping("/mis-procesos")
-    public ResponseEntity<?> obtenerMisProcesos() {
-        return ResponseEntity.ok(this.gestorProceso.findMisProcesos());
-    }
-
-
-    // @GetMapping("/mis-procesos/{id}")
-    // public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable Integer id) {
-    //     return ResponseEntity.ok(this.gestorProceso.findMisProcesosByResponsableId(id));
-    // }
-
-
-    @GetMapping("/mis-procesos/{id}")
-    public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable(name = "id") Integer id) {
-        return ResponseEntity.ok(this.gestorProceso.obtenerMisProcesos(id));
+    public ResponseEntity<?> obtenerMisProcesosPagoDocente() {
+        return ResponseEntity.ok(this.gestorProceso.findMisProcesosPagoDocente());
     }
 
     @GetMapping("/{id}/pasos")
@@ -71,8 +59,6 @@ public class ProcesoController {
     @PreAuthorize("hasAnyRole('administrador')")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
      public ResponseEntity<?> insertarProceso(@Valid @RequestBody ProcesoDTO procesoDTO) {
-        //     this.gestorProceso.insert(procesoDTO);
-        //  return new ResponseEntity<>(null, HttpStatus.OK);
          return new ResponseEntity<>(this.gestorProceso.insert(procesoDTO), HttpStatus.OK);
      }
      @PreAuthorize("hasAnyRole('administrador')")

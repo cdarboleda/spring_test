@@ -19,28 +19,25 @@ public class MiProcesoDTO {
 
     private Integer requirienteId;
     private String requirienteCedula;
+    private String requirienteNombre;
+    private String requirienteApellido;
 
     private String pasoNombre;
     private String pasoEstado;
     private String pasoDescripcionEstado;
+    private LocalDateTime pasoFechaInicio;
     private Integer responsablePasoId;
     private String responsablePasoCedula;
 
-public MiProcesoDTO(){
-
-}
+    public MiProcesoDTO() { }
 
     public MiProcesoDTO(
-            Integer procesoId,
-            TipoProceso tipoProceso,
-            LocalDateTime fechaInicio,
-            LocalDateTime fechaFin,
-            Boolean finalizado,
-            Boolean cancelado,
-            Integer personaId,
-            String personaCedula,
-            String pasoNombre,
-            Integer responsablePasoId,
+            Integer procesoId, TipoProceso tipoProceso, LocalDateTime fechaInicio,
+            LocalDateTime fechaFin, Boolean finalizado, Boolean cancelado,
+            Integer requirienteId, String requirienteCedula,
+            String requirienteNombre, String requirienteApellido,
+            String pasoNombre, String pasoEstado, String pasoDescripcionEstado,
+            LocalDateTime pasoFechaInicio, Integer responsablePasoId,
             String responsablePasoCedula) {
         this.procesoId = procesoId;
         this.tipoProceso = tipoProceso;
@@ -48,41 +45,17 @@ public MiProcesoDTO(){
         this.fechaFin = fechaFin;
         this.finalizado = finalizado;
         this.cancelado = cancelado;
-        this.requirienteId = personaId;
-        this.requirienteCedula = personaCedula;
+        this.requirienteId = requirienteId;
+        this.requirienteCedula = requirienteCedula;
+        this.requirienteNombre = requirienteNombre;
+        this.requirienteApellido = requirienteApellido;
         this.pasoNombre = pasoNombre;
+        this.pasoEstado = pasoEstado;
+        this.pasoDescripcionEstado = pasoDescripcionEstado;
+        this.pasoFechaInicio = pasoFechaInicio;
         this.responsablePasoId = responsablePasoId;
         this.responsablePasoCedula = responsablePasoCedula;
     }
-
-    public MiProcesoDTO(
-        Integer procesoId,
-        TipoProceso tipoProceso,
-        LocalDateTime fechaInicio,
-        LocalDateTime fechaFin,
-        Boolean finalizado,
-        Boolean cancelado,
-        Integer personaId,
-        String personaCedula,
-        String pasoNombre,
-        String pasoEstado,
-        String pasoDescripcionEstado,
-        Integer responsablePasoId,
-        String responsablePasoCedula) {
-    this.procesoId = procesoId;
-    this.tipoProceso = tipoProceso;
-    this.fechaInicio = fechaInicio;
-    this.fechaFin = fechaFin;
-    this.finalizado = finalizado;
-    this.cancelado = cancelado;
-    this.requirienteId = personaId;
-    this.requirienteCedula = personaCedula;
-    this.pasoNombre = pasoNombre;
-    this.pasoEstado = pasoEstado;
-    this.pasoDescripcionEstado = pasoDescripcionEstado;
-    this.responsablePasoId = responsablePasoId;
-    this.responsablePasoCedula = responsablePasoCedula;
-}
 
     // Getters y Setters
 }

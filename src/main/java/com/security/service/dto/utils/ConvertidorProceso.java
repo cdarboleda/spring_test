@@ -53,6 +53,7 @@ public class ConvertidorProceso {
             procesoDTO.setFechaInicio(proceso.getFechaInicio());
             procesoDTO.setFechaFin(proceso.getFechaFin());
             procesoDTO.setFinalizado(proceso.getFinalizado());
+            //TODO: el de cancelado
             procesoDTO.setTipoProceso(proceso.getTipoProceso().toString());
 
             procesoDTO.setCarpetasDocumento(

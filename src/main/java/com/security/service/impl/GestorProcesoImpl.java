@@ -1,25 +1,21 @@
 package com.security.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.security.db.Materia;
 import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.Proceso;
 import com.security.db.ProcesoPagoDocente;
 import com.security.db.ProcesoTitulacion;
-import com.security.db.enums.Estado;
-import com.security.db.enums.Evento;
 import com.security.db.enums.TipoProceso;
-import com.security.exception.CustomException;
 import com.security.repo.ICarpetaDocumentoRepository;
 import com.security.repo.IPasoRepository;
 import com.security.repo.IProcesoLogRepository;
@@ -29,11 +25,13 @@ import com.security.repo.IProcesoTitulacionRepository;
 import com.security.service.IGestorPasoService;
 import com.security.service.IGestorProcesoLogService;
 import com.security.service.IGestorProcesoService;
+import com.security.service.IMateriaService;
 import com.security.service.IPasoService;
 import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
 import com.security.service.IRolService;
 import com.security.service.dto.MiProcesoDTO;
+import com.security.service.dto.MiProcesoPagoDocenteDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteDTO;
 import com.security.service.dto.ProcesoPasoDocumentoDTO;
@@ -57,6 +55,8 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     private IProcesoService procesoService;
     @Autowired
     private IPersonaService personaService;
+    @Autowired
+    private IMateriaService materiaService;
     @Autowired
     private ICarpetaDocumentoRepository carpetaDocumentoRepository;
 
@@ -114,6 +114,8 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             proceso.setDescripcion("En este proceso se realiza el trámite de pago para un docente");
             pagoDocente.setProceso(proceso);
             pagoDocente.setModalidadVirtual(procesoPDDTO.getModalidadVirtual());
+            Materia materia = this.materiaService.findById(procesoPDDTO.getMateriaId());
+            pagoDocente.setMateria(materia);
             return procesoPagoDocenteRepository.save(pagoDocente);
         } else if (procesoDTO.getTipoProceso().equals(TipoProceso.TITULACION.toString())) {
             ProcesoTitulacionDTO procesoTDTO = (ProcesoTitulacionDTO) procesoDTO;
@@ -155,7 +157,8 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         // pasos.get(0).setResponsable(requiriente);
         if (procesoDTO.getTipoProceso().equals(TipoProceso.PAGO_DOCENTE.toString())) {
             pasos.stream().filter(
-                    paso -> paso.getNombre() == "documentacion_docente" || paso.getNombre() == "factura_docente" || paso.getNombre() == "validacion_asistencia_docente")
+                    paso -> paso.getNombre() == "documentacion_docente" || paso.getNombre() == "factura_docente"
+                            || paso.getNombre() == "validacion_asistencia_docente")
                     .forEach((paso -> paso.setResponsable(requiriente)));
         } else if (procesoDTO.getTipoProceso().equals(TipoProceso.TITULACION.toString())) {
             pasos.stream().filter(paso -> paso.getNombre() == "titu_paso1")
@@ -165,7 +168,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         proceso.setPasos(pasos);
         this.procesoRepository.save(proceso);
         var procesoEspecifico = this.insertarProcesoEspecifico(proceso, procesoDTO);
-        pasos.forEach(paso -> gestorProcesoLogService.insertarProcesoLog(paso, Evento.CREACION));
+        // pasos.forEach(paso -> gestorProcesoLogService.insertarProcesoLog(paso, Evento.CREACION));
         return convertidorProceso.convertirACompletoDTO(procesoEspecifico);
     }
 
@@ -211,62 +214,23 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     }
 
     @Override
-    public List<MiProcesoDTO> findMisProcesos() {
-        return this.procesoRepository.findMisProcesos();
+    public List<MiProcesoDTO> findMisProcesosGeneral() {
+        return this.procesoRepository.findMisProcesosGeneral();
     }
 
-    // devuelve la lista de MiProceso en procesos donde soy responsable de un
-    // proceso
-    // en el caso del coordinador si se le mostraría,
-    // funciona siempre y cuando sea responsable de almenos un paso,
-    // si es que hubiera un proceso en el que el requiriente no interviene en el
-    // programa como responsable
-    // no es suficiente, el metodo anterior me daria la info
-    // pero en el flujo normal, suele ser ambos, asi que toca añadir logica si es
-    // que en el futuro
-    // se llega a esos casos, por el momento no es necesario
     @Override
-    public List<MiProcesoDTO> findMisProcesosByResponsableId(Integer responsableId) {
-        return this.procesoRepository.findMisProcesosByResponsableId(responsableId);
+    public List<MiProcesoDTO> findMisProcesosGeneralPorResponsable(Integer responsableId) {
+        return this.procesoRepository.findMisProcesosGeneralPorResponsable(responsableId);
     }
 
-    public List<MiProcesoDTO> obtenerMisProcesos(Integer responsableId) {
-        List<Proceso> procesos = procesoRepository.findProcesosByResponsableId(responsableId);
+    @Override
+    public List<MiProcesoPagoDocenteDTO> findMisProcesosPagoDocente() {
+        return this.procesoRepository.findMisProcesosPagoDocente();
+    }
 
-        // Crear una lista de DTOs para devolver
-        List<MiProcesoDTO> resultado = new ArrayList<>();
-
-        for (Proceso proceso : procesos) {
-            // Buscar el paso en estado EN_CURSO, si existe
-            Paso pasoEnCurso = proceso.getPasos().stream()
-                    .filter(p -> p.getEstado() == Estado.EN_CURSO) // Enum EstadoPaso
-                    .findFirst()
-                    .orElse(null); // Si no hay paso en curso, será null
-
-            // Crear el DTO con la información relevante
-            MiProcesoDTO dto = new MiProcesoDTO(
-                    proceso.getId(),
-                    proceso.getTipoProceso(),
-                    proceso.getFechaInicio(),
-                    proceso.getFechaFin(),
-                    proceso.getFinalizado(),
-                    proceso.getCancelado(),
-                    proceso.getRequiriente().getId(),
-                    proceso.getRequiriente().getCedula(),
-                    pasoEnCurso != null ? pasoEnCurso.getNombre() : null,
-                    pasoEnCurso != null ? pasoEnCurso.getEstado().toString() : null,
-                    pasoEnCurso != null ? pasoEnCurso.getDescripcionEstado() : null,
-                    pasoEnCurso != null && pasoEnCurso.getResponsable() != null ? pasoEnCurso.getResponsable().getId()
-                            : null,
-                    pasoEnCurso != null && pasoEnCurso.getResponsable() != null
-                            ? pasoEnCurso.getResponsable().getCedula()
-                            : null);
-
-            // Agregar a la lista de resultados
-            resultado.add(dto);
-        }
-
-        return resultado;
+    @Override
+    public List<MiProcesoPagoDocenteDTO> findMisProcesosPagoDocentePorResponsable(Integer responsableId) {
+        return this.procesoRepository.findMisProcesosPagoDocentePorResponsable(responsableId);
     }
 
     @Override

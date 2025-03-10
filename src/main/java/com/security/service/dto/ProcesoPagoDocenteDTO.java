@@ -8,5 +8,6 @@ import lombok.EqualsAndHashCode;
 
 public class ProcesoPagoDocenteDTO extends ProcesoDTO{
     private Boolean modalidadVirtual;
+    private Integer materiaId;
     // public ProcesoPagoDocenteDTO() {} // Constructor vacío necesario
 }

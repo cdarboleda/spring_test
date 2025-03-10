@@ -44,6 +44,5 @@ public class ProcesoDTO {
     private LocalDateTime fechaFin;//Solo serviria cuando vamos a actualizar el final
     private Boolean finalizado;//Solo serviria cuando vamos a actualizar el final
     private Boolean cancelado;
-
     // public ProcesoDTO() {} // Constructor vacío necesario
 }

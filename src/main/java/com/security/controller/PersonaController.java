@@ -83,9 +83,7 @@ public class PersonaController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('administrador', 'usuario')")
     public ResponseEntity<?> buscarTodo() {
-        List<PersonaDTO> result = this.gestorUsurio.getUsers();
-        System.out.println("result en buscarTodos: " + result);
-        return new ResponseEntity<>(result, null, HttpStatus.OK);
+        return new ResponseEntity<>(this.gestorUsurio.getUsers(), HttpStatus.OK);
     }
 
     // todos, (id, cedula, nombre, apellido)
@@ -101,10 +99,12 @@ public class PersonaController {
         return new ResponseEntity<>(this.gestorPersonaService.findAllWithRoles(), HttpStatus.OK);
     }
 
+    //Este es el de la tabla de procesos cuando no soy admin
+    //El de cuando si es admin esta en el proceso controller
     @GetMapping("{id}/mis-procesos")
     @PreAuthorize("hasAnyRole('administrador', 'usuario')")
-    public ResponseEntity<?> obtenerMisProcesosByResponsableId(@PathVariable(name = "id") Integer id) {
-        return ResponseEntity.ok(this.gestorProcesoService.obtenerMisProcesos(id));
+    public ResponseEntity<?> obtenerMisProcesosPagoDocentePorResponsable(@PathVariable(name = "id") Integer id) {
+        return ResponseEntity.ok(this.gestorProcesoService.findMisProcesosPagoDocentePorResponsable(id));
     }
 
     @GetMapping(path = "/{id}/roles", produces = MediaType.APPLICATION_JSON_VALUE)

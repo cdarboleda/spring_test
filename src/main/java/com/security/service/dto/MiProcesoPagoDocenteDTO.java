@@ -1,0 +1,34 @@
+package com.security.service.dto;
+
+import java.time.LocalDateTime;
+
+import com.security.db.enums.TipoProceso;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class MiProcesoPagoDocenteDTO extends MiProcesoDTO {
+    
+    private String materiaCodigo;
+
+    public MiProcesoPagoDocenteDTO(
+            Integer procesoId, TipoProceso tipoProceso, LocalDateTime fechaInicio,
+            LocalDateTime fechaFin, Boolean finalizado, Boolean cancelado,
+            Integer requirienteId, String requirienteCedula,
+            String requirienteNombre, String requirienteApellido,
+            String pasoNombre, String pasoEstado, String pasoDescripcionEstado,
+            LocalDateTime pasoFechaInicio, Integer responsablePasoId,
+            String responsablePasoCedula, String materiaCodigo) {
+
+        super(procesoId, tipoProceso, fechaInicio, fechaFin, finalizado, cancelado,
+                requirienteId, requirienteCedula, requirienteNombre, requirienteApellido,
+                pasoNombre, pasoEstado, pasoDescripcionEstado, pasoFechaInicio,
+                responsablePasoId, responsablePasoCedula);
+
+        this.materiaCodigo = materiaCodigo;
+
+    }
+
+}

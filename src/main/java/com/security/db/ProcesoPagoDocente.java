@@ -18,6 +18,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name = "proceso_pago_docente")
@@ -35,5 +36,11 @@ public class ProcesoPagoDocente {
 
     @Column(name = "pago_modalidad_virtual")
     private Boolean modalidadVirtual;
-    
+
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    // @JsonIgnore
+    @ToString.Exclude
+    @JoinColumn(name = "mate_id")
+    private Materia materia;
+
 }
