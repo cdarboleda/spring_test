@@ -14,7 +14,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class ProcesoLogServiceImpl implements IProcesoLogService{
+public class ProcesoLogServiceImpl implements IProcesoLogService {
 
     @Autowired
     private IProcesoLogRepository procesoLogRepository;
@@ -36,10 +36,9 @@ public class ProcesoLogServiceImpl implements IProcesoLogService{
     }
 
     // @Override
-    // public List<ProcesoLog> findByIdProcesoAndIdPaso(Integer idProceso, Integer idPaso) {
-    //     return this.procesoLogRepository.findByIdProcesoAndIdPaso(idProceso, idPaso);
+    // public List<ProcesoLog> findByIdProcesoAndIdPaso(Integer idProceso, Integer
+    // idPaso) {
+    // return this.procesoLogRepository.findByIdProcesoAndIdPaso(idProceso, idPaso);
     // }
 
-
-    
 }

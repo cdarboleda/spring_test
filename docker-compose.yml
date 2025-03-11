@@ -26,7 +26,7 @@ services:
     ports:
       - "5433:5432" # Cambié el puerto del host a 5433 por el 5432 lo tengo ocupado 
     environment:
-      POSTGRES_DB: proyecto_v1
+      POSTGRES_DB: proyecto_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
 
@@ -37,7 +37,7 @@ services:
       - "8080:8080"
     environment:
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres_db:5432/proyecto_v1
+      KC_DB_URL: jdbc:postgresql://postgres_db:5432/proyecto_db
       KC_DB_SCHEMA: keycloak_schema
       KC_DB_USERNAME: postgres
       KC_DB_PASSWORD: postgres

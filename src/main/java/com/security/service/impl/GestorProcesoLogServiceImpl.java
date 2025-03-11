@@ -66,6 +66,7 @@ public class GestorProcesoLogServiceImpl implements IGestorProcesoLogService {
         procesoLog.setTipoEvento(tipoEvento);
 
         try {
+            
             return this.procesoLogService.insert(procesoLog);
 
         } catch (Exception e) {

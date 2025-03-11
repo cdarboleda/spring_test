@@ -41,6 +41,8 @@ public class ProcesoTitulacionController {
     @Autowired
     private IGestorProcesoService gestorProcesoService;
 
+    // opbtiene los datos de la persona "logeada" a partir del email del token de
+    // Keycloak
     @GetMapping(path = "/datos-personales", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonaLigeroDTO> obtenerDatosPersonales(Authentication authentication) {
         Jwt jwt = (Jwt) authentication.getPrincipal();
@@ -48,18 +50,21 @@ public class ProcesoTitulacionController {
         return ResponseEntity.ok(this.gestorPersonaServiceImpl.getDatosPersonaByEmail(email));
     }
 
+    // busca una persona (rol-estudiante) a partir de su email para agregarlo a un
+    // proceso de titulacion grupal
     @GetMapping(path = "/buscar-persona", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> agregarCompaniero(String email) {
         this.personaService.findByEmail(email);
         return ResponseEntity.ok(null);
     }
 
+    // inserta un proceso de titulacion e inicializa todos los valores en las tablas
+    // asociadas
     @PostMapping("/inscripcion")
     public ResponseEntity<String> inscribirProceso(@RequestBody ProcesoTitulacionDTO procesoTitulacionDTO) {
-
+        System.out.println("inscipcion....... " + procesoTitulacionDTO.getTipoProceso());
         try {
             // Reutiliza la lógica del servicio para insertar un proceso de titulación
-            gestorProcesoService.insert(procesoTitulacionDTO);
             return ResponseEntity.ok("Proceso de titulación creado con éxito.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

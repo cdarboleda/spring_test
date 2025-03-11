@@ -33,8 +33,8 @@ public class ProcesoDTO {
     private Integer requirienteId;
     private String descripcion;
     private LocalDateTime fechaInicio;
-    private LocalDateTime fechaFin;//Solo serviria cuando vamos a actualizar el final
-    private Boolean finalizado;//Solo serviria cuando vamos a actualizar el final
+    private LocalDateTime fechaFin;// Solo serviria cuando vamos a actualizar el final
+    private Boolean finalizado;// Solo serviria cuando vamos a actualizar el final
     private Boolean cancelado;
 
     // public ProcesoDTO() {} // Constructor vacío necesario

@@ -110,8 +110,9 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         return procesosLigeros;
     }
 
-    @SuppressWarnings("unchecked")
+    // @SuppressWarnings("unchecked")
     private Object insertarProcesoEspecifico(Proceso proceso, ProcesoDTO procesoDTO) {
+
         if (procesoDTO.getTipoProceso().equals(TipoProceso.PAGO_DOCENTE.toString())) {
             ProcesoPagoDocenteDTO procesoPDDTO = (ProcesoPagoDocenteDTO) procesoDTO;
             ProcesoPagoDocente pagoDocente = new ProcesoPagoDocente();
@@ -137,6 +138,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             }
             this.procesoTitulacionRepository.save(titulacion);
         }
+
         return proceso;
     }
 
@@ -157,7 +159,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         for (Persona compañero : compañeros) {
 
             CarpetaDocumento carpeta = new CarpetaDocumento();
-            carpeta.setPersona(compañero);
+            // carpeta.setPersona(compañero);
             carpeta.setProceso(proceso);
             carpeta.setUrl("test"); // resolver este campo
             this.carpetaDocumentoRepository.save(carpeta);
@@ -185,24 +187,34 @@ public class GestorProcesoImpl implements IGestorProcesoService {
                     convertidorPaso.convertirAEntidad(paso, pasoDTO);
                     paso.setProceso(proceso);
                     paso.setRol(this.rolService.buscarPorNombre(pasoDTO.getRol()).get());
+
                     return paso;
                 }).collect(Collectors.toList());
 
-        // pasos.get(0).setResponsable(requiriente);
+        pasos.get(0).setResponsable(requiriente);
         if (procesoDTO.getTipoProceso().equals(TipoProceso.PAGO_DOCENTE.toString())) {
             pasos.stream().filter(
                     paso -> paso.getNombre() == "documentacion_docente" || paso.getNombre() == "factura_docente")
                     .forEach((paso -> paso.setResponsable(requiriente)));
         } else if (procesoDTO.getTipoProceso().equals(TipoProceso.TITULACION.toString())) {
-            pasos.stream().filter(paso -> paso.getNombre() == "titu_paso1")
+            pasos.stream().filter(paso -> paso.getNombre() == "registro_propuesta")
                     .forEach((paso -> paso.setResponsable(requiriente)));
+
         }
 
         proceso.setPasos(pasos);
+
         this.procesoRepository.save(proceso);
-        var procesoEspecifico = this.insertarProcesoEspecifico(proceso, procesoDTO);
+        this.insertarProcesoEspecifico(proceso, procesoDTO);
+
         pasos.forEach(paso -> gestorProcesoLogService.insertarProcesoLog(paso, Evento.CREACION));
-        return convertidorProceso.convertirACompletoDTO(procesoEspecifico);
+
+        // Arreglar el Convertidor (3-11-2025)
+        // var procesoEspecificoConvertido =
+        // convertidorProceso.convertirACompletoDTO(procesoEspecifico);
+
+        // return temporal hasta arreglar el convertidor
+        return "mensaje temporal hata arreglar error en el converitdor";
     }
 
     @Override

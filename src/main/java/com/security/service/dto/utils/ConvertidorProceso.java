@@ -28,7 +28,7 @@ public class ConvertidorProceso {
     public Object convertirACompletoDTO(Object procesoEspecifico) {
 
         ProcesoCompletoDTO procesoDTO = null;
-
+        System.out.println("----------------" + procesoEspecifico);
         // Verificamos el tipo del proceso específico
         if (procesoEspecifico instanceof ProcesoPagoDocente) {
             ProcesoPagoDocente pagoDocente = (ProcesoPagoDocente) procesoEspecifico;
@@ -56,18 +56,16 @@ public class ConvertidorProceso {
             procesoDTO.setTipoProceso(proceso.getTipoProceso().toString());
 
             procesoDTO.setCarpetasDocumento(
-                    proceso.getCarpetasDocumento()!=null?
-                    proceso.getCarpetasDocumento().stream()
+                    proceso.getCarpetasDocumento() != null ? proceso.getCarpetasDocumento().stream()
                             .map(convertidorCarpetaDocumento::convertirALigeroDTO)
                             .collect(Collectors.toList())
-                            :null);
+                            : null);
 
             procesoDTO.setPasos(
-                    proceso.getPasos()!=null?
-                    proceso.getPasos().stream()
+                    proceso.getPasos() != null ? proceso.getPasos().stream()
                             .map(convertidorPaso::convertirAPasoDTO)
                             .collect(Collectors.toList())
-                            :null);
+                            : null);
             procesoDTO.setRequiriente(convertidorPersona.convertirALigeroDTO(proceso.getRequiriente()));
 
         }

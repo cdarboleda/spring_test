@@ -106,4 +106,16 @@ public class PersonaServiceImpl implements IPersonaService {
         return this.personaRepository.deleteByIdKeycloak(idKeycloak);
     }
 
+    @Override
+    public Persona findByCedula(String cedula) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByCedula'");
+    }
+
+    @Override
+    public List<Persona> findPersonasByIds(List<Integer> ids) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findPersonasByIds'");
+    }
+
 }
