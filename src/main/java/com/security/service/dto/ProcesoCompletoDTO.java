@@ -3,6 +3,8 @@ package com.security.service.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.security.db.Paso;
+
 import lombok.Data;
 
 @Data

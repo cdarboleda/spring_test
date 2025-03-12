@@ -20,6 +20,8 @@ public class PasoDTO {
     private Integer idProceso;
     private Integer idResponsable;
     private String responsablePasoCedula;
+    private String responsableNombre;
+    private String responsableApellido;
 
     public PasoDTO(){}
     public PasoDTO(Integer id, String nombre, Integer idResponsable, String rol){

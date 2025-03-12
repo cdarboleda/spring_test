@@ -56,7 +56,6 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
     @Override
     public String createUser(String username, String email, List<String> rolesToAssign) {
-        System.out.println("hola");
         // Usar un Set para evitar roles duplicados
         Set<String> keycloakRolesToAssign = mapRolesToKeycloakRoles(rolesToAssign);
 

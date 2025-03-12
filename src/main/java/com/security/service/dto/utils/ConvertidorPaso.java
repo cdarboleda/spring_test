@@ -23,6 +23,9 @@ public class ConvertidorPaso {
         dto.setFechaFin(paso.getFechaFin());
         dto.setIdProceso(paso.getProceso().getId());
         dto.setIdResponsable((paso.getResponsable()!=null)?paso.getResponsable().getId():null);
+        dto.setResponsablePasoCedula((paso.getResponsable()!=null)?paso.getResponsable().getCedula():null);
+        dto.setResponsableNombre((paso.getResponsable()!=null)?paso.getResponsable().getNombre():null);
+        dto.setResponsableApellido((paso.getResponsable()!=null)?paso.getResponsable().getApellido():null);
         dto.setRol(paso.getRol().getNombre());
         return dto;
     }
