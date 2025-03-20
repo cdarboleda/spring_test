@@ -11,14 +11,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.service.IGestorPasoService;
 import com.security.service.IPasoService;
 import com.security.service.dto.PasoDTO;
+import com.security.service.impl.EmailPasoRechazado;
 
 @RestController
 @CrossOrigin
@@ -102,5 +105,25 @@ public class PasoController {
     public ResponseEntity<?> buscarTodosEstados() {
         return new ResponseEntity<>(this.pasoService.buscarEstados(), HttpStatus.OK);
     }
+
+    @PutMapping(path = "/rechazar/{idPasoActual}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
+    public ResponseEntity<?> rechazarPaso(@PathVariable(name = "idPasoActual") Integer idPasoActual,
+    @RequestBody(required = false)  PasoDTO pasoAnteriorDTO,
+    @RequestParam (name = "observacionesString") String observacionesString) {
+        return new ResponseEntity<>(this.gestorPasoService.rechazarPaso(idPasoActual, pasoAnteriorDTO, observacionesString),
+                HttpStatus.OK);
+    }
+
+    //esto es del paso Anterior
+    //responsableNombre, responsableCorreo, procesoId, tipoProceso, pasoNombre, observaciones
+    @Autowired
+    private EmailPasoRechazado emailPasoRechazado;
+
+    // @PostMapping("/send")
+    // public String sendEmail() {
+    //     return this.emailPasoRechazado.send("vavabisga@gmail.com", "Subir documentación del Docente", 45);
+    // }
+
 
 }

@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 public class MiProcesoPagoDocenteDTO extends MiProcesoDTO {
     
     private String materiaCodigo;
+    private String maestriaCodigo;
 
     public MiProcesoPagoDocenteDTO(
             Integer procesoId, TipoProceso tipoProceso, LocalDateTime fechaInicio,
@@ -20,7 +21,7 @@ public class MiProcesoPagoDocenteDTO extends MiProcesoDTO {
             String requirienteNombre, String requirienteApellido,
             String pasoNombre, String pasoEstado, String pasoDescripcionEstado,
             LocalDateTime pasoFechaInicio, Integer responsablePasoId,
-            String responsablePasoCedula, String materiaCodigo) {
+            String responsablePasoCedula, String materiaCodigo, String maestriaCodigo) {
 
         super(procesoId, tipoProceso, fechaInicio, fechaFin, finalizado, cancelado,
                 requirienteId, requirienteCedula, requirienteNombre, requirienteApellido,
@@ -28,6 +29,7 @@ public class MiProcesoPagoDocenteDTO extends MiProcesoDTO {
                 responsablePasoId, responsablePasoCedula);
 
         this.materiaCodigo = materiaCodigo;
+        this.maestriaCodigo = maestriaCodigo;
 
     }
 

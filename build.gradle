@@ -30,6 +30,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.4.3'
+
     implementation 'org.hibernate.validator:hibernate-validator:9.0.0.CR1'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.18.2'
     implementation 'org.postgresql:postgresql:42.7.3'
@@ -43,6 +47,8 @@ dependencies {
 	      exclude group: 'org.jboss.resteasy', module: 'resteasy-jackson2-provider'
   	      exclude group: 'org.jboss.resteasy', module: 'resteasy-jaxb-provider'
 	} 
+
+
 	
     implementation 'org.jboss.resteasy:resteasy-client:6.2.11.Final'
     implementation 'org.jboss.resteasy:resteasy-multipart-provider:6.2.11.Final'

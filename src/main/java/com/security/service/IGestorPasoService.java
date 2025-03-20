@@ -14,4 +14,5 @@ public interface IGestorPasoService {
     public List<PasoDTO> updatePasosMismoResponsable(List<Integer> pasoIds, Integer idResponsable, String rol);
     public List<PasoDTO> findPasosDTOByProcesoId(Integer procesoId);
     public Paso updatePaso(Integer idPaso, PasoDTO pasoDTO);
+    public List<Paso> rechazarPaso(Integer idPasoActual,  PasoDTO pasoAnteriorDTO, String observaciones);
 }

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Paso rechazado</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@500&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+        *{
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+            font-family: "League Spartan", sans-serif;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 450px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            color: rgba(22, 24, 35, 0.75);
+        }
+
+        .container__logo {
+            display: flex;
+            width: 100%;
+            /* margin: 1rem 0; */
+            font-family: "Roboto", sans-serif;
+            /* background-color: #e0e0e0; */
+            /* padding: 1rem; */
+            text-align: center;
+        }
+
+        .logo {
+            display: block;
+            height: 100px;
+            width: 100px;
+            margin: 0 auto;
+        }
+
+        .saludos {
+            font-weight: 100;
+            font-size: 0.9rem;
+        }
+
+        /* p { font-size: 16px; } */
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="container__logo">
+            <!-- <h2>Notificación Dirección de Posgrado</h2> -->
+            <!-- <img class="logo" src="./assets/logo-posgrado-sd.png" alt="Logo posgrado"> -->
+            <img class="logo" src="https://posgrado-fica-uce.netlify.app/img/logo-posgrado.0df946c7.png" alt="Logo posgrado">
+        </div>
+        <p>Hola <span th:text="${responsableNombre}"></span>,</p>
+        <br>
+        <p>Como formas parte del proceso <span th:text="${tipoProceso}"></span> #<span th:text="${procesoId}"></span> en Dirección de Posgrado</p>
+        <p>Te notificamos que el paso, "<strong th:text="${pasoNombre}"></strong>", del cual estás a cargo, ha sido
+            <strong>rechazado</strong> .</p>
+        <br>
+        <p>Debes realizar las correcciones necesarias y resolver nuevamente</p>
+        <div th:if="${observaciones != null and not #lists.isEmpty(observaciones)}">
+            <p>Estas son las observaciones :</p>
+            <ul>
+                <li th:each="item : ${observaciones}" th:text="${item}"></li>
+            </ul>
+        </div>
+        <p th:unless="${observaciones != null and not #lists.isEmpty(observaciones)}">No hay observaciones.</p>
+        <br>
+        <div class="saludos">
+            <p>Saludos,<br>Equipo de Posgrado</p>
+
+        </div>
+    </div>
+</body>
+
+</html>

@@ -2,13 +2,14 @@ package com.security.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
+import com.security.controller.PasoController;
 import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.Proceso;
@@ -33,6 +34,8 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class GestorPasoServiceImpl implements IGestorPasoService {
 
+    private final PasoServiceImpl pasoServiceImpl;
+
     @Autowired
     private IPasoRepository pasoRepository;
 
@@ -49,10 +52,17 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     private IPasoService pasoService;
 
     @Autowired
+    private EmailPasoRechazado emailPasoRechazado;
+
+    @Autowired
     private IGestorProcesoLogService gestorProcesoLogService;
 
     @Autowired
     private PasoFactoryManager factoryManager;
+
+    GestorPasoServiceImpl(PasoServiceImpl pasoServiceImpl) {
+        this.pasoServiceImpl = pasoServiceImpl;
+    }
 
     @Override
     public List<PasoDTO> crearPasos(String proceso) {
@@ -104,8 +114,9 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
 
         paso.setEstado(Estado.valueOf(pasoDTO.getEstado()));
 
-        if (pasoDTO.getObservacion() != null)
+        // if (pasoDTO.getObservacion() != null)
             paso.setObservacion(pasoDTO.getObservacion());
+
         paso.setDescripcionEstado(pasoDTO.getDescripcionEstado() == null
                 ? EstadoHelper.getDescripcionPorIndice(Estado.valueOf(pasoDTO.getEstado()), 0)
                 : pasoDTO.getDescripcionEstado());
@@ -145,6 +156,43 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         paso.setProceso(proceso);
         paso.setResponsable(persona);
         return this.pasoRepository.save(paso);
+    }
+
+    @Override
+    public List<Paso> rechazarPaso(Integer idPasoActual, PasoDTO pasoAnteriorDTO, String observacionesString) {
+        PasoDTO pasoActualDTO = new PasoDTO();
+        pasoActualDTO.setEstado(Estado.PENDIENTE.toString());
+        // pasoActualDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 1));// este 
+        pasoActualDTO.setDescripcionEstado("Rechazado");//o este
+
+        List<Paso> pasos = new ArrayList<>();
+        Paso pasoActual = this.updatePaso(idPasoActual, pasoActualDTO);
+        pasos.add(pasoActual);
+
+        if(pasoAnteriorDTO!=null){
+            pasoAnteriorDTO.setEstado(Estado.EN_CURSO.toString());
+            pasoAnteriorDTO.setDescripcionEstado("En correcciones");//o este
+            pasoAnteriorDTO.setObservacion(observacionesString);
+
+            if (observacionesString.trim().isEmpty()) {
+                pasoAnteriorDTO.setObservacion(null);
+            }
+            
+            Paso pasoAnterior = this.updatePaso(pasoAnteriorDTO.getId(), pasoAnteriorDTO);
+
+            List<String> observaciones=  Arrays.stream(observacionesString.split(";")) // Divide por ";"
+                    .map(String::trim) // Elimina espacios en blanco alrededor de cada elemento
+                    .filter(obs -> !obs.isEmpty()) // Filtra los vacíos
+                    .collect(Collectors.toList()); // Lo convierte en una lista
+
+            pasos.add(pasoAnterior);
+
+            //la notificacion, deshabilitada por el momento hasta tener correos validos
+            // this.emailPasoRechazado.send(pasoAnteriorDTO, observaciones);
+        }
+        
+        return pasos;
+
     }
 
 }

@@ -1,5 +1,7 @@
 package com.security.db;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,7 +36,7 @@ public class ProcesoPagoDocente {
     @JsonIgnore
     private Proceso proceso;
 
-    @Column(name = "pago_modalidad_virtual")
+    @Column(name = "pago_doce_modalidad_virtual")
     private Boolean modalidadVirtual;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -42,5 +44,14 @@ public class ProcesoPagoDocente {
     @ToString.Exclude
     @JoinColumn(name = "mate_id")
     private Materia materia;
+
+    @Column(name = "pago_doce_fecha_ejecucion_desde")
+    private LocalDate fechaEjecucionDesde;
+
+    @Column(name = "pago_doce_fecha_ejecucion_hasta")
+    private LocalDate fechaEjecucionHasta;
+
+    @Column(name = "pago_doce_cohorte")
+    private Integer cohorte;
 
 }
