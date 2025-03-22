@@ -42,9 +42,6 @@ public class Materia {
     @Column(name = "mate_numero_horas")
     private Integer numeroHoras;
  
-    @Column(name = "mate_cohorte")
-    private String cohorte;
- 
     //relacion con proceso pago
     // @OneToMany(mappedBy = "materia",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     // @JsonIgnore

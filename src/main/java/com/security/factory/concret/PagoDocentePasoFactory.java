@@ -42,14 +42,17 @@ public class PagoDocentePasoFactory implements IPasoFactory {
                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "director"));
         pasos.add(this.crearPaso("aprobacion_decano", 8, 
                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
-        pasos.add(this.crearPaso("factura_docente", 9, 
+        
+        pasos.add(this.crearPaso("revision_financiero", 9, 
+                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
+
+        pasos.add(this.crearPaso("factura_docente", 10, 
                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "docente"));
-        pasos.add(this.crearPaso("revision_factura_director", 10, 
+        pasos.add(this.crearPaso("revision_factura_director", 11, 
                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "director"));
-        pasos.add(this.crearPaso("desembolso_financiero", 11, 
+        pasos.add(this.crearPaso("desembolso_financiero", 12, 
                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
-        pasos.add(this.crearPaso("finalizacion_tramite", 12, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
+        
         return pasos;
     }
 

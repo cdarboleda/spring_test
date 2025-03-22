@@ -27,6 +27,7 @@ public class Convertidor {
 
         dto.setRoles(nombreRoles);
         dto.setActivo(persona.getActivo());
+        dto.setObservacion(persona.getObservacion());
 
         return dto;
 
@@ -41,6 +42,7 @@ public class Convertidor {
         persona.setCorreo(dto.getCorreo());
         persona.setTelefono(dto.getTelefono());
         persona.setActivo(dto.getActivo());
+        persona.setObservacion(dto.getObservacion());
         
         return persona;
 

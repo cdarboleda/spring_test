@@ -55,6 +55,8 @@ public class Persona {
     private String telefono;
     @Column(name = "pers_activo")
     private Boolean activo;
+    @Column(name = "pers_observacion")
+    private String observacion;
 
     @OneToMany(mappedBy = "requiriente",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
