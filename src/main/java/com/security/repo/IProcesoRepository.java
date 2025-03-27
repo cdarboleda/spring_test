@@ -40,12 +40,12 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         +
                         "req.id, req.cedula, req.nombre, req.apellido, " +
                         "paso.nombre, CAST(paso.estado AS string), paso.descripcionEstado, paso.fechaInicio, " +
-                        "resp.id, resp.cedula, mat.codigoMateria, mat.codigoMaestria, " +
-                        "ppd.fechaEjecucionDesde, ppd.fechaEjecucionHasta ) " +
+                        "resp.id, resp.cedula, mat.codigo, mae.maestria.codigo ) " +
                         "FROM ProcesoPagoDocente ppd " +
                         "LEFT JOIN ppd.proceso p " +
                         "LEFT JOIN p.requiriente req " +
                         "LEFT JOIN ppd.materia mat " +
+                        "LEFT JOIN mat.maestriaDetalle mae " +
                         "LEFT JOIN p.pasos paso ON paso.estado = 'EN_CURSO' " + // Filtra paso en curso
                         "LEFT JOIN paso.responsable resp ") // Información del responsable del paso
         List<MiProcesoPagoDocenteDTO> findMisProcesosPagoDocente();
@@ -56,12 +56,12 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         +
                         "req.id, req.cedula, req.nombre, req.apellido, " +
                         "paso.nombre, CAST(paso.estado AS string), paso.descripcionEstado, paso.fechaInicio, " +
-                        "resp.id, resp.cedula, mat.codigoMateria, mat.codigoMaestria, " +
-                        "ppd.fechaEjecucionDesde, ppd.fechaEjecucionHasta ) " +
+                        "resp.id, resp.cedula, mat.codigo, mae.maestria.codigo ) " +
                         "FROM ProcesoPagoDocente ppd " +
                         "LEFT JOIN ppd.proceso p " +
                         "LEFT JOIN p.requiriente req " +
                         "LEFT JOIN ppd.materia mat " +
+                        "LEFT JOIN mat.maestriaDetalle mae " +
                         "LEFT JOIN p.pasos paso ON paso.estado = 'EN_CURSO' " + // Filtra paso en curso
                         "LEFT JOIN paso.responsable resp " +
                         "WHERE EXISTS (SELECT 1 FROM p.pasos pas WHERE pas.responsable.id = :responsableId)")

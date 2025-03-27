@@ -1,7 +1,5 @@
 package com.security.db;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -13,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -22,6 +19,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "materia")
 @Data
+@ToString
 public class Materia {
  
     @Id
@@ -30,31 +28,20 @@ public class Materia {
     @SequenceGenerator(name = "seq_mate", initialValue = 1, allocationSize = 1)
     private Integer id;
  
-    @Column(name = "mate_codigo_maestria")
-    private String codigoMaestria;
+    @Column(name = "mate_codigo")
+    private String codigo;
  
-    @Column(name = "mate_nombre_maestria")
-    private String nombreMaestria;
+    @Column(name = "mate_nombre")
+    private String nombre;
  
-    @Column(name = "mate_codigo_materia")
-    private String codigoMateria;
- 
-    @Column(name = "mate_nombre_materia")
-    private String nombreMateria;
- 
-    @Column(name = "mate_numero_horas")
-    private Integer numeroHoras;
-
+    @Column(name = "mate_periodo")
+    private Integer periodo;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonIgnore
-    @ToString.Exclude
+    // @JsonIgnore
+    // @ToString.Exclude
     @JoinColumn(name = "maes_deta_id")
     private MaestriaDetalle maestriaDetalle;
- 
-    //relacion con proceso pago
-    // @OneToMany(mappedBy = "materia",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    // @JsonIgnore
-    // private List<Proceso> procesos;
+
    
 }

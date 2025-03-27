@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.security.db.Materia;
 import com.security.service.IMateriaService;
+import com.security.service.dto.MateriaDTO;
 
 import jakarta.validation.Valid;
 
@@ -36,13 +37,13 @@ public class MateriaController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('administrador')")
-    public ResponseEntity<?> insertar(@Valid @RequestBody Materia materia) {
+    public ResponseEntity<?> insertar(@Valid @RequestBody MateriaDTO materia) {
         return new ResponseEntity<>(this.materiaService.insert(materia), HttpStatus.OK);
     }
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('administrador')")
-    public ResponseEntity<?> actualizar(@PathVariable(name = "id") Integer id, @RequestBody Materia materia) {
+    public ResponseEntity<?> actualizar(@PathVariable(name = "id") Integer id, @RequestBody MateriaDTO materia) {
         materia.setId(id);
         return new ResponseEntity<>(this.materiaService.update(materia), HttpStatus.OK);
     }

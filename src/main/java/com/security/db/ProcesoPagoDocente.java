@@ -45,13 +45,13 @@ public class ProcesoPagoDocente {
     @JoinColumn(name = "mate_id")
     private Materia materia;
 
-    @Column(name = "pago_doce_fecha_ejecucion_desde")
-    private LocalDate fechaEjecucionDesde;
+    @Column(name = "pago_doce_fecha_inicio_clase")
+    private LocalDate fechaInicioClase;
 
-    @Column(name = "pago_doce_fecha_ejecucion_hasta")
-    private LocalDate fechaEjecucionHasta;
+    @Column(name = "pago_doce_fecha_fin_clase")
+    private LocalDate fechaFinClase;
 
-    @Column(name = "pago_doce_cohorte")
-    private Integer cohorte;
+    // @Column(name = "pago_doce_cohorte")
+    // private Integer cohorte;
 
 }

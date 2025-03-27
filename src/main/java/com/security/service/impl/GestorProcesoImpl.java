@@ -114,9 +114,9 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             proceso.setDescripcion("En este proceso se realiza el trámite de pago para un docente");
             pagoDocente.setProceso(proceso);
             pagoDocente.setModalidadVirtual(procesoPDDTO.getModalidadVirtual());
-            pagoDocente.setFechaEjecucionDesde(procesoPDDTO.getFechaEjecucionDesde());
-            pagoDocente.setFechaEjecucionHasta(procesoPDDTO.getFechaEjecucionHasta());
-            pagoDocente.setCohorte(procesoPDDTO.getCohorte());
+            pagoDocente.setFechaInicioClase(procesoPDDTO.getFechaInicioClase());
+            pagoDocente.setFechaFinClase(procesoPDDTO.getFechaFinClase());
+            // pagoDocente.setCohorte(procesoPDDTO.getCohorte());
             Materia materia = this.materiaService.findById(procesoPDDTO.getMateriaId());
             pagoDocente.setMateria(materia);
             return procesoPagoDocenteRepository.save(pagoDocente);

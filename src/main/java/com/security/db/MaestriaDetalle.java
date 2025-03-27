@@ -51,6 +51,7 @@ public class MaestriaDetalle {
 
     @OneToMany(mappedBy = "maestriaDetalle",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
+    @ToString.Exclude
     private List<Materia> materias;
     
 }

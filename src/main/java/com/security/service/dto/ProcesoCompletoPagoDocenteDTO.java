@@ -15,15 +15,15 @@ import lombok.EqualsAndHashCode;
 public class ProcesoCompletoPagoDocenteDTO extends ProcesoCompletoDTO{
     private Boolean modalidadVirtual;
     private Materia materia;
-    private LocalDate fechaEjecucionDesde;
-    private LocalDate fechaEjecucionHasta;
-    private Integer cohorte;
+    private LocalDate fechaInicioClase;
+    private LocalDate fechaFinClase;
+    // private Integer cohorte;
 
     public ProcesoCompletoPagoDocenteDTO(ProcesoPagoDocente pagoDocente) {
         this.modalidadVirtual=pagoDocente.getModalidadVirtual();
         this.materia = pagoDocente.getMateria();
-        this.fechaEjecucionDesde = pagoDocente.getFechaEjecucionDesde();
-        this.fechaEjecucionHasta = pagoDocente.getFechaEjecucionHasta();
-        this.cohorte = pagoDocente.getCohorte();
+        this.fechaInicioClase = pagoDocente.getFechaInicioClase();
+        this.fechaFinClase = pagoDocente.getFechaFinClase();
+        // this.cohorte = pagoDocente.getCohorte();
     }
 }
