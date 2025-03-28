@@ -31,7 +31,7 @@ public class MaestriaServiceImpl implements IMaestriaService {
             maestria = new Maestria();
             maestria.setNombre(maestriaDTO.getNombre());
             maestria.setCodigo(maestriaDTO.getCodigo());
-            maestria = maestriaRepository.save(maestria); 
+            maestria = maestriaRepository.save(maestria);
         } else {
             // Buscar si la maestría ya existe
             Optional<Maestria> existingMaestria = maestriaRepository.findById(maestriaDTO.getMaestriaId());
@@ -89,9 +89,9 @@ public class MaestriaServiceImpl implements IMaestriaService {
 
     @Override
     public boolean delete(MaestriaDTO maestriaDTO) {
-        
+
         if (maestriaDTO.getMaestriaId() == null || maestriaDTO.getMaestriaDetalleId() == null) {
-            return false; 
+            return false;
         }
 
         // Obtenemos la Maestria utilizando el maestriaId del DTO
@@ -107,20 +107,54 @@ public class MaestriaServiceImpl implements IMaestriaService {
                 maestriaDetalleRepository.deleteById(maestriaDTO.getMaestriaDetalleId()); // Eliminar el detalle
                 maestriaRepository.deleteById(maestriaDTO.getMaestriaId()); // Eliminar la Maestria
                 System.out.println("Esta eliminando solo la mestria.-------------------------------------------");
-                System.out.println("Id maestria: " +maestriaDTO.getMaestriaId());
+                System.out.println("Id maestria: " + maestriaDTO.getMaestriaId());
             } else {
                 // Si tiene más de un MaestriaDetalle, solo eliminamos el MaestriaDetalle
                 // específico
-                System.out.println("Esta eliminando solo la mestria detalle.-------------------------------------------");
-                System.out.println("Id maestria detalle: "+maestriaDTO.getMaestriaDetalleId());
-                System.out.println("Id maestria: " +maestriaDTO.getMaestriaId());
-                
+                System.out
+                        .println("Esta eliminando solo la mestria detalle.-------------------------------------------");
+                System.out.println("Id maestria detalle: " + maestriaDTO.getMaestriaDetalleId());
+                System.out.println("Id maestria: " + maestriaDTO.getMaestriaId());
+
                 maestriaDetalleRepository.deleteById(maestriaDTO.getMaestriaDetalleId()); // Eliminar solo el detalle
             }
             System.out.println("llego al final.-------------------------------------------");
             return true;
         } else {
             return false; // Si no se encuentra la Maestria con ese ID, no se elimina nada
+        }
+    }
+
+    @Override
+    public MaestriaDTO update(MaestriaDTO maestriaDTO) {
+        if (maestriaDTO.getMaestriaId() == null || maestriaDTO.getMaestriaDetalleId() == null) {
+            throw new IllegalArgumentException(
+                    "El ID de la maestría y el ID del detalle son obligatorios para actualizar.");
+        }
+
+        Optional<Maestria> maestriaOpt = maestriaRepository.findById(maestriaDTO.getMaestriaId());
+        Optional<MaestriaDetalle> detalleOpt = maestriaDetalleRepository.findById(maestriaDTO.getMaestriaDetalleId());
+
+        if (maestriaOpt.isPresent() && detalleOpt.isPresent()) {
+            Maestria maestria = maestriaOpt.get();
+            MaestriaDetalle detalle = detalleOpt.get();
+
+            // Actualizar datos de la Maestría
+            maestria.setNombre(maestriaDTO.getNombre());
+            maestria.setCodigo(maestriaDTO.getCodigo());
+            maestriaRepository.save(maestria);
+
+            // Actualizar datos del MaestriaDetalle
+            detalle.setCohorte(maestriaDTO.getCohorte());
+            detalle.setFechaInicio(maestriaDTO.getFechaInicio());
+            detalle.setFechaFin(maestriaDTO.getFechaFin());
+            detalle.setEstado(maestriaDTO.getEstado());
+            detalle.setMaestria(maestria);
+            maestriaDetalleRepository.save(detalle);
+
+            return maestriaDTO;
+        } else {
+            throw new IllegalArgumentException("No se encontró la maestría o el detalle para actualizar.");
         }
     }
 

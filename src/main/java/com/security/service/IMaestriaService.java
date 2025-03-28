@@ -11,4 +11,6 @@ public interface IMaestriaService {
     public List<MaestriaDTO> findAll();
     
     public boolean delete(MaestriaDTO maestriaDTO);
+
+    public MaestriaDTO update(MaestriaDTO maestriaDTO);
 }
