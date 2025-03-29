@@ -38,7 +38,7 @@ public class Materia {
     private Integer periodo;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    // @JsonIgnore
+    @JsonIgnore
     // @ToString.Exclude
     @JoinColumn(name = "maes_deta_id")
     private MaestriaDetalle maestriaDetalle;
