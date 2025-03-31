@@ -138,7 +138,7 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
         }
         return pasos;
     }
-    
+
     @Override
     public List<PersonaLigeroDTO> findAllWithRoles() {
         List<PersonaLigeroDTO> dtos = this.personaRepository.findAllWithRoles().stream()
@@ -149,7 +149,7 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
                         p.getApellido(),
                         p.getRoles().stream().map(Rol::getNombre).collect(Collectors.toList())))
                 .collect(Collectors.toList());
-                return dtos;
+        return dtos;
     }
 
     private void rolesInvalidosMensaje(List<Rol> roles, List<String> rolesIds) {
@@ -181,7 +181,7 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
     public List<Persona> findPersonasByRol(String nombreRol) {
 
         Optional<Rol> rol = this.rolService.buscarPorNombre(nombreRol);
-
+        System.out.println("rol LLEGO AL BACK: " + rol);
         if (rol.isEmpty()) {
             throw new CustomException("No existe el rol con nombre: " + nombreRol, HttpStatus.BAD_REQUEST);
         } else {

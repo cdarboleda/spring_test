@@ -18,7 +18,7 @@ import com.security.service.dto.PasoDTO;
 public class PasoFactoryManager {
 
     private final Map<String, IPasoFactory> factoryMap = new HashMap<>();
-    
+
     @Autowired
     public PasoFactoryManager(IPasoFactory procesoEspecifico) {
         factoryMap.put(TipoProceso.PAGO_DOCENTE.toString(), new PagoDocentePasoFactory());

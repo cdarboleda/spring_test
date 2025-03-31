@@ -16,9 +16,9 @@ public interface ICarpetaDocumentoRepository extends JpaRepository<CarpetaDocume
 
     public List<CarpetaDocumento> findByProcesoId(Integer procesoId);
 
-    //public List<CarpetaDocumento> findByPersonaId(Integer personaId);
+    // public List<CarpetaDocumento> findByPersonaId(Integer personaId);
 
-    public List<CarpetaDocumento> findByPasoId(Integer pasoId);
+    public CarpetaDocumento findByPasoId(Integer pasoId);
 
     @Transactional
     @Modifying
@@ -29,5 +29,9 @@ public interface ICarpetaDocumentoRepository extends JpaRepository<CarpetaDocume
     // "(d.id, d.nombre, d.url, d.descripcion, d.fechaCreacion, p.id, p.nombre) " +
     // "FROM Documento d JOIN d.proceso p WHERE d.id = :id")
     // DocumentoDTO findDTOById(@Param("id") Integer id);
+
+    @Transactional
+    @Query("SELECT COUNT(c) > 0 FROM CarpetaDocumento c WHERE c.paso.id = :pasoId")
+    public boolean existByIdPaso(Integer pasoId);
 
 }

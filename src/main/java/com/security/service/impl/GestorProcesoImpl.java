@@ -132,10 +132,13 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             titulacion.setNotaLector2(procesoTDTO.getNotaLector2());
 
             // Agrega los compañeros al proceso en caso de ser modo GRUPAL
-            if (procesoTDTO.getGrupo() != null && procesoTDTO.getIdInvolucrados() != null) {
-                asociarCompañerosAlProceso(proceso, procesoTDTO.getIdInvolucrados());
-
-            }
+            /*
+             * if (procesoTDTO.getGrupo() != null && procesoTDTO.getIdInvolucrados() !=
+             * null) {
+             * asociarCompañerosAlProceso(proceso, procesoTDTO.getIdInvolucrados());
+             * 
+             * }
+             */
             this.procesoTitulacionRepository.save(titulacion);
         }
 
@@ -284,9 +287,15 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         for (Proceso proceso : procesos) {
             // Buscar el paso en estado EN_CURSO, si existe
             Paso pasoEnCurso = proceso.getPasos().stream()
-                    .filter(p -> p.getEstado() == Estado.EN_CURSO) // Enum EstadoPaso
+                    .filter(p -> p.getEstado() == Estado.EN_CURSO && p.getResponsable().getId().equals(responsableId))
                     .findFirst()
-                    .orElse(null); // Si no hay paso en curso, será null
+                    .orElseGet(() ->
+                    // Si no se encuentra un paso con el responsableId, obtener el primer paso en
+                    // EN_CURSO
+                    proceso.getPasos().stream()
+                            .filter(p -> p.getEstado() == Estado.EN_CURSO)
+                            .findFirst()
+                            .orElse(null));
 
             // Crear el DTO con la información relevante
             MiProcesoDTO dto = new MiProcesoDTO(

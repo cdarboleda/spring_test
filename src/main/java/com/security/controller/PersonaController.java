@@ -78,7 +78,7 @@ public class PersonaController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarTodo() {
         List<PersonaDTO> result = this.gestorUsurio.getUsers();
-        System.out.println("result en buscarTodos: " + result);
+        // System.out.println("result en buscarTodos: " + result);
         return new ResponseEntity<>(result, null, HttpStatus.OK);
     }
 
@@ -128,7 +128,8 @@ public class PersonaController {
 
     @GetMapping(path = "/roles/{rol}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarPorRol(@PathVariable String rol) {
+        System.out.println("llego el rooooool " + rol);
         return new ResponseEntity<>(this.gestorPersonaService.findPersonasByRol(rol), HttpStatus.OK);
     }
-    
+
 }

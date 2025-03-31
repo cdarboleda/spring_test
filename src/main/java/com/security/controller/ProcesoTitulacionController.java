@@ -17,10 +17,13 @@ import com.security.service.impl.GestorPersonaServiceImpl;
 import com.security.service.IGestorProcesoService;
 import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
+import com.security.service.IProcesoTitulacionService;
 import com.security.service.dto.PersonaLigeroDTO;
 import com.security.service.dto.ProcesoTitulacionDTO;
+import com.security.service.dto.PersonaTitulacionLigeroDTO;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -28,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin
 @RequestMapping("/titulacion")
 public class ProcesoTitulacionController {
+
+    private final PersonaController personaController;
 
     @Autowired
     private GestorPersonaServiceImpl gestorPersonaServiceImpl;
@@ -40,6 +45,13 @@ public class ProcesoTitulacionController {
 
     @Autowired
     private IGestorProcesoService gestorProcesoService;
+
+    @Autowired
+    private IProcesoTitulacionService procesoTitulacionService;
+
+    ProcesoTitulacionController(PersonaController personaController) {
+        this.personaController = personaController;
+    }
 
     // opbtiene los datos de la persona "logeada" a partir del email del token de
     // Keycloak
@@ -54,8 +66,9 @@ public class ProcesoTitulacionController {
     // proceso de titulacion grupal
     @GetMapping(path = "/buscar-persona", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> agregarCompaniero(String email) {
-        this.personaService.findByEmail(email);
-        return ResponseEntity.ok(null);
+
+        return new ResponseEntity<>(this.personaService.findByEmail(email), HttpStatus.OK);
+
     }
 
     // inserta un proceso de titulacion e inicializa todos los valores en las tablas
@@ -65,11 +78,18 @@ public class ProcesoTitulacionController {
         System.out.println("inscipcion....... " + procesoTitulacionDTO.getTipoProceso());
         try {
             // Reutiliza la lógica del servicio para insertar un proceso de titulación
+            this.gestorProcesoService.insert(procesoTitulacionDTO);
             return ResponseEntity.ok("Proceso de titulación creado con éxito.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al crear el proceso: " + e.getMessage());
         }
+    }
+
+    @GetMapping(path = "/proceso/{id}/revisor", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerDatosRevisorByProcesoId(@PathVariable(name = "id") Integer id) {
+
+        return new ResponseEntity<>(this.procesoTitulacionService.buscarRevisorYNota(id), HttpStatus.OK);
     }
 
 }

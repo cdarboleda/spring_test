@@ -27,7 +27,6 @@ import lombok.Data;
 @Data
 public class ProcesoTitulacion {
 
-
     @Id
     private Integer id;
 
@@ -59,6 +58,12 @@ public class ProcesoTitulacion {
 
     @Column(name = "titu_nota_propuesta_proyecto")
     private Double notaPropuestaProyecto;
+
+    @Column(name = "titu_revisor_propuesta_proyecto")
+    private String revisorPropuestaProyecto;
+
+    @Column(name = "titu_tutor_proyecto")
+    private String tutorPoyecto;
 
     @OneToMany(mappedBy = "procesoTitulacion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
