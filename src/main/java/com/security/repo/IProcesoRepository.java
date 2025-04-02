@@ -40,7 +40,8 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         +
                         "req.id, req.cedula, req.nombre, req.apellido, " +
                         "paso.nombre, CAST(paso.estado AS string), paso.descripcionEstado, paso.fechaInicio, " +
-                        "resp.id, resp.cedula, mat.codigo, mae.maestria.codigo ) " +
+                        "resp.id, resp.cedula, mat.codigo, mat.nombre, mae.maestria.codigo, mae.maestria.nombre, " +
+                        "ppd.fechaInicioClase, ppd.fechaFinClase ) " +
                         "FROM ProcesoPagoDocente ppd " +
                         "LEFT JOIN ppd.proceso p " +
                         "LEFT JOIN p.requiriente req " +
@@ -56,7 +57,8 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         +
                         "req.id, req.cedula, req.nombre, req.apellido, " +
                         "paso.nombre, CAST(paso.estado AS string), paso.descripcionEstado, paso.fechaInicio, " +
-                        "resp.id, resp.cedula, mat.codigo, mae.maestria.codigo ) " +
+                        "resp.id, resp.cedula, mat.codigo, mat.nombre, mae.maestria.codigo, mae.maestria.nombre, " +
+                        "ppd.fechaInicioClase, ppd.fechaFinClase ) " +
                         "FROM ProcesoPagoDocente ppd " +
                         "LEFT JOIN ppd.proceso p " +
                         "LEFT JOIN p.requiriente req " +
