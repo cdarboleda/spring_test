@@ -37,11 +37,10 @@ public class MaestriaContoller {
         return new ResponseEntity<>(this.maestriaService.findAll(), HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/{maestriaId}/{maestriaDetalleId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> eliminar(@PathVariable(name="maestriaId") Integer maestriaId, @PathVariable(name="maestriaDetalleId") Integer maestriaDetalleId) {
+    @DeleteMapping(path = "/{maestriaId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> eliminar(@PathVariable(name="maestriaId") Integer maestriaId) {
         MaestriaDTO maestriaDTO = new MaestriaDTO();
-        maestriaDTO.setMaestriaId(maestriaId);
-        maestriaDTO.setMaestriaDetalleId(maestriaDetalleId);
+        maestriaDTO.setId(maestriaId);
         return new ResponseEntity<>(this.maestriaService.delete(maestriaDTO), HttpStatus.OK);
     }
 

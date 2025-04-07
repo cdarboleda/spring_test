@@ -11,9 +11,9 @@ import com.security.service.dto.MateriaTablaDTO;
 public interface IMateriaRepository extends JpaRepository<Materia, Integer> {
             @Query("SELECT new com.security.service.dto.MateriaTablaDTO( " +
                         "mat.id, mat.codigo, mat.nombre, mat.periodo, "+
-                        "mae.id, mae.maestria.nombre, mae.maestria.codigo, " +
+                        "mae.id, mae.nombre, mae.codigo, " +
                         "mae.cohorte, mae.fechaInicio, mae.fechaFin) " +
                         "FROM Materia mat " +
-                        "LEFT JOIN mat.maestriaDetalle mae ")
+                        "LEFT JOIN mat.maestria mae ")
         List<MateriaTablaDTO> findMateriasTabla();
 }

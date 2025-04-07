@@ -40,8 +40,8 @@ public class Materia {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     // @ToString.Exclude
-    @JoinColumn(name = "maes_deta_id")
-    private MaestriaDetalle maestriaDetalle;
+    @JoinColumn(name = "maes_id")
+    private Maestria maestria;
 
    
 }

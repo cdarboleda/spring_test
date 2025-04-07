@@ -24,12 +24,12 @@ public class ConvertidorMateria {
         materiaTablaDTO.setCodigo(materia.getCodigo());
         materiaTablaDTO.setNombre(materia.getNombre());
         materiaTablaDTO.setPeriodo(materia.getPeriodo());
-        materiaTablaDTO.setMaestriaId(materia.getMaestriaDetalle().getId());
-        materiaTablaDTO.setMaestriaNombre(materia.getMaestriaDetalle().getMaestria().getNombre());
-        materiaTablaDTO.setMaestriaCodigo(materia.getMaestriaDetalle().getMaestria().getCodigo());
-        materiaTablaDTO.setMaestriaCohorte(materia.getMaestriaDetalle().getCohorte());
-        materiaTablaDTO.setMaestriaFechaEjecucionDesde(materia.getMaestriaDetalle().getFechaInicio());
-        materiaTablaDTO.setMaestriaFechaEjecucionHasta(materia.getMaestriaDetalle().getFechaFin());
+        materiaTablaDTO.setMaestriaId(materia.getMaestria().getId());
+        materiaTablaDTO.setMaestriaNombre(materia.getMaestria().getNombre());
+        materiaTablaDTO.setMaestriaCodigo(materia.getMaestria().getCodigo());
+        materiaTablaDTO.setMaestriaCohorte(materia.getMaestria().getCohorte());
+        materiaTablaDTO.setMaestriaFechaEjecucionDesde(materia.getMaestria().getFechaInicio());
+        materiaTablaDTO.setMaestriaFechaEjecucionHasta(materia.getMaestria().getFechaFin());
         return materiaTablaDTO;
     }
 

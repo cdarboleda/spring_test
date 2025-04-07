@@ -1,5 +1,6 @@
 package com.security.db;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,6 +16,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name = "maestria")
@@ -33,8 +35,21 @@ public class Maestria {
     @Column(name = "maes_codigo")
     private String codigo;
 
-    @OneToMany(mappedBy = "maestria",fetch = FetchType.LAZY)
+    @Column(name = "maes_cohorte")
+    private String cohorte;
+
+    @Column(name = "maes_fecha_inicio_ejecucion")
+    private LocalDateTime fechaInicio;
+
+    @Column(name = "maes_fecha_fin_ejecucion")
+    private LocalDateTime fechaFin;
+
+    @Column(name = "maes_estado")
+    private String estado;
+
+    @OneToMany(mappedBy = "maestria",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
-    private List<MaestriaDetalle> maestriasDetalle;
+    @ToString.Exclude
+    private List<Materia> materias;
     
 }

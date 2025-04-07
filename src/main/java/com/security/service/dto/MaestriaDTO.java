@@ -7,8 +7,7 @@ import lombok.Data;
 @Data
 public class MaestriaDTO {
 
-    private Integer maestriaId;
-    private Integer maestriaDetalleId;
+    private Integer id;
 
     private String nombre;
     private String codigo;

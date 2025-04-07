@@ -8,10 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.security.db.Maestria;
-import com.security.db.MaestriaDetalle;
 import com.security.db.Materia;
 import com.security.exception.CustomException;
-import com.security.repo.IMaestriaDetalleRepository;
 import com.security.repo.IMaestriaRepository;
 import com.security.repo.IMateriaRepository;
 import com.security.service.IMateriaService;
@@ -32,7 +30,7 @@ public class MateriaServiceImpl implements IMateriaService {
     private ConvertidorMateria convertidorMateria;
 
     @Autowired
-    private IMaestriaDetalleRepository maestriaDetalleRepository;
+    private IMaestriaRepository maestriaRepository;
 
     @Override
     public List<MateriaTablaDTO> findAll() {
@@ -43,12 +41,12 @@ public class MateriaServiceImpl implements IMateriaService {
     @Override
     public MateriaTablaDTO insert(MateriaDTO materiaDTO) {
         Materia materia = this.convertidorMateria.convertirAEntidad(materiaDTO);
-        MaestriaDetalle maestriaDetalle = this.maestriaDetalleRepository
+        Maestria maestria = this.maestriaRepository
                 .findById(materiaDTO.getMaestriaId())
                 .orElseThrow(() -> new CustomException(
-                        "La maestria detalle: " + materiaDTO.getMaestriaId() + " no encontrada", HttpStatus.NOT_FOUND));
+                        "La maestria: " + materiaDTO.getMaestriaId() + " no encontrada", HttpStatus.NOT_FOUND));
 
-        materia.setMaestriaDetalle(maestriaDetalle);
+        materia.setMaestria(maestria);
         Materia materiaAux = this.materiaRepository.save(materia);
         return this.convertidorMateria.convertirEntidadATablaDTO(materiaAux);
     }
@@ -59,12 +57,12 @@ public class MateriaServiceImpl implements IMateriaService {
         materia.setCodigo(materiaDTO.getCodigo());
         materia.setNombre(materiaDTO.getNombre());
         materia.setPeriodo(materiaDTO.getPeriodo());
-        MaestriaDetalle maestriaDetalle = this.maestriaDetalleRepository
+        Maestria maestria = this.maestriaRepository
                 .findById(materiaDTO.getMaestriaId())
                 .orElseThrow(() -> new CustomException(
-                        "La maestria detalle: " + materiaDTO.getMaestriaId() + " no encontrada", HttpStatus.NOT_FOUND));
-        materia.setMaestriaDetalle(maestriaDetalle);
-        System.out.println(materia);
+                        "La maestria: " + materiaDTO.getMaestriaId() + " no encontrada", HttpStatus.NOT_FOUND));
+        materia.setMaestria(maestria);
+
         return this.convertidorMateria.convertirEntidadATablaDTO(materia);
     }
 
