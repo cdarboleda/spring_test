@@ -12,15 +12,15 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 
-public class ProcesoTitulacionDTO extends ProcesoDTO{
+public class ProcesoTitulacionDTO extends ProcesoDTO {
 
     private Boolean grupo;
     private Double calificacionFinal;
     private LocalDateTime fechaDefensa;
     private Double notaLector1;
     private Double notaLector2;
-    private List<Integer> idInvolucrados; // Lista de estudiantes involucrados (si es grupal)
-    private List<ObservacionLector> observaciones;
+    private String tutorPoyecto;
+    private Double notaPropuestaProyecto;
 
     // public ProcesoTitulacionDTO() {} // Constructor vacío necesario
 

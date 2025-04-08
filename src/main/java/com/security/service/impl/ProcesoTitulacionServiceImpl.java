@@ -1,92 +1,87 @@
 package com.security.service.impl;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 import com.security.db.Persona;
 import com.security.db.ProcesoTitulacion;
-import com.security.repo.ICarpetaDocumentoRepository;
+import com.security.db.enums.PasoTitulacion;
+import com.security.repo.IPersonaRepository;
 import com.security.repo.IProcesoTitulacionRepository;
-import com.security.service.IPersonaService;
 import com.security.service.IProcesoTitulacionService;
-import com.security.service.dto.PersonaTitulacionLigeroDTO;
-import com.security.service.dto.TitulacionPropuestaLigeroDTO;
+import com.security.service.dto.PersonaDTO;
+import com.security.service.dto.TitulacionResponsableNotaLigeroDTO;
+import com.security.service.dto.TitulacionTutorLigeroDTO;
 
 @Service
 @Transactional
 public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
 
-    private static final String ROL_TUTOR = "TUTOR";
-    private static final String ROL_REVISOR = "REVISOR";
-    private static final String ROL_LECTOR = "LECTOR";
-
     @Autowired
     private IProcesoTitulacionRepository procesoTitulacionRepository;
 
     @Autowired
-    private IPersonaService personaService;
+    private IPersonaRepository personaRepository;
 
-    // Obtener el revisor y la nota de la tabla titualcionProceso a partir del id
+    public void insertarNotaPasoEspecifico(
+            Integer idProcesoTitulacion, TitulacionResponsableNotaLigeroDTO responsableNotaLigeroDTO) {
+
+        // Validaciones iniciales
+        if (responsableNotaLigeroDTO == null || responsableNotaLigeroDTO.getNombrePaso() == null) {
+            throw new IllegalArgumentException("El DTO de responsable o el nombre del paso no pueden ser nulos.");
+        }
+
+        // Buscar el proceso de titulación
+        ProcesoTitulacion proceso = this.procesoTitulacionRepository.findById(idProcesoTitulacion)
+                .orElseThrow(() -> new EntityNotFoundException("Proceso de titulación no encontrado"));
+
+        PasoTitulacion paso = PasoTitulacion.fromString(responsableNotaLigeroDTO.getNombrePaso());
+        if (paso == null) {
+            throw new IllegalArgumentException(
+                    "El paso de titulación no es válido: " + responsableNotaLigeroDTO.getNombrePaso());
+        }
+
+        Double calificacion = responsableNotaLigeroDTO.getCalificacionPaso();
+        // Asignar la calificación según el paso
+        switch (paso) {
+            case REVISION_IDONEIDAD -> proceso.setNotaPropuestaProyecto(calificacion);
+            case REVISION_LECTOR_1 -> proceso.setNotaLector1(calificacion);
+            case REVISION_LECTOR_2 -> proceso.setNotaLector2(calificacion);
+            default -> throw new IllegalArgumentException("El paso no permite la inserción de calificación.");
+        }
+
+        procesoTitulacionRepository.save(proceso);
+    }
+
     @Override
-    public TitulacionPropuestaLigeroDTO buscarRevisorYNota(Integer idProcesoTitulacion) {
+    public void agregarTutorProcesoTitulacion(Integer idProcesoTitulacion, PersonaDTO personatutorDTO) {
         // TODO Auto-generated method stub
-        Optional<ProcesoTitulacion> procesoTitulacion = this.procesoTitulacionRepository.findById(idProcesoTitulacion);
-        TitulacionPropuestaLigeroDTO titulacionPropuestaLigeroDTO = new TitulacionPropuestaLigeroDTO();
-        titulacionPropuestaLigeroDTO.setNombre(procesoTitulacion.get().getRevisorPropuestaProyecto());
-        titulacionPropuestaLigeroDTO.setCalificacionPlan(procesoTitulacion.get().getNotaPropuestaProyecto());
 
-        return titulacionPropuestaLigeroDTO;
+        ProcesoTitulacion procesoTitu = this.procesoTitulacionRepository.findById(idProcesoTitulacion)
+                .orElseThrow(() -> new EntityNotFoundException("Proceso de titulación no encontrado"));
+
+        Persona persona = this.personaRepository.findById(personatutorDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Tutor con id: " + personatutorDTO.getId() + " no encontrado"));
+
+        procesoTitu.setTutorPoyecto(persona.getNombre() + " " + persona.getApellido());
+
+        procesoTitulacionRepository.save(procesoTitu);
     }
 
     @Override
+    public TitulacionTutorLigeroDTO buscarTutorProcesoTitulacion(Integer idProcesoTitulacion) {
 
-    public void AgregarTutorRevisor(PersonaTitulacionLigeroDTO persona) {
-        Persona personaVerificada = verificarDatosRevisorProyecto(persona);
-        if (personaVerificada == null) {
-            throw new EntityNotFoundException("No existe el proceso con ID: " + persona.getProcesoId() +
-                    " o la persona con ID: " + persona.getId());
-        }
-        String nombrePersonaCompleto = nombreCompleto(personaVerificada);
+        ProcesoTitulacion procesoTitu = this.procesoTitulacionRepository.findById(idProcesoTitulacion)
+                .orElseThrow(() -> new EntityNotFoundException("Proceso de titulación no encontrado"));
+        TitulacionTutorLigeroDTO tutorLigeroDTO = new TitulacionTutorLigeroDTO();
+        tutorLigeroDTO.setNombreTutor(procesoTitu.getTutorPoyecto());
+        tutorLigeroDTO.setIdProceso(procesoTitu.getId());
 
-        for (String rol : persona.getRoles()) {
-            switch (rol.toUpperCase()) {
-                case ROL_REVISOR:
+        return tutorLigeroDTO;
 
-                    this.procesoTitulacionRepository.insertarRevisorProyecto(persona.getProcesoId(),
-                            nombrePersonaCompleto);
-                    break;
-                case ROL_TUTOR:
-                    this.procesoTitulacionRepository.insertarTutorProyecto(persona.getProcesoId(),
-                            nombrePersonaCompleto);
-                    break;
-                case ROL_LECTOR:
-                    this.procesoTitulacionRepository.insertarTutorProyecto(persona.getProcesoId(),
-                            nombrePersonaCompleto);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Rol no válido: " + rol);
-            }
-        }
-    }
-
-    private Persona verificarDatosRevisorProyecto(PersonaTitulacionLigeroDTO persona) {
-
-        if (!this.procesoTitulacionRepository.existsByIdAndPersonaId(persona.getProcesoId(), persona.getId())) {
-            throw new EntityNotFoundException("El proceso con ID " + persona.getProcesoId() +
-                    " o la persona con ID " + persona.getId() + " no existen.");
-        }
-        // quizas añadir verificacion si estan activos
-        // quizas añadir verificacion si son rol Docentes
-        return this.personaService.findById(persona.getId());
-    }
-
-    private String nombreCompleto(Persona persona) {
-        return persona.getNombre() + " " + persona.getApellido();
     }
 
 }

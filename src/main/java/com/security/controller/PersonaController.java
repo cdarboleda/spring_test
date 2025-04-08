@@ -128,7 +128,6 @@ public class PersonaController {
 
     @GetMapping(path = "/roles/{rol}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarPorRol(@PathVariable String rol) {
-        System.out.println("llego el rooooool " + rol);
         return new ResponseEntity<>(this.gestorPersonaService.findPersonasByRol(rol), HttpStatus.OK);
     }
 

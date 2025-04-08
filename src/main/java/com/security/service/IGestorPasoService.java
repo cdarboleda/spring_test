@@ -12,4 +12,5 @@ public interface IGestorPasoService {
     public PasoDTO updatePasoResponsable(Integer idPaso, Integer idResponsable);
     public List<PasoDTO> findPasosDTOByProcesoId(Integer procesoId);
     public Paso updatePaso(Integer idPaso, PasoDTO pasoDTO);
+    
 }

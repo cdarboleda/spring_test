@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.security.service.impl.GestorPersonaServiceImpl;
 import com.security.service.IGestorProcesoService;
+import com.security.service.IGestorProcesoTitulacionService;
 import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
 import com.security.service.IProcesoTitulacionService;
+import com.security.service.dto.PersonaDTO;
 import com.security.service.dto.PersonaLigeroDTO;
 import com.security.service.dto.ProcesoTitulacionDTO;
+import com.security.service.dto.TitulacionResponsableNotaLigeroDTO;
 import com.security.service.dto.PersonaTitulacionLigeroDTO;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +34,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin
 @RequestMapping("/titulacion")
 public class ProcesoTitulacionController {
-
-    private final PersonaController personaController;
 
     @Autowired
     private GestorPersonaServiceImpl gestorPersonaServiceImpl;
@@ -49,9 +50,8 @@ public class ProcesoTitulacionController {
     @Autowired
     private IProcesoTitulacionService procesoTitulacionService;
 
-    ProcesoTitulacionController(PersonaController personaController) {
-        this.personaController = personaController;
-    }
+    @Autowired
+    private IGestorProcesoTitulacionService gestorProcesoTitulacionService;
 
     // opbtiene los datos de la persona "logeada" a partir del email del token de
     // Keycloak
@@ -86,10 +86,37 @@ public class ProcesoTitulacionController {
         }
     }
 
-    @GetMapping(path = "/proceso/{id}/revisor", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> obtenerDatosRevisorByProcesoId(@PathVariable(name = "id") Integer id) {
+    @GetMapping(path = "/{id}/paso/{nombrePaso}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerResponsableNotaPasoEspecifico(@PathVariable(name = "id") Integer id,
+            @PathVariable(name = "nombrePaso") String nombrePaso) {
+        return new ResponseEntity<>(this.gestorProcesoTitulacionService.buscarResponsableNotaPaso(id, nombrePaso),
+                HttpStatus.OK);
+    }
 
-        return new ResponseEntity<>(this.procesoTitulacionService.buscarRevisorYNota(id), HttpStatus.OK);
+    @PostMapping(path = "/{id}/calificacion", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> insertarCalificacionPasoEspecifico(
+            @PathVariable Integer id,
+            @RequestBody TitulacionResponsableNotaLigeroDTO responsableNotaLigeroDTO) {
+
+        this.procesoTitulacionService.insertarNotaPasoEspecifico(id, responsableNotaLigeroDTO);
+        return ResponseEntity.ok("El proceso de Tituacion con id: " + id + " se guardo correctamente en el paso: "
+                + responsableNotaLigeroDTO.getNombrePaso());
+    }
+
+    @GetMapping(path = "/{id}/tutor", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerDatosTutorTitulacion(@PathVariable(name = "id") Integer id) {
+        return new ResponseEntity<>(this.procesoTitulacionService.buscarTutorProcesoTitulacion(id),
+                HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/{id}/tutor", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> insertarTutorTitulacion(@PathVariable Integer id,
+            @RequestBody PersonaDTO personaTutorDTO) {
+
+        this.procesoTitulacionService.agregarTutorProcesoTitulacion(id, personaTutorDTO);
+        return ResponseEntity
+                .ok("El tutor: " + personaTutorDTO.getNombre() + " " + personaTutorDTO.getApellido()
+                        + " se insertor correctamente en el proceso de Tituacion con id: " + id);
     }
 
 }
