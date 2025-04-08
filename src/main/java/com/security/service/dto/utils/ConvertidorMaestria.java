@@ -12,7 +12,7 @@ public class ConvertidorMaestria {
         Maestria maestria = new Maestria();
         maestria.setId(maestriaDTO.getId());
         maestria.setNombre(maestriaDTO.getNombre());
-        maestria.setCodigo(maestriaDTO.getNombre());
+        maestria.setCodigo(maestriaDTO.getCodigo());
         maestria.setCohorte(maestriaDTO.getCohorte());
         maestria.setFechaInicio(maestriaDTO.getFechaInicio());
         maestria.setFechaFin(maestriaDTO.getFechaFin());
