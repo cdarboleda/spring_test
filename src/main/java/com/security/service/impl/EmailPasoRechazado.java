@@ -4,16 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.security.controller.EmailController;
-import com.security.repo.ICarpetaDocumentoRepository;
-import com.security.service.dto.PasoDTO;
-
-import jakarta.mail.MessagingException;
-import lombok.Data;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import com.security.service.dto.PasoDTO;
+
+import jakarta.mail.MessagingException;
 
 @Service
 public class EmailPasoRechazado {

@@ -30,11 +30,7 @@ public class ProcesoTitulacion {
 
     @Id
     private Integer id;
-
-    // @OneToOne(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "proc_id")
-    // @JsonIgnore
-    // private Proceso proceso;
+    
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "proc_id")

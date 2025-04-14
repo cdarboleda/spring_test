@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import com.security.db.Proceso;
 import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.MiProcesoPagoDocenteDTO;
-import com.security.service.dto.PasoDTO;
 import com.security.service.dto.ProcesoPasoDocumentoDTO;
 
 @Repository
@@ -18,12 +17,8 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
 
         List<Proceso> findByRequirienteId(Integer id);
 
-        // Aqui estaba la que me devolvia todos los procesos cuando soy admin,
-        // pero como mostraba la materia si no es de pago docente?,
-        // quiza sirva moviendole para que muestre info general de cualquier tipo de
-        // proceso
-        // pues como estaba antes
-
+        //devuelve todos los procesos en general con esa estructura
+        //ya no se usa
         @Query("SELECT new com.security.service.dto.MiProcesoDTO( " +
                         "p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, p.cancelado, " +
                         "req.id, req.cedula, req.nombre, req.apellido, " +
@@ -35,6 +30,8 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         "LEFT JOIN paso.responsable resp ")
         List<MiProcesoDTO> findMisProcesosGeneral();
 
+        //devuelve los procesos de pago docente, para la tabla de procesos de pago docente
+        //hecho para el admin que necesita todos los procesos pd de todos los usuarios
         @Query("SELECT new com.security.service.dto.MiProcesoPagoDocenteDTO( " +
                         "p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, p.cancelado, "
                         +
@@ -47,11 +44,11 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         "LEFT JOIN p.requiriente req " +
                         "LEFT JOIN ppd.materia mat " +
                         "LEFT JOIN mat.maestria mae " +
-                        "LEFT JOIN p.pasos paso ON paso.estado = 'EN_CURSO' " + // Filtra paso en curso
+                        "LEFT JOIN p.pasos paso ON paso.estado = 'EN_CURSO' " +
                         "LEFT JOIN paso.responsable resp ") // Información del responsable del paso
         List<MiProcesoPagoDocenteDTO> findMisProcesosPagoDocente();
 
-        // Tabla Mis Procesos para un usuario normal
+        //Todos los procesos pd pero solo donde el usuario logueado participe
         @Query("SELECT new com.security.service.dto.MiProcesoPagoDocenteDTO( " +
                         "p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, p.cancelado, "
                         +
@@ -64,12 +61,14 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         "LEFT JOIN p.requiriente req " +
                         "LEFT JOIN ppd.materia mat " +
                         "LEFT JOIN mat.maestria mae " +
-                        "LEFT JOIN p.pasos paso ON paso.estado = 'EN_CURSO' " + // Filtra paso en curso
+                        "LEFT JOIN p.pasos paso ON paso.estado = 'EN_CURSO' " +
                         "LEFT JOIN paso.responsable resp " +
                         "WHERE EXISTS (SELECT 1 FROM p.pasos pas WHERE pas.responsable.id = :responsableId)")
         List<MiProcesoPagoDocenteDTO> findMisProcesosPagoDocentePorResponsable(
                         @Param("responsableId") Integer responsableId);
 
+        //devuelve todos los procesos de un usuario con la estructura general
+        //ya no se usa
         @Query("SELECT new com.security.service.dto.MiProcesoDTO( " +
                         "p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, p.cancelado, " +
                         "req.id, req.cedula, req.nombre, req.apellido, " +
@@ -83,18 +82,15 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
         List<MiProcesoDTO> findMisProcesosGeneralPorResponsable(@Param("responsableId") Integer responsableId);
 
         @Query("SELECT new com.security.service.dto.ProcesoPasoDocumentoDTO(" +
-                        "p.id, p.descripcion, " +
-                        "pa.id, pa.nombre, pa.estado, pa.descripcionEstado, pa.fechaInicio, pa.fechaFin, pa.orden, pa.observacion, pa.rol.nombre, "
-                        +
+                        "pa.id, pa.nombre, pa.estado, pa.descripcionEstado, pa.fechaInicio, pa.fechaFin, pa.orden, pa.observacion, pa.rol.nombre, " +
                         "per.id, per.nombre, per.cedula, per.apellido, per.telefono, per.correo, " +
                         "cd.id, cd.url) " +
-                        "FROM Proceso p " +
-                        "LEFT JOIN p.pasos pa " +
+                        "FROM Paso pa " +
                         "LEFT JOIN pa.responsable per " +
                         "LEFT JOIN pa.carpetaDocumentos cd " +
-
-                        "WHERE p.id = :procesoId " +
+                        "WHERE pa.proceso.id = :procesoId " +
                         "ORDER BY pa.orden")
         List<ProcesoPasoDocumentoDTO> findProcesoDetalleById(@Param("procesoId") Integer procesoId);
+
 
 }

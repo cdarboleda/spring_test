@@ -9,8 +9,6 @@ import lombok.Data;
 @Data
 public class ProcesoPasoDocumentoDTO {
 
-    private Integer procesoId;
-    private String procesoDescripcion;
     private Integer pasoId;
     private String pasoNombre;
     private Estado pasoEstado;
@@ -29,15 +27,13 @@ public class ProcesoPasoDocumentoDTO {
     private String observacion;
     private String rol;
 
-    public ProcesoPasoDocumentoDTO(Integer procesoId, String procesoDescripcion,
+    public ProcesoPasoDocumentoDTO(
             Integer pasoId, String pasoNombre,
             Estado pasoEstado, String descripcionEstado, LocalDateTime pasoFechaInicio,
             LocalDateTime pasoFechaFin, Integer pasoOrden, String observacion, String rol,
             Integer responsableId, String responsableNombre,
             String responsableCedula, String responsableApellido, String responsableTelefono, String responsableCorreo,
             Integer carpetaId, String carpetaUrl) {
-        this.procesoId = procesoId;
-        this.procesoDescripcion = procesoDescripcion;
         this.pasoId = pasoId;
         this.pasoNombre = pasoNombre;
         this.pasoEstado = pasoEstado;

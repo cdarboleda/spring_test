@@ -3,9 +3,6 @@ package com.security.service.impl;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,10 +144,6 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
                 .collect(Collectors.toList());
                 return dtos;
     }
-
-    // public PersonaDTO findWithRoles(){
-
-    // }
 
     private void rolesInvalidosMensaje(List<Rol> roles, List<String> rolesIds) {
 

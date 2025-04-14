@@ -21,39 +21,28 @@ public class PagoDocentePasoFactory implements IPasoFactory {
     public List<PasoDTO> generatePasos() {
         List<PasoDTO> pasos = new ArrayList<>();
 
-        pasos.add(this.crearPaso("documentacion_docente", 1,
-                Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), LocalDateTime.now(),
-                "docente"));
-        pasos.add(this.crearPaso("revision_coordinador", 2, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "coordinador"));
-        pasos.add(this.crearPaso("revision_secretaria", 3, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
-        pasos.add(this.crearPaso("pedido_asistencia", 4, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
-
-        pasos.add(this.crearPaso("validacion_asistencia_docente", 5, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "docente"));
-
-        pasos.add(this.crearPaso("validacion_asistencia_coordinador", 6, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "coordinador"));
-        
-        
-        pasos.add(this.crearPaso("autorizacion_director", 7, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "director"));
-        pasos.add(this.crearPaso("aprobacion_decano", 8, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
-        
-        pasos.add(this.crearPaso("revision_financiero", 9, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
-
-        pasos.add(this.crearPaso("factura_docente", 10, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "docente"));
-        pasos.add(this.crearPaso("revision_factura_director", 11, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "director"));
-        pasos.add(this.crearPaso("desembolso_financiero", 12, 
-                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, "secretaria"));
+        pasos.add(this.crearPasoPrimero("documentacion_docente", "docente"));
+        pasos.add(this.crearPasoDefault("revision_coordinador", 2, "coordinador"));
+        pasos.add(this.crearPasoDefault("revision_secretaria", 3, "secretaria"));
+        pasos.add(this.crearPasoDefault("pedido_asistencia", 4, "secretaria"));
+        pasos.add(this.crearPasoDefault("validacion_asistencia_docente", 5, "docente"));
+        pasos.add(this.crearPasoDefault("validacion_asistencia_coordinador", 6, "coordinador"));
+        pasos.add(this.crearPasoDefault("autorizacion_director", 7, "director"));
+        pasos.add(this.crearPasoDefault("aprobacion_decano", 8, "secretaria"));
+        pasos.add(this.crearPasoDefault("revision_financiero", 9, "secretaria"));
+        pasos.add(this.crearPasoDefault("factura_docente", 10, "docente"));
+        pasos.add(this.crearPasoDefault("revision_factura_director", 11, "director"));
+        pasos.add(this.crearPasoDefault("desembolso_financiero", 12, "secretaria"));
         
         return pasos;
+    }
+
+    private PasoDTO crearPasoPrimero(String nombrePaso, String rol){
+        return this.crearPaso(nombrePaso, 1, Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), LocalDateTime.now(), rol);
+    }
+
+    private PasoDTO crearPasoDefault(String nombrePaso, Integer orden, String rol){
+        return this.crearPaso(nombrePaso, orden, Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, rol);
     }
 
     private PasoDTO crearPaso(String nombre,

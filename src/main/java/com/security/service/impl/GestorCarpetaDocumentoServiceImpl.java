@@ -43,13 +43,9 @@ public class GestorCarpetaDocumentoServiceImpl implements IGestorCarpetaDocument
         documento.setId(null);
         documento.setUrl(documentoDTO.getUrl());
         documento.setProceso(this.procesoService.findById(documentoDTO.getProcesoId()));
-        // documento.setPersona(this.personaService.findById(documentoDTO.getPersonaId()));
         documento.setPaso(this.pasoService.findById(documentoDTO.getPasoId()));
 
         CarpetaDocumento documentoActual = this.documentoRepository.save(documento);
-
-        // this.pasoService.updateEstado(documentoDTO.getPasoId(),
-        // documentoDTO.getEstado());
 
         return convertidorDocumento.convertirALigeroDTO(documentoActual);
     }

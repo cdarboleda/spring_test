@@ -29,10 +29,12 @@ services:
       KC_DB_URL: jdbc:postgresql://host.docker.internal:5432/proyecto_db
       KC_DB_SCHEMA: keycloak_schema
       KC_DB_USERNAME: postgres
-      KC_DB_PASSWORD: postgres
+      KC_DB_PASSWORD: admin
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     command: [ "start-dev" ]
+    volumes:
+      - ./themes/:/opt/keycloak/themes/
 #     volumes:
 #       - ./themes:/opt/keycloak/themes/
     # entrypoint: /opt/keycloak/bin/kc.sh --verbose start-dev --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import com.security.controller.PasoController;
+
 import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.Proceso;
@@ -34,8 +34,6 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class GestorPasoServiceImpl implements IGestorPasoService {
 
-    private final PasoServiceImpl pasoServiceImpl;
-
     @Autowired
     private IPasoRepository pasoRepository;
 
@@ -59,10 +57,6 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
 
     @Autowired
     private PasoFactoryManager factoryManager;
-
-    GestorPasoServiceImpl(PasoServiceImpl pasoServiceImpl) {
-        this.pasoServiceImpl = pasoServiceImpl;
-    }
 
     @Override
     public List<PasoDTO> crearPasos(String proceso) {

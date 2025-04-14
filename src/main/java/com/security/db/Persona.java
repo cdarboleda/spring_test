@@ -28,10 +28,6 @@ import lombok.Data;
 @Data
 public class Persona {
 
-    //proceso titulacion, password
-    //persona -> requiriente
-    //pasos set -> pasos list
-
     @Id
     @Column(name = "pers_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="seq_pers")
@@ -65,10 +61,6 @@ public class Persona {
     @OneToMany(mappedBy = "responsable", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     private List<Paso> pasos;
-    
-    // @OneToMany(mappedBy = "persona",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    // @JsonIgnore
-    // private List<CarpetaDocumento> carpetaDocumentos;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -78,18 +70,5 @@ public class Persona {
     )
     // @JsonIgnore
     private Set<Rol> roles = new HashSet<>();
-
-    // @Override
-    // public boolean equals(Object o) {
-    //     if (this == o) return true;
-    //     if (!(o instanceof Persona)) return false;
-    //     return id != null && id.equals(((Persona) o).getId());
-    // }
- 
-    // @Override
-    // public int hashCode() {
-    //     return getClass().hashCode();
-    // }
-
 
 }

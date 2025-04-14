@@ -24,10 +24,6 @@ public class ProcesoLog {
     @SequenceGenerator(name = "seq_proc_log", initialValue = 1, allocationSize = 1)
     private Integer id;
 
-    // @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    // @JsonIgnore
-    // @JoinColumn(name = "proc_id")
-    // private Proceso proceso;
     @Column(name = "proc_log_proceso_id")
     private Integer procesoId;
 
@@ -39,9 +35,6 @@ public class ProcesoLog {
 
     @Column(name = "proc_log_responsable_nombre")
     private String responsableNombre;
-
-    // @Column(name = "proc_log_paso_id")
-    // private Integer pasoId;
 
     @Column(name = "proc_log_paso_orden")
     private Integer pasoOrden;

@@ -36,11 +36,6 @@ public class CarpetaDocumento {
     @JsonIgnore
     private Proceso proceso;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name="pers_id")
-    // @JsonIgnore
-    // private Persona persona;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="paso_id")
     @JsonIgnore

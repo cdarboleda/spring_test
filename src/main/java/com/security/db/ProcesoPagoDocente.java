@@ -51,7 +51,4 @@ public class ProcesoPagoDocente {
     @Column(name = "pago_doce_fecha_fin_clase")
     private LocalDate fechaFinClase;
 
-    // @Column(name = "pago_doce_cohorte")
-    // private Integer cohorte;
-
 }

@@ -16,18 +16,11 @@ public interface ICarpetaDocumentoRepository extends JpaRepository<CarpetaDocume
 
     public List<CarpetaDocumento> findByProcesoId(Integer procesoId);
 
-    //public List<CarpetaDocumento> findByPersonaId(Integer personaId);
-
     public List<CarpetaDocumento> findByPasoId(Integer pasoId);
 
     @Transactional
     @Modifying
     @Query("DELETE FROM CarpetaDocumento c WHERE c.proceso.id = :procesoId")
     void deleteByProcesoId(@Param("procesoId") Integer procesoId);
-
-    // @Query("SELECT new com.security.service.dto.DocumentoDTO"+
-    // "(d.id, d.nombre, d.url, d.descripcion, d.fechaCreacion, p.id, p.nombre) " +
-    // "FROM Documento d JOIN d.proceso p WHERE d.id = :id")
-    // DocumentoDTO findDTOById(@Param("id") Integer id);
 
 }

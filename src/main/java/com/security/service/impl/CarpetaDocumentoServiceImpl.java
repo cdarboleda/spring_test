@@ -52,16 +52,6 @@ public class CarpetaDocumentoServiceImpl implements ICarpetaDocumentoService {
         return documentosLigeros;
     }
 
-    // @Override
-    // public List<CarpetaDocumentoLigeroDTO> findAllByPersonaId(Integer idPersona) {
-    //     List<CarpetaDocumento> documentos = this.carpetaDocumentoRepository.findByPersonaId(idPersona);
-    //     if (documentos.isEmpty()) {
-    //         throw new EntityNotFoundException("No hay carpeta documentos para la persona con id: " + idPersona);
-    //     }
-    //     List<CarpetaDocumentoLigeroDTO> documentosLigeros = documentos.stream().map(convertidorCarpetaDocumento::convertirALigeroDTO).collect(Collectors.toList());
-    //     return documentosLigeros;
-    // }
-
     @Override
     public void deleteById(Integer id) {
         if (!this.carpetaDocumentoRepository.existsById(id)) {

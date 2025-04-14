@@ -27,13 +27,6 @@ import lombok.ToString;
 @Data
 public class Proceso {
 
-    //nombre, descripcion, titulacion
-    //estado -> finalizado
-    //pago docente a OneToOne
-    public Proceso(){
-
-    }
-
     @Id
     @Column(name = "proc_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="seq_proc")
@@ -56,7 +49,7 @@ public class Proceso {
     @Column(name = "proc_descripcion") 
     private String descripcion;
 
-    @Column(name = "proc_tipo_proceso", nullable = true)//si es nulo es un generico
+    @Column(name = "proc_tipo_proceso", nullable = true)
     private TipoProceso tipoProceso;
     
     @OneToMany(mappedBy = "proceso", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})

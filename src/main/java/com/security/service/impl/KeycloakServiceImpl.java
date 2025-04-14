@@ -86,11 +86,11 @@ public class KeycloakServiceImpl implements IKeycloakService {
             assignRolesToUser(userId, roles);
 
             // Enviar correo para que el usuario configure su contraseña
-            // keycloakProvider.getKeycloak()
-            // .realm(realmName)
-            // .users()
-            // .get(userId)
-            // .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
+            keycloakProvider.getKeycloak()
+            .realm(realmName)
+            .users()
+            .get(userId)
+            .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
 
             return userId;
 
