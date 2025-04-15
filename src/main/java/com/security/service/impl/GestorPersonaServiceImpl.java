@@ -57,10 +57,6 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
     // importante
     @Override
     public PersonaDTO insertar(PersonaDTO personaDTO) {
-        // if (this.personaService.tieneErrores(personaDTO)) {
-        // throw new CustomException("Hay campos erróneos, por favor revise antes de
-        // enviar", HttpStatus.BAD_REQUEST);
-        // }
         if (this.personaService.findByCedulaOptional(personaDTO.getCedula()).isPresent()) {
             throw new CustomException("Ya existe una persona con la cedula: " + personaDTO.getCedula(),
                     HttpStatus.BAD_REQUEST);
@@ -72,7 +68,6 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
         List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
 
         this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
-
         persona.setRoles(new HashSet<>(roles));
         return convertidor.convertirAPersonaDTO(personaRepository.save(persona));
     }

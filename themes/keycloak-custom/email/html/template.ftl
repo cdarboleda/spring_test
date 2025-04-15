@@ -13,7 +13,6 @@
 </head>
 <body>
     <div class="container">
-        <h1>Notificación de Keycloak</h1>
         <#nested>
     </div>
 </body>

@@ -12,6 +12,7 @@ import com.security.service.IKeycloakService;
 import com.security.service.dto.UserDTO;
 import com.security.util.KeycloakProvider;
 
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 @Slf4j
 public class KeycloakServiceImpl implements IKeycloakService {
@@ -67,16 +69,10 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
         // Crear el usuario en Keycloak
         Response response = null;
-
+        String userId = null;
         try {
             response = getKeycloak().users().create(user);
-            System.out.println("reponse: " + response);
-
-            if (response.getStatus() != 201) {
-                return null;
-            }
-
-            String userId = response.getLocation().getPath()
+            userId = response.getLocation().getPath()
                     .substring(response.getLocation().getPath().lastIndexOf("/") + 1);
 
             List<RoleRepresentation> roles = getClientRoles().stream()
@@ -95,8 +91,9 @@ public class KeycloakServiceImpl implements IKeycloakService {
             return userId;
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            //return null;
+            this.deleteUser(userId);
+            throw new RuntimeException("Error al crear el usuario en Keycloak en createUser de KeycloakService", e);
         } finally {
             if (response != null) {
                 response.close(); // Cerrar la respuesta para evitar fugas

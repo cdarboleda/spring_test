@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.security.exception.CustomException;
 import com.security.service.IGestorPersonaService;
 import com.security.service.IGestorUsurio;
 import com.security.service.IKeycloakService;
@@ -36,27 +38,13 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     //Metodo para ingresar un nuevo registro de usuario
     @Override
     public PersonaDTO createUser(PersonaDTO personaDTO) {
-
         String idUser = this.keycloakService.createUser(
-                personaDTO.getCedula(),
-                personaDTO.getCorreo(),
-                personaDTO.getRoles());
-
-        if (idUser == null) {
-            throw new RuntimeException("Error al crear el usuario en Keycloak");
-        }
-
-        personaDTO.setIdKeycloak(idUser);
-        try {
+            personaDTO.getCedula(),
+            personaDTO.getCorreo(),
+            personaDTO.getRoles());
+            personaDTO.setIdKeycloak(idUser);
+            
             return this.gestorPersonaService.insertar(personaDTO);
-        } catch (Exception e) {
-            try {
-                this.keycloakService.deleteUser(idUser); // Intentar eliminar en Keycloak
-            } catch (Exception rollbackError) {
-                throw new RuntimeException("Error al insertar en la base de datos. Además, falló el rollback en Keycloak.", rollbackError);
-            }
-            throw new RuntimeException("Error al insertar en la base de datos. Se ha revertido la creación en Keycloak.", e);
-        }
     }
 
     @Override
