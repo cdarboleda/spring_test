@@ -182,7 +182,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
             pasos.add(pasoAnterior);
 
             //la notificacion, deshabilitada por el momento hasta tener correos validos
-            // this.emailPasoRechazado.send(pasoAnteriorDTO, observaciones);
+            this.emailPasoRechazado.send(pasoAnteriorDTO, observaciones);
         }
         
         return pasos;

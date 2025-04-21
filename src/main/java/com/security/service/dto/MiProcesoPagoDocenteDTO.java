@@ -27,13 +27,13 @@ public class MiProcesoPagoDocenteDTO extends MiProcesoDTO {
             String requirienteNombre, String requirienteApellido,
             String pasoNombre, String pasoEstado, String pasoDescripcionEstado,
             LocalDateTime pasoFechaInicio, Integer responsablePasoId,
-            String responsablePasoCedula, String materiaCodigo, String materiaNombre, String maestriaCodigo,
+            String responsableCedula, String materiaCodigo, String materiaNombre, String maestriaCodigo,
             String maestriaNombre, LocalDate fechaInicioClase, LocalDate fechaFinClase) {
 
         super(procesoId, tipoProceso, fechaInicio, fechaFin, finalizado, cancelado,
                 requirienteId, requirienteCedula, requirienteNombre, requirienteApellido,
                 pasoNombre, pasoEstado, pasoDescripcionEstado, pasoFechaInicio,
-                responsablePasoId, responsablePasoCedula);
+                responsablePasoId, responsableCedula);
 
         this.materiaCodigo = materiaCodigo;
         this.materiaNombre = materiaNombre;

@@ -19,10 +19,10 @@ public class PasoDTO {
     private Integer idProceso;
     private String tipoProceso;
     private Integer idResponsable;
-    private String responsablePasoCedula;
+    private String responsableCedula;
     private String responsableNombre;
     private String responsableApellido;
-    private String responsableEmail;
+    private String responsableCorreo;
 
     public PasoDTO() {
     }
@@ -35,25 +35,25 @@ public class PasoDTO {
     }
 
     public PasoDTO(String nombre, String estado, String descripcionEstado, LocalDateTime fechaInicio,
-            Integer responsableId, String responsablePasoCedula) {
+            Integer responsableId, String responsableCedula) {
 
         this.nombre = nombre;
         this.estado = estado;
         this.descripcionEstado = descripcionEstado;
         this.fechaInicio = fechaInicio;
         this.idResponsable = responsableId;
-        this.responsablePasoCedula = responsablePasoCedula;
+        this.responsableCedula = responsableCedula;
     }
 
     public PasoDTO(String nombre, String estado, String descripcionEstado, LocalDateTime fechaInicio,
-            Integer responsableId, String responsablePasoCedula, String responsableEmail) {
+            Integer responsableId, String responsableCedula, String responsableCorreo) {
 
         this.nombre = nombre;
         this.estado = estado;
         this.descripcionEstado = descripcionEstado;
         this.fechaInicio = fechaInicio;
         this.idResponsable = responsableId;
-        this.responsablePasoCedula = responsablePasoCedula;
-        this.responsableEmail = responsableEmail;
+        this.responsableCedula = responsableCedula;
+        this.responsableCorreo = responsableCorreo;
     }
 }

@@ -29,12 +29,12 @@ public class EmailPasoRechazado {
             variables.put("tipoProceso", paso.getTipoProceso());
             variables.put("responsableNombre", paso.getResponsableNombre());
             variables.put("responsableApellido", paso.getResponsableApellido());
-            variables.put("responsableEmail", paso.getResponsableEmail());
+            variables.put("responsableCorreo", paso.getResponsableCorreo());
             variables.put("observaciones", observaciones);
-
+        System.out.println("paso.responsableCorreo()"+ paso.getResponsableCorreo());
             try {
-                // this.emailService.sendEmail("PasoRechazado", paso.getResponsableEmail(), "Proceso # "+paso.getIdProceso()+": Un paso ha sido rechazado", variables);
-                this.emailService.sendEmail("PasoRechazado", "kpchiguano@uce.edu.ec", "Proceso "+paso.getTipoProceso()+" # "+paso.getIdProceso()+": Un paso ha sido rechazado", variables);
+                this.emailService.sendEmail("PasoRechazado", paso.getResponsableCorreo(), "Proceso # "+paso.getIdProceso()+": Un paso ha sido rechazado", variables);
+                // this.emailService.sendEmail("PasoRechazado", "kpchiguano@uce.edu.ec", "Proceso "+paso.getTipoProceso()+" # "+paso.getIdProceso()+": Un paso ha sido rechazado", variables);
                 return "Mensaje enviado con exito";
             } catch (MessagingException e) {
                 // TODO Auto-generated catch block
@@ -45,6 +45,7 @@ public class EmailPasoRechazado {
     @Async
     public void send(PasoDTO paso, List<String> observaciones){
         this.paso = paso;
+        System.out.println("el paso: "+paso );
         this.observaciones = observaciones;
         this.useSend();
     }

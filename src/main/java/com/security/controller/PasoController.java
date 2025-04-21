@@ -106,7 +106,7 @@ public class PasoController {
         return new ResponseEntity<>(this.pasoService.buscarEstados(), HttpStatus.OK);
     }
 
-    @PutMapping(path = "/rechazar/{idPasoActual}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/rechazar/{idPasoActual}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('administrador', 'usuario')")
     public ResponseEntity<?> rechazarPaso(@PathVariable(name = "idPasoActual") Integer idPasoActual,
     @RequestBody(required = false)  PasoDTO pasoAnteriorDTO,
