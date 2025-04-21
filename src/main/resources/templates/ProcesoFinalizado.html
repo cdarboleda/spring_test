@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Proceso Finalizado</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@500&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+        body {
+            font-family: "League Spartan", sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: rgba(22, 24, 35, 0.75);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            height: 80px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .saludo {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img class="logo" src="https://posgrado-fica-uce.netlify.app/img/logo-posgrado.0df946c7.png" alt="Logo posgrado">
+        <h2>Notificación de Proceso Finalizado</h2>
+
+        <p>Hola <strong th:text="${requirienteNombre} + ' ' + ${requirienteApellido}">Nombre Apellido</strong>,</p>
+
+        <p>Le informamos que el proceso Pago Docente con ID <strong th:text="${procesoId}">123</strong> ha sido <strong>FINALIZADO CON ÉXITO</strong>.</p>
+
+        <p><strong>Cédula:</strong> <span th:text="${requirienteCedula}">0000000</span></p>
+        <p><strong>Fecha:</strong> <span th:text="${fecha}">2024-04-20</span></p>
+
+        <div class="saludo">
+            <p>Saludos cordiales,<br>Equipo de Posgrado</p>
+        </div>
+    </div>
+</body>
+
+</html>
