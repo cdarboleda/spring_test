@@ -1,6 +1,6 @@
 package com.security.db;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,10 +39,10 @@ public class Maestria {
     private String cohorte;
 
     @Column(name = "maes_fecha_inicio_ejecucion")
-    private LocalDateTime fechaInicio;
+    private LocalDate fechaInicio;
 
     @Column(name = "maes_fecha_fin_ejecucion")
-    private LocalDateTime fechaFin;
+    private LocalDate fechaFin;
 
     @Column(name = "maes_estado")
     private String estado;

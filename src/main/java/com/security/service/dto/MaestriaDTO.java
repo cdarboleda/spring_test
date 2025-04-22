@@ -1,6 +1,7 @@
 package com.security.service.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 import lombok.Data;
 
@@ -13,8 +14,8 @@ public class MaestriaDTO {
     private String codigo;
 
     private String cohorte;
-    private LocalDateTime fechaInicio;
-    private LocalDateTime fechaFin;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
     private String estado;
 
 }

@@ -24,9 +24,9 @@ public class MateriaTablaDTO {
 
     private String maestriaCohorte;
 
-    private LocalDateTime maestriaFechaEjecucionDesde;
+    private LocalDate maestriaFechaEjecucionDesde;
 
-    private LocalDateTime maestriaFechaEjecucionHasta;
+    private LocalDate maestriaFechaEjecucionHasta;
 
     public MateriaTablaDTO(){}
     public MateriaTablaDTO(
@@ -38,8 +38,8 @@ public class MateriaTablaDTO {
             String maestriaNombre,
             String maestriaCodigo,
             String maestriaCohorte,
-            LocalDateTime maestriaFechaEjecucionDesde,
-            LocalDateTime maestriaFechaEjecucionHasta) {
+            LocalDate maestriaFechaEjecucionDesde,
+            LocalDate maestriaFechaEjecucionHasta) {
                 this.id = id;
                 this.codigo = codigo;
                 this.nombre = nombre;
