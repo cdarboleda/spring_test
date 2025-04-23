@@ -46,7 +46,12 @@
         <p><strong>Fecha:</strong> <span th:text="${fecha}">2024-04-19T00:00:00Z</span></p>
 
         <p><strong>Motivo de cancelación:</strong></p>
-        <blockquote th:text="${motivo}">Aquí va el motivo del rechazo o cancelación del proceso.</blockquote>
+
+        <div th:if="${motivo != null and not #lists.isEmpty(motivo)}">
+            <ul>
+                <li th:each="item : ${motivo}" th:text="${item}"></li>
+            </ul>
+        </div>
 
         <div class="saludo">
             <p>Saludos,<br>Equipo de Posgrado</p>

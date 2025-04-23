@@ -1,6 +1,7 @@
 package com.security.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class EmailProcesoCancelado {
             String requirienteApellido = persona.getApellido();
             String requirienteCedula = persona.getCedula();
             String fecha = data.get("fecha").toString();
-            String motivo = data.get("motivo").toString();
+            String[] motivo = data.get("motivo").toString().split(";");
 
             Map<String, Object> variables = new HashMap<>();
             variables.put("procesoId", procesoId);

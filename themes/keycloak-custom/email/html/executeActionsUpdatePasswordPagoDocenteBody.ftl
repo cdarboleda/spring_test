@@ -2,7 +2,7 @@
     <#assign expirationMinutes = linkExpiration?number>
     <#assign expirationHours = expirationMinutes / 60>
     <#assign expirationHoursRounded = expirationHours?string("0.#")>
-    <h1>Sistema/Plataforma XXX, Consejo de Posgrado - Alta de usuario</h1>
+    <h1>Sistema de Gestión de Procesos SIGEPRO, Consejo de Posgrado - Alta de usuario</h1>
     <p>Hola usuario con número de indentificación: <strong>${user.username}</strong></p>
     <p>Para completar el proceso de registro en XX y activar su cuenta, por favor haga click en el siguiente enlace:</p>
     <a href="${link}" target="_blank">Establecer contraseña</a>
