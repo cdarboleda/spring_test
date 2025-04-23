@@ -139,10 +139,10 @@ public class GestorProcesoImpl implements IGestorProcesoService {
              * 
              * }
              */
-            this.procesoTitulacionRepository.save(titulacion);
+            return this.procesoTitulacionRepository.save(titulacion);
         }
 
-        return proceso;
+        return null;
     }
 
     private void asociarCompañerosAlProceso(Proceso proceso, List<Integer> idsCompañeros) {
@@ -208,16 +208,10 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         proceso.setPasos(pasos);
 
         this.procesoRepository.save(proceso);
-        this.insertarProcesoEspecifico(proceso, procesoDTO);
-
+        var procesoEspecifico = this.insertarProcesoEspecifico(proceso, procesoDTO);
+        // guarda los logs de creacion del paso (PENDIENTE)
         pasos.forEach(paso -> gestorProcesoLogService.insertarProcesoLog(paso, Evento.CREACION));
-
-        // Arreglar el Convertidor (3-11-2025)
-        // var procesoEspecificoConvertido =
-        // convertidorProceso.convertirACompletoDTO(procesoEspecifico);
-
-        // return temporal hasta arreglar el convertidor
-        return "mensaje temporal hata arreglar error en el converitdor";
+        return convertidorProceso.convertirACompletoDTO(procesoEspecifico);
     }
 
     @Override
@@ -307,6 +301,8 @@ public class GestorProcesoImpl implements IGestorProcesoService {
                     proceso.getCancelado(),
                     proceso.getRequiriente().getId(),
                     proceso.getRequiriente().getCedula(),
+                    proceso.getRequiriente().getNombre(),
+                    proceso.getRequiriente().getApellido(),
                     pasoEnCurso != null ? pasoEnCurso.getNombre() : null,
                     pasoEnCurso != null ? pasoEnCurso.getEstado().toString() : null,
                     pasoEnCurso != null ? pasoEnCurso.getDescripcionEstado() : null,

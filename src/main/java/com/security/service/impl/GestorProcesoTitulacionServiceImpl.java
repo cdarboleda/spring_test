@@ -70,7 +70,7 @@ public class GestorProcesoTitulacionServiceImpl implements IGestorProcesoTitulac
                 // Obtener la nota del paso específico
                 Double nota = this.procesoTitulacionRepository.findById(idProcesoTitulacion)
                                 .map(proceso -> switch (pasoTitulacion) {
-                                        case REVISION_IDONEIDAD -> proceso.getNotaPropuestaProyecto();
+                                        //case REVISION_IDONEIDAD -> proceso.getNotaPropuestaProyecto();
                                         case REVISION_LECTOR_1 -> proceso.getNotaLector1();
                                         case REVISION_LECTOR_2 -> proceso.getNotaLector2();
                                         default -> null; // null si el paso no tienecalificacion

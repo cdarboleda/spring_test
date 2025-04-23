@@ -23,7 +23,7 @@ public class TitulacionPasoFactory implements IPasoFactory {
 
         private static final String ROL_ESTUDIANTE = "ESTUDIANTE";
         private static final String ROL_DOCENTE = "DOCENTE";
-        private static final String ROL_LECTOR = "LECTOR";
+        // private static final String ROL_LECTOR = "LECTOR";
         private static final String ROL_SECRETARIA = "SECRETARIA";
         private static final String ROL_DIRECTOR = "DIRECTOR";
 
@@ -43,45 +43,47 @@ public class TitulacionPasoFactory implements IPasoFactory {
                                 "Reporte de revision del plan de titulacion",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_DOCENTE));
-                pasos.add(this.crearPaso(PasoTitulacion.CORRECCION_PLAN.getNombre(), 4,
-                                "Realizar las correcciones del plan emitidas por el revisor",
-                                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
-                                ROL_ESTUDIANTE));
-
-                pasos.add(this.crearPaso(PasoTitulacion.APROBACION_PLAN_TITULACION.getNombre(), 5,
+                /*
+                 * pasos.add(this.crearPaso(PasoTitulacion.CORRECCION_PLAN.getNombre(), 4,
+                 * "Realizar las correcciones del plan emitidas por el revisor",
+                 * Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0),
+                 * null,
+                 * ROL_ESTUDIANTE));
+                 */
+                pasos.add(this.crearPaso(PasoTitulacion.APROBACION_PLAN_TITULACION.getNombre(), 4,
                                 "Consejo de posgrado revisa el reporte positivo, aprueba el plan y designa tutor oficialmente",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_DIRECTOR)); // ROL CONSEJO POSGRADO sera administrado por la/el DIRECTOR
-                pasos.add(this.crearPaso(PasoTitulacion.DESARROLLO_PROYECTO.getNombre(), 6,
+                pasos.add(this.crearPaso(PasoTitulacion.DESARROLLO_PROYECTO.getNombre(), 5,
                                 "El estudiante desarrolla el proyecto y lo envia junto a documentos necesarios",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_ESTUDIANTE));
-                pasos.add(this.crearPaso(PasoTitulacion.GENERACION_REPORTE_ANTI_PLAGIO.getNombre(), 7,
+                pasos.add(this.crearPaso(PasoTitulacion.GENERACION_REPORTE_ANTI_PLAGIO.getNombre(), 6,
                                 "Secretaria gestiona el reporte de anti plagio y recopila los documentos",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_SECRETARIA));
-                pasos.add(this.crearPaso(PasoTitulacion.DESIGNACION_LECTORES.getNombre(), 8,
+                pasos.add(this.crearPaso(PasoTitulacion.DESIGNACION_LECTORES.getNombre(), 7,
                                 "Revisa la documentacion y designa los lectores",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_DIRECTOR));
 
-                pasos.add(this.crearPaso(PasoTitulacion.REVISION_LECTOR_1.getNombre(), 9,
+                pasos.add(this.crearPaso(PasoTitulacion.REVISION_LECTOR_1.getNombre(), 8,
                                 "El Lector 1 revisa el proyecto y emiten sus observaciones",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
-                                ROL_LECTOR));
-                pasos.add(this.crearPaso(PasoTitulacion.REVISION_LECTOR_2.getNombre(), 10,
+                                ROL_DOCENTE));
+                pasos.add(this.crearPaso(PasoTitulacion.REVISION_LECTOR_2.getNombre(), 9,
                                 "El Lector 2 revisan el proyecto y emiten sus observaciones",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
-                                ROL_LECTOR));
-                pasos.add(this.crearPaso(PasoTitulacion.CORRECCION_OBSERVACION_LECTORES.getNombre(), 11,
+                                ROL_DOCENTE));
+                pasos.add(this.crearPaso(PasoTitulacion.CORRECCION_OBSERVACION_LECTORES.getNombre(), 10,
                                 "Estudiante corrige las observaciones emitidas por los lectores",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_ESTUDIANTE));
-                pasos.add(this.crearPaso(PasoTitulacion.DOCUMENTACION_DEFENSA.getNombre(), 12,
+                pasos.add(this.crearPaso(PasoTitulacion.DOCUMENTACION_DEFENSA.getNombre(), 11,
                                 "El estudiante entrega la documentacion final para la defensa",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_ESTUDIANTE));
-                pasos.add(this.crearPaso(PasoTitulacion.DEFENSA.getNombre(), 13,
+                pasos.add(this.crearPaso(PasoTitulacion.DEFENSA.getNombre(), 12,
                                 "Secretaria coordina la defensa y se asigna un tribunal",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_SECRETARIA));

@@ -1,16 +1,37 @@
 package com.security.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import com.security.service.dto.PersonaDTO;
+import com.security.service.dto.PersonaTitulacionLigeroDTO;
+import com.security.service.dto.ProcesoTitulacionDTO;
+import com.security.service.dto.ProcesoTitulacionLigeroDTO;
 import com.security.service.dto.TitulacionResponsableNotaLigeroDTO;
-import com.security.service.dto.TitulacionTutorLigeroDTO;
+import com.security.service.dto.PersonaTitulacionLigeroDTO;
 
 public interface IProcesoTitulacionService {
 
-    public void insertarNotaPasoEspecifico(Integer idProcesoTitulacion,
-            TitulacionResponsableNotaLigeroDTO responsableNotaLigeroDTO);
+        public ProcesoTitulacionLigeroDTO actualizarProcesoTitulacion(Integer id,
+                        ProcesoTitulacionLigeroDTO procesoTitulacionDTO);
 
-    public void agregarTutorProcesoTitulacion(Integer idProcesoTitulacion, PersonaDTO personaTutorDTO);
+        public ProcesoTitulacionLigeroDTO obtenerProcesoTitulacion(Integer id);
 
-    public TitulacionTutorLigeroDTO buscarTutorProcesoTitulacion(Integer idProcesoTitulacion);
+        public void insertarNotaPasoEspecifico(Integer idProcesoTitulacion,
+                        TitulacionResponsableNotaLigeroDTO responsableNotaLigeroDTO);
+
+        public void agregarTutorProcesoTitulacion(Integer idProcesoTitulacion, PersonaDTO personaTutorDTO);
+
+        public PersonaTitulacionLigeroDTO buscarTutorProcesoTitulacion(Integer idProcesoTitulacion);
+
+        public void agregarPersonaTribunaUno(Integer idProcesoTitulacion, PersonaDTO personaTribunalUnoDTO);
+
+        public List<PersonaTitulacionLigeroDTO> buscarPersonasTribunal(Integer idProcesoTitulacion);
+
+        public void agregarPersonaTribunalDos(Integer idProcesoTitulacion, PersonaDTO personaTribunalDosDTO);
+
+        public void actualizarFechaDefensa(Integer idProcesoTitulacion, LocalDateTime fechaDefensa);
+
+        public LocalDateTime buscarFechaDefensa(Integer idProcesoTitulacion);
 
 }

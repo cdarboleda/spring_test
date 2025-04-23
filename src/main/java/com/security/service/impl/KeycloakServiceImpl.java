@@ -71,7 +71,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
         try {
             response = getKeycloak().users().create(user);
-            System.out.println("reponse: " + response);
+            System.out.println("reponse: " + response.getStatus());
 
             if (response.getStatus() != 201) {
                 return null;

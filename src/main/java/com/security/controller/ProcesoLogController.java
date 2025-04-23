@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.db.ProcesoLog;
+import com.security.service.IGestorProcesoLogService;
 import com.security.service.IProcesoLogService;
 
 @RestController
@@ -25,6 +26,9 @@ public class ProcesoLogController {
 
     @Autowired
     private IProcesoLogService procesoLogService;
+
+    @Autowired
+    private IGestorProcesoLogService gestorProcesoLogService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> insertar(@RequestBody ProcesoLog procesoLog) {
@@ -48,5 +52,11 @@ public class ProcesoLogController {
     // idPaso),
     // null, HttpStatus.OK);
     // }
+
+    @GetMapping(path = "/{id}/proceso/seguimiento-titulacion")
+    public ResponseEntity<?> obtenerLogProcesoFiltradoTitulacion(@PathVariable(name = "id") Integer id) {
+        return new ResponseEntity<>(this.gestorProcesoLogService.buscarLogProcesoFiltradoTitulacion(id), null,
+                HttpStatus.OK);
+    }
 
 }

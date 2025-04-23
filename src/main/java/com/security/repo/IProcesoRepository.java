@@ -31,14 +31,13 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
 
         @Query("SELECT new com.security.service.dto.MiProcesoDTO( " +
                         "p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, p.cancelado, " +
-                        "req.id, req.cedula, " +
+                        "req.id, req.cedula, req.nombre, req.apellido, " +
                         "paso.nombre, CAST(paso.estado AS string), paso.descripcionEstado, " +
                         "resp.id, resp.cedula) " +
                         "FROM Proceso p " +
                         "LEFT JOIN p.requiriente req " +
                         "LEFT JOIN p.pasos paso ON paso.estado = 'EN_CURSO' " +
                         "LEFT JOIN paso.responsable resp ")
-                        //+ "WHERE paso.estado = 'EN_CURSO'") 
         List<MiProcesoDTO> findMisProcesos();
 
         // Trae todos los procesos donde haya almenos un paso en el que yo sea
@@ -51,7 +50,8 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
         // Trae todos los procesos donde yo sea responsable de almenos uno, y tambien
         // busca el paso que sea EN_curso (messirve solito, pero quiza es demasiado sql)
         @Query("SELECT new com.security.service.dto.MiProcesoDTO" +
-                        "(p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, p.cancelado, req.id, req.cedula, " +
+                        "(p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, p.cancelado, req.id, req.cedula, "
+                        +
                         " pasoEnCurso.nombre, pasoEnCurso.responsable.id, pasoEnCurso.responsable.cedula) " +
                         "FROM Proceso p " +
                         "JOIN p.requiriente req " +

@@ -33,7 +33,7 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     @Autowired
     private Convertidor convertidor;
 
-    //Metodo para ingresar un nuevo registro de usuario
+    // Metodo para ingresar un nuevo registro de usuario
     @Override
     public PersonaDTO createUser(PersonaDTO personaDTO) {
 
@@ -53,9 +53,11 @@ public class GestorUsuarioImpl implements IGestorUsurio {
             try {
                 this.keycloakService.deleteUser(idUser); // Intentar eliminar en Keycloak
             } catch (Exception rollbackError) {
-                throw new RuntimeException("Error al insertar en la base de datos. Además, falló el rollback en Keycloak.", rollbackError);
+                throw new RuntimeException(
+                        "Error al insertar en la base de datos. Además, falló el rollback en Keycloak.", rollbackError);
             }
-            throw new RuntimeException("Error al insertar en la base de datos. Se ha revertido la creación en Keycloak.", e);
+            throw new RuntimeException(
+                    "Error al insertar en la base de datos. Se ha revertido la creación en Keycloak.", e);
         }
     }
 
@@ -114,7 +116,7 @@ public class GestorUsuarioImpl implements IGestorUsurio {
             }
 
             // Si la eliminación en la base de datos fue exitosa, proceder con Keycloak
-            boolean keycloakEliminado =  this.keycloakService.deleteUser(idKeycloak);
+            boolean keycloakEliminado = this.keycloakService.deleteUser(idKeycloak);
             System.out.println("Se eliminó de Keycloak exitosamente.");
             return keycloakEliminado;
 

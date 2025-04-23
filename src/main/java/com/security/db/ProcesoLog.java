@@ -20,7 +20,7 @@ public class ProcesoLog {
 
     @Id
     @Column(name = "proc_log_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="seq_proc_log")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_proc_log")
     @SequenceGenerator(name = "seq_proc_log", initialValue = 1, allocationSize = 1)
     private Integer id;
 
@@ -54,11 +54,14 @@ public class ProcesoLog {
 
     @Column(name = "proc_log_tipo_evento")
     private Evento tipoEvento;
-    
+
     @Column(name = "proc_log_paso_estado_descripcion")
     private String pasoEstadoDescripcion;
 
+    @Column(name = "proc_log_observacion")
+    private String pasoObservacion;
+
     @Column(name = "proc_log_fecha_cambio")
     private LocalDateTime fechaCambio;
-    
+
 }

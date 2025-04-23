@@ -50,14 +50,23 @@ public class ProcesoTitulacion {
     @Column(name = "titu_fecha_defensa")
     private LocalDateTime fechaDefensa;
 
+    @Column(name = "titu_nota_tribunal_1")
+    private Double notaTribunal1;
+
+    @Column(name = "titu_persona_tribunal_1")
+    private String personaTribunal1;
+
+    @Column(name = "titu_nota_tribunal_2")
+    private Double notaTribunal2;
+
+    @Column(name = "titu_persona_tribunal_2")
+    private String personaTribunal2;
+
     @Column(name = "titu_nota_lector_1")
     private Double notaLector1;
 
     @Column(name = "titu_nota_lector_2")
     private Double notaLector2;
-
-    @Column(name = "titu_nota_propuesta_proyecto")
-    private Double notaPropuestaProyecto;
 
     @Column(name = "titu_tutor_proyecto")
     private String tutorPoyecto;

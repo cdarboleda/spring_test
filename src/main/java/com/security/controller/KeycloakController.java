@@ -21,7 +21,7 @@ import com.security.service.dto.UserDTO;
 
 @RestController
 @RequestMapping("/keycloak/user")
-@PreAuthorize("hasAnyRole('administrador')")
+@PreAuthorize("hasAnyRole('administrador', 'secretaria')") // quitar rol secretaria (4/11/20205)
 public class KeycloakController {
 
     @Autowired

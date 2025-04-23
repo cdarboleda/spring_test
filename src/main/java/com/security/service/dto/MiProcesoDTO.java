@@ -19,6 +19,8 @@ public class MiProcesoDTO {
 
     private Integer requirienteId;
     private String requirienteCedula;
+    private String requirienteNombre;
+    private String requirienteApellido;
 
     private String pasoNombre;
     private String pasoEstado;
@@ -64,6 +66,8 @@ public MiProcesoDTO(){
         Boolean cancelado,
         Integer personaId,
         String personaCedula,
+        String personaNombre,
+        String personaApellido,
         String pasoNombre,
         String pasoEstado,
         String pasoDescripcionEstado,
@@ -77,6 +81,8 @@ public MiProcesoDTO(){
     this.cancelado = cancelado;
     this.requirienteId = personaId;
     this.requirienteCedula = personaCedula;
+    this.requirienteNombre = personaNombre;
+    this.requirienteApellido = personaApellido;
     this.pasoNombre = pasoNombre;
     this.pasoEstado = pasoEstado;
     this.pasoDescripcionEstado = pasoDescripcionEstado;

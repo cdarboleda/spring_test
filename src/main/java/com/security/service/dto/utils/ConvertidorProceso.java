@@ -28,8 +28,7 @@ public class ConvertidorProceso {
     public Object convertirACompletoDTO(Object procesoEspecifico) {
 
         ProcesoCompletoDTO procesoDTO = null;
-        System.out.println("----------------" + procesoEspecifico);
-        // Verificamos el tipo del proceso específico
+
         if (procesoEspecifico instanceof ProcesoPagoDocente) {
             ProcesoPagoDocente pagoDocente = (ProcesoPagoDocente) procesoEspecifico;
             procesoDTO = new ProcesoCompletoPagoDocenteDTO(pagoDocente);

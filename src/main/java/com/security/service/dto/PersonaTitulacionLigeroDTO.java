@@ -1,14 +1,20 @@
 package com.security.service.dto;
 
-import java.util.List;
-
 import lombok.Data;
 
 @Data
 public class PersonaTitulacionLigeroDTO {
 
+    private Integer idProceso;
     private Integer id;
-    private Integer procesoId;
-    List<String> roles;
+    private String nombre;
 
+    public PersonaTitulacionLigeroDTO() {
+    }
+
+    public PersonaTitulacionLigeroDTO(Integer id, String nombre) {
+
+        this.id = id;
+        this.nombre = nombre;
+    }
 }
