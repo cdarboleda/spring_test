@@ -7,5 +7,5 @@
     <p>Para completar el proceso de registro en XX y activar su cuenta, por favor haga click en el siguiente enlace:</p>
     <a href="${link}" target="_blank">Establecer contraseña</a>
     <p>Este link estará vigente durante <strong>${expirationHoursRounded} horas</strong></p>
-    <p>Si lo desea, una vez que haya activado su cuenta, podrá iniciar el proceso de pago en el Consejo de Posgado de la Facultad de Ingeniería y Ciencias Aplicadas de la UCE, desde http://localhost:8081</p>
+    <p>Si lo desea, una vez que haya activado su cuenta, podrá iniciar el proceso de pago en el Consejo de Posgado de la Facultad de Ingeniería y Ciencias Aplicadas de la UCE, desde https://vue-app.whiteocean-0e11a556.westus.azurecontainerapps.io</p>
 </#macro>
