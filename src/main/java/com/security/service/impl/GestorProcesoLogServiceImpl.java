@@ -15,6 +15,7 @@ import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.ProcesoLog;
 import com.security.db.enums.Evento;
+import com.security.db.enums.PasoTitulacion;
 import com.security.service.IGestorProcesoLogService;
 import com.security.service.IPersonaService;
 import com.security.service.IProcesoLogService;
@@ -138,7 +139,12 @@ public class GestorProcesoLogServiceImpl implements IGestorProcesoLogService {
                     ProcesoLogDTO siguiente = listProcesoLog.get(j);
 
                     if (siguiente.getPasoOrden() == actual.getPasoOrden() + 1) {
-                        if (!"FINALIZADO".equalsIgnoreCase(siguiente.getPasoEstado())) {
+                        if (!"FINALIZADO".equalsIgnoreCase(siguiente.getPasoEstado())
+                                && !PasoTitulacion.APROBACION_PLAN_TITULACION.toString().equalsIgnoreCase(actual.getPasoNombre())
+                                && !PasoTitulacion.DESIGNACION_LECTORES.toString().equalsIgnoreCase(actual.getPasoNombre())
+                                && !PasoTitulacion.REVISION_LECTOR_1.toString().equalsIgnoreCase(actual.getPasoNombre())
+                                && !PasoTitulacion.REVISION_LECTOR_1.toString().equalsIgnoreCase(actual.getPasoNombre())
+                                && !PasoTitulacion.CORRECCION_OBSERVACION_LECTORES.toString().equalsIgnoreCase(actual.getPasoNombre())) {
                             actual.setPasoEstadoDescripcion("Enviado");
                         }
                         break; // Ya encontramos el siguiente paso, salimos

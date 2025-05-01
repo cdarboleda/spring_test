@@ -26,6 +26,7 @@ import com.security.service.dto.ProcesoTitulacionDTO;
 import com.security.service.dto.ProcesoTitulacionLigeroDTO;
 import com.security.service.dto.TitulacionResponsableNotaLigeroDTO;
 import com.security.service.dto.PersonaTitulacionLigeroDTO;
+import com.security.service.dto.ProcesoCompletoTitulacionDTO;
 import com.security.service.dto.ProcesoDTO;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,7 +65,6 @@ public class ProcesoTitulacionController {
         Jwt jwt = (Jwt) authentication.getPrincipal();
 
         String email = jwt.getClaim("email");
-        System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ: " + email);
         return ResponseEntity.ok(this.gestorPersonaServiceImpl.getDatosPersonaByEmail(email));
     }
 
@@ -98,7 +98,9 @@ public class ProcesoTitulacionController {
         System.out.println("inscipcion....... " + procesoTitulacionDTO.getTipoProceso());
         try {
             // Reutiliza la lógica del servicio para insertar un proceso de titulación
-            this.gestorProcesoService.insert(procesoTitulacionDTO);
+            ProcesoCompletoTitulacionDTO proceso = (ProcesoCompletoTitulacionDTO) this.gestorProcesoService
+                    .insert(procesoTitulacionDTO);
+            this.procesoTitulacionService.asignarSecretariaAlproceso(proceso);
             return ResponseEntity.ok("Proceso de titulación creado con éxito.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

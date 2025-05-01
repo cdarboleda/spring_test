@@ -5,12 +5,16 @@ import java.util.List;
 
 import com.security.service.dto.PersonaDTO;
 import com.security.service.dto.PersonaTitulacionLigeroDTO;
+import com.security.service.dto.ProcesoCompletoTitulacionDTO;
 import com.security.service.dto.ProcesoTitulacionDTO;
 import com.security.service.dto.ProcesoTitulacionLigeroDTO;
 import com.security.service.dto.TitulacionResponsableNotaLigeroDTO;
-import com.security.service.dto.PersonaTitulacionLigeroDTO;
 
 public interface IProcesoTitulacionService {
+
+        public Object insertarProcesoTitulacion(ProcesoTitulacionDTO procesoTitulacionDTO);
+
+        public void asignarSecretariaAlproceso(ProcesoCompletoTitulacionDTO proceso);
 
         public ProcesoTitulacionLigeroDTO actualizarProcesoTitulacion(Integer id,
                         ProcesoTitulacionLigeroDTO procesoTitulacionDTO);

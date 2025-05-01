@@ -28,6 +28,7 @@ import com.security.repo.IProcesoPagoDocenteRepository;
 import com.security.repo.IProcesoRepository;
 import com.security.repo.IProcesoTitulacionRepository;
 import com.security.service.IGestorPasoService;
+import com.security.service.IGestorPersonaService;
 import com.security.service.IGestorProcesoLogService;
 import com.security.service.IGestorProcesoService;
 import com.security.service.IPasoService;

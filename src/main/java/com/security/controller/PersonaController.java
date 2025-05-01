@@ -1,6 +1,7 @@
 package com.security.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -130,8 +131,17 @@ public class PersonaController {
     }
 
     @GetMapping(path = "/roles/{rol}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> buscarPorRol(@PathVariable String rol) {
-        return new ResponseEntity<>(this.gestorPersonaService.findPersonasByRol(rol), HttpStatus.OK);
+    public ResponseEntity<?> buscarPorRol(@PathVariable String rol,
+            @RequestParam(required = false) List<Integer> excluirIds) {
+
+        List<Persona> personas = this.gestorPersonaService.findPersonasByRol(rol);
+        if (excluirIds != null && !excluirIds.isEmpty()) {
+            personas = personas.stream()
+                    .filter(p -> !excluirIds.contains(p.getId()))
+                    .collect(Collectors.toList());
+        }
+
+        return new ResponseEntity<>(personas, HttpStatus.OK);
     }
 
 }

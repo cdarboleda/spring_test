@@ -68,8 +68,8 @@ public class ProcesoTitulacion {
     @Column(name = "titu_nota_lector_2")
     private Double notaLector2;
 
-    @Column(name = "titu_tutor_proyecto")
-    private String tutorPoyecto;
+    @Column(name = "titu_tutor_id")
+    private Integer tutorId;
 
     @OneToMany(mappedBy = "procesoTitulacion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore

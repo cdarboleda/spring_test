@@ -181,7 +181,6 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
     public List<Persona> findPersonasByRol(String nombreRol) {
 
         Optional<Rol> rol = this.rolService.buscarPorNombre(nombreRol);
-        System.out.println("rol LLEGO AL BACK: " + rol);
         if (rol.isEmpty()) {
             throw new CustomException("No existe el rol con nombre: " + nombreRol, HttpStatus.BAD_REQUEST);
         } else {

@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.service.IGestorPasoService;
+import com.security.service.IGestorValidacionesService;
 import com.security.service.IPasoService;
 import com.security.service.dto.PasoDTO;
 
@@ -28,6 +30,8 @@ public class PasoController {
     private IPasoService pasoService;
     @Autowired
     private IGestorPasoService gestorPasoService;
+    @Autowired
+    private IGestorValidacionesService gestorValidacionesService;
 
     /*
      * @GetMapping(path = "/{proceso}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -96,6 +100,12 @@ public class PasoController {
     @GetMapping(path = "/proceso/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarPorIdProceso(@PathVariable Integer id) {
         return new ResponseEntity<>(this.pasoService.findByProcesoId(id), null, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{id}/validar-responsable/{idPersona}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> validarUsuarioResponsablePaso(@PathVariable(name = "id") Integer id,
+            @PathVariable(name = "idPersona") Integer idPersona) {
+        return new ResponseEntity<>(this.gestorValidacionesService.validarAccionPaso(id, idPersona), HttpStatus.OK);
     }
 
 }

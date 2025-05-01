@@ -16,10 +16,15 @@ import com.security.db.ProcesoTitulacion;
 import com.security.db.enums.PasoTitulacion;
 import com.security.repo.IPersonaRepository;
 import com.security.repo.IProcesoTitulacionRepository;
+import com.security.service.IGestorPasoService;
+import com.security.service.IGestorPersonaService;
+import com.security.service.IGestorProcesoService;
 import com.security.service.IProcesoTitulacionService;
+import com.security.service.dto.PasoDTO;
 import com.security.service.dto.PersonaDTO;
 import com.security.service.dto.TitulacionResponsableNotaLigeroDTO;
 import com.security.service.dto.PersonaTitulacionLigeroDTO;
+import com.security.service.dto.ProcesoCompletoTitulacionDTO;
 import com.security.service.dto.ProcesoTitulacionDTO;
 import com.security.service.dto.ProcesoTitulacionLigeroDTO;
 
@@ -27,20 +32,58 @@ import com.security.service.dto.ProcesoTitulacionLigeroDTO;
 @Transactional
 public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
 
-        private final ConvertidorProcesoTitulacion convertidorProcesoTitulacion;
-
-        private final Convertidor convertidor;
-
         @Autowired
         private IProcesoTitulacionRepository procesoTitulacionRepository;
 
         @Autowired
         private IPersonaRepository personaRepository;
 
-        ProcesoTitulacionServiceImpl(Convertidor convertidor,
-                        ConvertidorProcesoTitulacion convertidorProcesoTitulacion) {
-                this.convertidor = convertidor;
-                this.convertidorProcesoTitulacion = convertidorProcesoTitulacion;
+        @Autowired
+        private IGestorProcesoService gestorProcesoService;
+
+        @Autowired
+        private IGestorPasoService gestorPasoService;
+
+        @Autowired
+        private IGestorPersonaService gestorPersonaService;
+
+        private final static String ROL_SECRETARIA = "SECRETARIA";
+
+        @Override
+        public Object insertarProcesoTitulacion(ProcesoTitulacionDTO procesoTitulacionDTO) {
+                // Insertar el proceso
+                ProcesoCompletoTitulacionDTO proceso = (ProcesoCompletoTitulacionDTO) gestorProcesoService
+                                .insert(procesoTitulacionDTO);
+
+                // Retornar el proceso creado, si es necesario
+                return proceso;
+        }
+
+        @Transactional
+        public void asignarSecretariaAlproceso(ProcesoCompletoTitulacionDTO proceso) {
+                // Verificar que el proceso tiene pasos
+                if (proceso.getPasos() == null || proceso.getPasos().isEmpty()) {
+                        throw new IllegalStateException("El proceso no tiene pasos definidos.");
+                }
+
+                // Paso con orden 2
+                PasoDTO paso2 = proceso.getPasos().stream()
+                                .filter(p -> p.getOrden() == 2)
+                                .findFirst()
+                                .orElseThrow(() -> new IllegalStateException("No se encontró el paso con orden 2."));
+
+                // Obtener secretaria activa
+                Persona secretaria = gestorPersonaService.findPersonasByRol("SECRETARIA").stream()
+                                .filter(Persona::getActivo)
+                                .findFirst()
+                                .orElseThrow(() -> new IllegalStateException("No hay secretaria activa."));
+
+                // Actualizar responsable
+                this.gestorPasoService.updatePasoResponsable(paso2.getId(), secretaria.getId());
+
+                System.out.println("Paso actualizado con responsable: " + secretaria.getNombre() + " al paso "
+                                + paso2.getId());
+
         }
 
         @Override
@@ -82,8 +125,7 @@ public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
                 // .ifPresent(procesoExistente::setNotaPropuestaProyecto);
                 Optional.ofNullable(procesoTitulacionDTO.getNotaLector1()).ifPresent(procesoExistente::setNotaLector1);
                 Optional.ofNullable(procesoTitulacionDTO.getNotaLector2()).ifPresent(procesoExistente::setNotaLector2);
-                Optional.ofNullable(procesoTitulacionDTO.getTutorPoyecto())
-                                .ifPresent(procesoExistente::setTutorPoyecto);
+                Optional.ofNullable(procesoTitulacionDTO.getTutorId()).ifPresent(procesoExistente::setTutorId);
                 Optional.ofNullable(procesoTitulacionDTO.getGrupo()).ifPresent(procesoExistente::setGrupo);
 
                 Optional.ofNullable(procesoTitulacionDTO.getNotaTribunal1())
@@ -162,7 +204,7 @@ public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
                                 .orElseThrow(() -> new EntityNotFoundException(
                                                 "Tutor con id: " + personatutorDTO.getId() + " no encontrado"));
 
-                procesoTitu.setTutorPoyecto(persona.getNombre() + " " + persona.getApellido());
+                procesoTitu.setTutorId(persona.getId());
 
                 procesoTitulacionRepository.save(procesoTitu);
         }
@@ -172,8 +214,15 @@ public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
 
                 ProcesoTitulacion procesoTitu = this.procesoTitulacionRepository.findById(idProcesoTitulacion)
                                 .orElseThrow(() -> new EntityNotFoundException("Proceso de titulación no encontrado"));
+
+                Persona persona = this.personaRepository.findById(procesoTitu.getTutorId())
+                                .orElseThrow(() -> new EntityNotFoundException(
+                                                "No existe un tutor en el proceso de titulación"));
+
                 PersonaTitulacionLigeroDTO tutorLigeroDTO = new PersonaTitulacionLigeroDTO();
-                tutorLigeroDTO.setNombre(procesoTitu.getTutorPoyecto());
+
+                tutorLigeroDTO.setId(procesoTitu.getTutorId());
+                tutorLigeroDTO.setNombre(persona.getNombre() + " " + persona.getApellido());
                 tutorLigeroDTO.setIdProceso(procesoTitu.getId());
 
                 return tutorLigeroDTO;
