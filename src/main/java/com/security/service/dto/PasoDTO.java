@@ -1,6 +1,6 @@
 package com.security.service.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import lombok.Data;
 
@@ -10,9 +10,9 @@ public class PasoDTO {
     private String nombre;
     private Integer orden;
     private String descripcionEstado;
-    private LocalDateTime fechaInicio;
+    private Instant fechaInicio;
     private String estado;
-    private LocalDateTime fechaFin;
+    private Instant fechaFin;
     private String observacion;
     private String rol;
 
@@ -34,7 +34,7 @@ public class PasoDTO {
         this.rol = rol;
     }
 
-    public PasoDTO(String nombre, String estado, String descripcionEstado, LocalDateTime fechaInicio,
+    public PasoDTO(String nombre, String estado, String descripcionEstado, Instant fechaInicio,
             Integer responsableId, String responsableCedula) {
 
         this.nombre = nombre;
@@ -45,7 +45,7 @@ public class PasoDTO {
         this.responsableCedula = responsableCedula;
     }
 
-    public PasoDTO(String nombre, String estado, String descripcionEstado, LocalDateTime fechaInicio,
+    public PasoDTO(String nombre, String estado, String descripcionEstado, Instant fechaInicio,
             Integer responsableId, String responsableCedula, String responsableCorreo) {
 
         this.nombre = nombre;

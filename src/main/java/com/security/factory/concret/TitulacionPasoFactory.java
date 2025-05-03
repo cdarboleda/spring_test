@@ -1,6 +1,6 @@
 package com.security.factory.concret;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class TitulacionPasoFactory implements IPasoFactory {
     public List<PasoDTO> generatePasos() {
         List<PasoDTO> pasos = new ArrayList<>();
         pasos.add(this.crearPaso("titu_paso1", 1, 
-         Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), LocalDateTime.now(),"estudiante"));
+         Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), Instant.now(),"estudiante"));
         pasos.add(this.crearPaso("titu_paso2", 2,  
         Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,"secretaria"));
         return pasos;
@@ -33,7 +33,7 @@ public class TitulacionPasoFactory implements IPasoFactory {
             Integer orden, 
             Estado estado, 
             String descripcionEstado,
-            LocalDateTime fechaInicio,
+            Instant fechaInicio,
             String rol) {
                 
         PasoDTO paso = new PasoDTO();

@@ -3,6 +3,7 @@ package com.security.config;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -25,6 +26,9 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationConverter authenticationConverter;
 
+    @Value("${frontend.url}")
+    private String frontendURL;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -43,8 +47,8 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        //configuration.setAllowedOrigins(List.of("http://localhost:8081")); // Cambia por la URL de tu frontend
-        configuration.setAllowedOrigins(List.of("https://vue-app.whiteocean-0e11a556.westus.azurecontainerapps.io")); // Cambia por la URL de tu frontend
+        configuration.setAllowedOrigins(List.of(frontendURL)); // Cambia por la URL de tu frontend
+        // configuration.setAllowedOrigins(List.of("https://vue-app.whiteocean-0e11a556.westus.azurecontainerapps.io")); // Cambia por la URL de tu frontend
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);

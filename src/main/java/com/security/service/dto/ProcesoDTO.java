@@ -1,21 +1,17 @@
 package com.security.service.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 // import jakarta.validation.constraints.NotEmpty;
 // import org.hibernate.validator.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 @JsonTypeInfo(
@@ -40,8 +36,8 @@ public class ProcesoDTO {
     @Min(value = 1)
     private Integer requirienteId;
     private String descripcion;
-    private LocalDateTime fechaInicio;
-    private LocalDateTime fechaFin;//Solo serviria cuando vamos a actualizar el final
+    private Instant fechaInicio;
+    private Instant fechaFin;//Solo serviria cuando vamos a actualizar el final
     private Boolean finalizado;//Solo serviria cuando vamos a actualizar el final
     private Boolean cancelado;
     // public ProcesoDTO() {} // Constructor vacío necesario

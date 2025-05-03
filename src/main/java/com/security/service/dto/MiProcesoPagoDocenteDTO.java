@@ -1,7 +1,7 @@
 package com.security.service.dto;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import com.security.db.enums.TipoProceso;
 
@@ -23,12 +23,12 @@ public class MiProcesoPagoDocenteDTO extends MiProcesoDTO {
     private String cohorte;
 
     public MiProcesoPagoDocenteDTO(
-            Integer procesoId, TipoProceso tipoProceso, LocalDateTime fechaInicio,
-            LocalDateTime fechaFin, Boolean finalizado, Boolean cancelado,
+            Integer procesoId, TipoProceso tipoProceso, Instant fechaInicio,
+            Instant fechaFin, Boolean finalizado, Boolean cancelado,
             Integer requirienteId, String requirienteCedula,
             String requirienteNombre, String requirienteApellido,
             String pasoNombre, String pasoEstado, String pasoDescripcionEstado,
-            LocalDateTime pasoFechaInicio, Integer responsablePasoId,
+            Instant pasoFechaInicio, Integer responsablePasoId,
             String responsableCedula, String materiaCodigo, String materiaNombre, String maestriaCodigo,
             String maestriaNombre, LocalDate fechaInicioClase, LocalDate fechaFinClase, String cohorte) {
 

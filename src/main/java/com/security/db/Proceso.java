@@ -1,6 +1,6 @@
 package com.security.db;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,7 +18,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
@@ -34,10 +33,10 @@ public class Proceso {
     private Integer id;
 
     @Column(name = "proc_fecha_inicio")
-    private LocalDateTime fechaInicio;
+    private Instant fechaInicio;
 
     @Column(name = "proc_fecha_fin")
-    private LocalDateTime fechaFin;
+    private Instant fechaFin;
 
     @Column(name = "proc_finalizado")
     private Boolean finalizado;// = false;

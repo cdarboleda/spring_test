@@ -1,6 +1,6 @@
 package com.security.service.impl;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class ProcesoLogServiceImpl implements IProcesoLogService{
 
     @Override
     public ProcesoLog insert(ProcesoLog procesoLog) {
-        procesoLog.setFechaCambio(LocalDateTime.now());
+        procesoLog.setFechaCambio(Instant.now());
         return this.procesoLogRepository.save(procesoLog);
     }
 

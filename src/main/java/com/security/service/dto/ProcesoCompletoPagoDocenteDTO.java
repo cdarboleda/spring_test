@@ -1,7 +1,6 @@
 package com.security.service.dto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import com.security.db.Materia;
 import com.security.db.ProcesoPagoDocente;

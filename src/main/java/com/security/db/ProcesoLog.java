@@ -1,6 +1,6 @@
 package com.security.db;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import com.security.db.enums.Evento;
 
@@ -52,6 +52,6 @@ public class ProcesoLog {
     private String pasoEstadoDescripcion;
 
     @Column(name = "proc_log_fecha_cambio")
-    private LocalDateTime fechaCambio;
+    private Instant fechaCambio;
     
 }

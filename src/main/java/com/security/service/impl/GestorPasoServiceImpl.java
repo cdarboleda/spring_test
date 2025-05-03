@@ -1,6 +1,6 @@
 package com.security.service.impl;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -116,9 +116,9 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
                 : pasoDTO.getDescripcionEstado());
 
         if (pasoDTO.getEstado().equalsIgnoreCase("FINALIZADO")) {
-            paso.setFechaFin(LocalDateTime.now());
+            paso.setFechaFin(Instant.now());
         } else if (pasoDTO.getEstado().equalsIgnoreCase("EN_CURSO")) {
-            paso.setFechaInicio(LocalDateTime.now());
+            paso.setFechaInicio(Instant.now());
             paso.setFechaFin(null);
         } else if (pasoDTO.getEstado().equalsIgnoreCase("PENDIENTE")) {
             paso.setFechaInicio(null);

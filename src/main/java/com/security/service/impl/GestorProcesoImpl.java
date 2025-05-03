@@ -1,6 +1,6 @@
 package com.security.service.impl;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -142,7 +142,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         Proceso proceso = new Proceso();
         proceso.setFinalizado(false);
         proceso.setCancelado(false);
-        proceso.setFechaInicio(LocalDateTime.now());
+        proceso.setFechaInicio(Instant.now());
         proceso.setTipoProceso(TipoProceso.valueOf(procesoDTO.getTipoProceso()));
         Persona requiriente = this.personaService.findById(procesoDTO.getRequirienteId());
         proceso.setRequiriente(requiriente);

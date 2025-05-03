@@ -1,6 +1,6 @@
 package com.security.factory.concret;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class PagoDocentePasoFactory implements IPasoFactory {
     }
 
     private PasoDTO crearPasoPrimero(String nombrePaso, String rol){
-        return this.crearPaso(nombrePaso, 1, Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), LocalDateTime.now(), rol);
+        return this.crearPaso(nombrePaso, 1, Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), Instant.now(), rol);
     }
 
     private PasoDTO crearPasoDefault(String nombrePaso, Integer orden, String rol){
@@ -49,7 +49,7 @@ public class PagoDocentePasoFactory implements IPasoFactory {
             Integer orden,
             Estado estado,
             String descripcionEstado,
-            LocalDateTime fechaInicio,
+            Instant fechaInicio,
             String rol) {
 
         PasoDTO paso = new PasoDTO();

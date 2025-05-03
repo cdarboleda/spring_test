@@ -1,9 +1,7 @@
 package com.security.service.dto;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
-import com.security.db.enums.Estado;
 import com.security.db.enums.TipoProceso;
 
 import lombok.Data;
@@ -12,8 +10,8 @@ import lombok.Data;
 public class MiProcesoDTO {
     private Integer procesoId;
     private TipoProceso tipoProceso;
-    private LocalDateTime fechaInicio;
-    private LocalDateTime fechaFin;
+    private Instant fechaInicio;
+    private Instant fechaFin;
     private Boolean finalizado;
     private Boolean cancelado;
 
@@ -25,19 +23,19 @@ public class MiProcesoDTO {
     private String pasoNombre;
     private String pasoEstado;
     private String pasoDescripcionEstado;
-    private LocalDateTime pasoFechaInicio;
+    private Instant pasoFechaInicio;
     private Integer responsablePasoId;
     private String responsableCedula;
 
     public MiProcesoDTO() { }
 
     public MiProcesoDTO(
-            Integer procesoId, TipoProceso tipoProceso, LocalDateTime fechaInicio,
-            LocalDateTime fechaFin, Boolean finalizado, Boolean cancelado,
+            Integer procesoId, TipoProceso tipoProceso, Instant fechaInicio,
+            Instant fechaFin, Boolean finalizado, Boolean cancelado,
             Integer requirienteId, String requirienteCedula,
             String requirienteNombre, String requirienteApellido,
             String pasoNombre, String pasoEstado, String pasoDescripcionEstado,
-            LocalDateTime pasoFechaInicio, Integer responsablePasoId,
+            Instant pasoFechaInicio, Integer responsablePasoId,
             String responsableCedula) {
         this.procesoId = procesoId;
         this.tipoProceso = tipoProceso;

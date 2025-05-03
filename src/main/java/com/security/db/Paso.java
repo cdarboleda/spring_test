@@ -1,6 +1,6 @@
 package com.security.db;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,13 +42,13 @@ public class Paso {
     private String descripcionEstado;
 
     @Column(name = "paso_fecha_inicio")
-    private LocalDateTime fechaInicio;
+    private Instant fechaInicio;
 
     @Column(name = "paso_estado", nullable = false)
     private Estado estado;
 
     @Column(name = "paso_fecha_fin")
-    private LocalDateTime fechaFin;
+    private Instant fechaFin;
 
     @Column(name = "paso_observacion")
     private String observacion;

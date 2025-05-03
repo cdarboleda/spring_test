@@ -1,6 +1,6 @@
 package com.security.service.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import com.security.db.ObservacionLector;
@@ -16,7 +16,7 @@ public class ProcesoCompletoTitulacionDTO extends ProcesoCompletoDTO{
     
     private Boolean grupo;
     private Double calificacionFinal;
-    private LocalDateTime fechaDefensa;
+    private Instant fechaDefensa;
     private Double notaLector1;
     private Double notaLector2;
     private List<ObservacionLector> observaciones;

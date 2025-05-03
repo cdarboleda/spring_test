@@ -1,6 +1,6 @@
 package com.security.factory.concret;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class ProcesoGenerico implements IPasoFactory {
     public List<PasoDTO> generatePasos() {
         List<PasoDTO> pasos = new ArrayList<>();
         pasos.add(this.crearPaso("Paso 1", 1,
-        Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), LocalDateTime.now()));
+        Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), Instant.now()));
 
         return pasos;
     }
@@ -33,7 +33,7 @@ public class ProcesoGenerico implements IPasoFactory {
             Integer orden, 
             Estado estado, 
             String descripcionEstado,
-            LocalDateTime fechaInicio) {
+            Instant fechaInicio) {
                 
         PasoDTO paso = new PasoDTO();
         paso.setNombre(nombre);

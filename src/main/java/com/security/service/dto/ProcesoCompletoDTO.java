@@ -1,9 +1,7 @@
 package com.security.service.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
-
-import com.security.db.Paso;
 
 import lombok.Data;
 
@@ -14,8 +12,8 @@ public class ProcesoCompletoDTO{
     private Integer id;
     private String descripcion;
     private String tipoProceso;
-    private LocalDateTime fechaInicio;
-    private LocalDateTime fechaFin;
+    private Instant fechaInicio;
+    private Instant fechaFin;
     private Boolean finalizado;
     private List<CarpetaDocumentoLigeroDTO> carpetasDocumento;
     private PersonaLigeroDTO requiriente;
