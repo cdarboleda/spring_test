@@ -27,7 +27,7 @@
             </#if>
         </#if>
     </div>
-    <p><a href="https://vue-app.whiteocean-0e11a556.westus.azurecontainerapps.io">${kcSanitize(msg("backToApplication"))?no_esc}</a></p>
+    <p><a href="https://vue-app.wittybeach-29ed0ec7.westus.azurecontainerapps.io">${kcSanitize(msg("backToApplication"))?no_esc}</a></p>
     </#if>
        
 
