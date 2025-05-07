@@ -5,9 +5,8 @@
     <meta charset="UTF-8">
     <title>Proceso Finalizado</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@500&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
         body {
-            font-family: "League Spartan", sans-serif;
+            font-family: sans-serif;
             padding: 20px;
             background-color: #f4f4f4;
             color: rgba(22, 24, 35, 0.75);
@@ -27,30 +26,52 @@
             height: 80px;
         }
 
-        h2 {
+        h2,
+        h1 {
             text-align: center;
         }
 
         .saludo {
             margin-top: 20px;
+            font-size: 0.75rem;
+            line-height: 1rem;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <img class="logo" src="https://posgrado-fica-uce.netlify.app/img/logo-posgrado.0df946c7.png" alt="Logo posgrado">
+        <img class="logo" src="https://posgrado-fica-uce.netlify.app/img/logo-posgrado.0df946c7.png"
+            alt="Logo posgrado">
+        <h1>Sistema de Gestión de Procesos SIGEPRO Consejo de Posgrado</h1>
         <h2>Notificación de Proceso Finalizado</h2>
+        <br>
+        <p>Saludos <strong th:text="${requirienteNombre} + ' ' + ${requirienteApellido}">Nombre Apellido</strong>,</p>
 
-        <p>Hola <strong th:text="${requirienteNombre} + ' ' + ${requirienteApellido}">Nombre Apellido</strong>,</p>
+        <p>Le informamos que el Proceso Pago Docente #<strong th:text="${procesoId}">123</strong> ha sido
+            <strong>FINALIZADO CON ÉXITO</strong>.</p>
 
-        <p>Le informamos que el proceso Pago Docente con ID <strong th:text="${procesoId}">123</strong> ha sido <strong>FINALIZADO CON ÉXITO</strong>.</p>
-
-        <p><strong>Cédula:</strong> <span th:text="${requirienteCedula}">0000000</span></p>
+        <!-- <p><strong>Cédula:</strong> <span th:text="${requirienteCedula}">0000000</span></p> -->
         <p><strong>Fecha:</strong> <span th:text="${fecha}">2024-04-20</span></p>
 
+        <br>
+        <p>Si necesita ayuda con su cuenta, por favor envíe un e-mail a <a style="display:inline;"
+                href="fing.consejo.posgrado@uce.edu.ec" target="_blank">fing.consejo.posgrado@uce.edu.ec</a></p>
+
+        <p>Muchas gracias.
+            <br>
+            Cordialmente<br><br>
+            Equipo de soporte<br>
+            <hr>
         <div class="saludo">
-            <p>Saludos cordiales,<br>Equipo de Posgrado</p>
+            <!-- <p>Saludos,<br>Equipo de Posgrado</p> -->
+            Facultad de Ingeneiría y Ciencias Aplicadas<br>
+            Ubicación: Ciudadela Universitaria, Edificio de Aulas de la Facultad de Ingeniería y Ciencias Aplicadas,
+            Cuarto Piso<br>
+            Mapa: <a style="display:inline;" href="https://maps.app.goo.gl/n1QtFFtyyYdXRpEC9" target="_blank">Dirección
+                en Google Maps</a><br>
+            Teléfonos: (593-02) 2551 270 / (593-02) 3216975 / +593 98 374 7088<br>
+            </p>
         </div>
     </div>
 </body>

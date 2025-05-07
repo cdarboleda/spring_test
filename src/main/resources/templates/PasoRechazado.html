@@ -5,48 +5,40 @@
     <meta charset="UTF-8">
     <title>Paso rechazado</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@500&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-        *{
+        * {
             box-sizing: border-box;
         }
-        body {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            align-items: center;
-            font-family: "League Spartan", sans-serif;
-            font-size: 16px;
-        }
 
-        .container {
-            max-width: 1200px;
-            width: 450px;
+        body {
+            font-family: sans-serif;
             padding: 20px;
             background-color: #f4f4f4;
-            border-radius: 10px;
             color: rgba(22, 24, 35, 0.75);
         }
 
-        .container__logo {
-            display: flex;
-            width: 100%;
-            /* margin: 1rem 0; */
-            font-family: "Roboto", sans-serif;
-            /* background-color: #e0e0e0; */
-            /* padding: 1rem; */
-            text-align: center;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
         }
 
         .logo {
             display: block;
-            height: 100px;
-            width: 100px;
-            margin: 0 auto;
+            margin: 0 auto 20px;
+            height: 80px;
         }
 
-        .saludos {
-            font-weight: 100;
-            font-size: 0.9rem;
+        h2,
+        h1 {
+            text-align: center;
+        }
+
+        .saludo {
+            margin-top: 20px;
+            font-size: 0.75rem;
+            line-height: 1rem;
         }
 
         /* p { font-size: 16px; } */
@@ -55,29 +47,48 @@
 
 <body>
     <div class="container">
-        <div class="container__logo">
-            <!-- <h2>Notificación Dirección de Posgrado</h2> -->
-            <!-- <img class="logo" src="./assets/logo-posgrado-sd.png" alt="Logo posgrado"> -->
-            <img class="logo" src="https://posgrado-fica-uce.netlify.app/img/logo-posgrado.0df946c7.png" alt="Logo posgrado">
-        </div>
-        <p>Hola <span th:text="${responsableNombre}"></span>,</p>
+        <img class="logo" src="https://posgrado-fica-uce.netlify.app/img/logo-posgrado.0df946c7.png"
+            alt="Logo posgrado">
+        <h1>Sistema de Gestión de Procesos SIGEPRO Consejo de Posgrado</h1>
+        <h2>Notificación de Paso Rechazado</h2>
         <br>
-        <p>Información sobre el Proceso #<span th:text="${procesoId}"></span> - <span th:text="${tipoProceso}"></span>:</p>
-        <p>El paso: "<strong th:text="${pasoNombre}"></strong>", ha sido
-            <strong>RECHAZADO</strong>.</p>
+        <p>Saludos <strong th:text="${requirienteNombre} + ' ' + ${requirienteApellido}">Nombre Apellido</strong></p>
+
+        <p>Información sobre el Proceso #<strong th:text="${procesoId}">45</strong> - <span
+                th:text="${tipoProceso}">Pago Docente</span></p>
+
+        <p>El paso: "<strong th:text="${pasoNombre}">Enviar documentación</strong>", ha sido
+            <strong>RECHAZADO</strong>.
+        </p>
         <br>
-        <p>OBSERVACIONES</p>
+        <p><strong>OBSERVACIONES</strong></p>
         <div th:if="${observaciones != null and not #lists.isEmpty(observaciones)}">
             <ul>
                 <li th:each="item : ${observaciones}" th:text="${item}"></li>
             </ul>
-            <p>Debe corregir las observaciones y volver a subir la documentación correcta, para poder continuar al siguiente paso.</p>
+            <p>Debe corregir las observaciones y volver a subir la documentación correcta, para poder continuar
+                al siguiente paso.</p>
         </div>
         <p th:unless="${observaciones != null and not #lists.isEmpty(observaciones)}">No hay observaciones.</p>
         <br>
-        <div class="saludos">
-            <p>Saludos,<br>Equipo de Posgrado</p>
 
+        <p>Si necesita ayuda con su cuenta, por favor envíe un e-mail a <a style="display:inline;"
+                href="fing.consejo.posgrado@uce.edu.ec" target="_blank">fing.consejo.posgrado@uce.edu.ec</a></p>
+
+        <p>Muchas gracias.
+            <br>
+            Cordialmente<br><br>
+            Equipo de soporte<br>
+            <hr>
+        <div class="saludo">
+            <!-- <p>Saludos,<br>Equipo de Posgrado</p> -->
+            Facultad de Ingeneiría y Ciencias Aplicadas<br>
+            Ubicación: Ciudadela Universitaria, Edificio de Aulas de la Facultad de Ingeniería y Ciencias Aplicadas,
+            Cuarto Piso<br>
+            Mapa: <a style="display:inline;" href="https://maps.app.goo.gl/n1QtFFtyyYdXRpEC9" target="_blank">Dirección
+                en Google Maps</a><br>
+            Teléfonos: (593-02) 2551 270 / (593-02) 3216975 / +593 98 374 7088<br>
+            </p>
         </div>
     </div>
 </body>
