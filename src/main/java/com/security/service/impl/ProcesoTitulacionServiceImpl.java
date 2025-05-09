@@ -47,7 +47,7 @@ public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
         @Autowired
         private IGestorPersonaService gestorPersonaService;
 
-        private final static String ROL_SECRETARIA = "SECRETARIA";
+        private final static String ROL_SECRETARIA = "secretaria";
 
         @Override
         public Object insertarProcesoTitulacion(ProcesoTitulacionDTO procesoTitulacionDTO) {
@@ -73,7 +73,7 @@ public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
                                 .orElseThrow(() -> new IllegalStateException("No se encontró el paso con orden 2."));
 
                 // Obtener secretaria activa
-                Persona secretaria = gestorPersonaService.findPersonasByRol("SECRETARIA").stream()
+                Persona secretaria = gestorPersonaService.findPersonasByRol(ROL_SECRETARIA).stream()
                                 .filter(Persona::getActivo)
                                 .findFirst()
                                 .orElseThrow(() -> new IllegalStateException("No hay secretaria activa."));
@@ -119,8 +119,10 @@ public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
 
                 Optional.ofNullable(procesoTitulacionDTO.getCalificacionFinal())
                                 .ifPresent(procesoExistente::setCalificacionFinal);
-                Optional.ofNullable(procesoTitulacionDTO.getFechaDefensa())
-                                .ifPresent(procesoExistente::setFechaDefensa);
+
+                                //hacer a lguna comprobacion parq no inserte null al inicio
+                procesoExistente.setFechaDefensa(procesoTitulacionDTO.getFechaDefensa());
+
                 // Optional.ofNullable(procesoTitulacionDTO.getNotaPropuestaProyecto())
                 // .ifPresent(procesoExistente::setNotaPropuestaProyecto);
                 Optional.ofNullable(procesoTitulacionDTO.getNotaLector1()).ifPresent(procesoExistente::setNotaLector1);
@@ -136,6 +138,8 @@ public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
                                 .ifPresent(procesoExistente::setNotaTribunal2);
                 Optional.ofNullable(procesoTitulacionDTO.getPersonaTribunal2())
                                 .ifPresent(procesoExistente::setPersonaTribunal2);
+                Optional.ofNullable(procesoTitulacionDTO.getNotaTribunal3())
+                                .ifPresent(procesoExistente::setNotaTribunal3);
 
                 // Guardar cambios
                 procesoTitulacionRepository.save(procesoExistente);
@@ -145,6 +149,7 @@ public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
                 return procesoDTO;
         }
 
+        // PUEDE SE Q YA NO HAGA FALTA ESTE METODO
         public void insertarNotaPasoEspecifico(
                         Integer idProcesoTitulacion, TitulacionResponsableNotaLigeroDTO responsableNotaLigeroDTO) {
 

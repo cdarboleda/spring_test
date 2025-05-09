@@ -59,6 +59,9 @@ public class ProcesoTitulacion {
     @Column(name = "titu_nota_tribunal_2")
     private Double notaTribunal2;
 
+    @Column(name = "titu_nota_tribunal_3")
+    private Double notaTribunal3;
+
     @Column(name = "titu_persona_tribunal_2")
     private String personaTribunal2;
 

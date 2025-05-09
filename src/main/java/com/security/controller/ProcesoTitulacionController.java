@@ -40,145 +40,155 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/titulacion")
 public class ProcesoTitulacionController {
 
-    @Autowired
-    private GestorPersonaServiceImpl gestorPersonaServiceImpl;
+        @Autowired
+        private GestorPersonaServiceImpl gestorPersonaServiceImpl;
 
-    @Autowired
-    private IPersonaService personaService;
+        @Autowired
+        private IPersonaService personaService;
 
-    @Autowired
-    private IProcesoService procesoService;
+        @Autowired
+        private IProcesoService procesoService;
 
-    @Autowired
-    private IGestorProcesoService gestorProcesoService;
+        @Autowired
+        private IGestorProcesoService gestorProcesoService;
 
-    @Autowired
-    private IProcesoTitulacionService procesoTitulacionService;
+        @Autowired
+        private IProcesoTitulacionService procesoTitulacionService;
 
-    @Autowired
-    private IGestorProcesoTitulacionService gestorProcesoTitulacionService;
+        @Autowired
+        private IGestorProcesoTitulacionService gestorProcesoTitulacionService;
 
-    // opbtiene los datos de la persona "logeada" a partir del email del token de
-    // Keycloak
-    @GetMapping(path = "/datos-personales", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PersonaLigeroDTO> obtenerDatosPersonales(Authentication authentication) {
-        Jwt jwt = (Jwt) authentication.getPrincipal();
+        // opbtiene los datos de la persona "logeada" a partir del email del token de
+        // Keycloak
+        @GetMapping(path = "/datos-personales", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<PersonaLigeroDTO> obtenerDatosPersonales(Authentication authentication) {
+                Jwt jwt = (Jwt) authentication.getPrincipal();
 
-        String email = jwt.getClaim("email");
-        return ResponseEntity.ok(this.gestorPersonaServiceImpl.getDatosPersonaByEmail(email));
-    }
-
-    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> actualizarProcesoTitulacion(@PathVariable(name = "id") Integer id,
-            @RequestBody ProcesoTitulacionLigeroDTO procesoTitulacionDTO) {
-
-        return new ResponseEntity<>(this.procesoTitulacionService.actualizarProcesoTitulacion(id, procesoTitulacionDTO),
-                HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> obtenerProcesoTitulacion(@PathVariable(name = "id") Integer id) {
-        return new ResponseEntity<>(this.procesoTitulacionService.obtenerProcesoTitulacion(id),
-                HttpStatus.OK);
-    }
-
-    // busca una persona (rol-estudiante) a partir de su email para agregarlo a un
-    // proceso de titulacion grupal
-    @GetMapping(path = "/buscar-persona", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> agregarCompaniero(String email) {
-
-        return new ResponseEntity<>(this.personaService.findByEmail(email), HttpStatus.OK);
-
-    }
-
-    // inserta un proceso de titulacion e inicializa todos los valores en las tablas
-    // asociadas
-    @PostMapping("/inscripcion")
-    public ResponseEntity<String> inscribirProceso(@RequestBody ProcesoTitulacionDTO procesoTitulacionDTO) {
-        System.out.println("inscipcion....... " + procesoTitulacionDTO.getTipoProceso());
-        try {
-            // Reutiliza la lógica del servicio para insertar un proceso de titulación
-            ProcesoCompletoTitulacionDTO proceso = (ProcesoCompletoTitulacionDTO) this.gestorProcesoService
-                    .insert(procesoTitulacionDTO);
-            this.procesoTitulacionService.asignarSecretariaAlproceso(proceso);
-            return ResponseEntity.ok("Proceso de titulación creado con éxito.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al crear el proceso: " + e.getMessage());
+                String email = jwt.getClaim("email");
+                return ResponseEntity.ok(this.gestorPersonaServiceImpl.getDatosPersonaByEmail(email));
         }
-    }
 
-    @GetMapping(path = "/{id}/paso/{nombre}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> obtenerResponsableNotaPasoEspecifico(@PathVariable(name = "id") Integer id,
-            @PathVariable(name = "nombre") String nombre) {
-        return new ResponseEntity<>(this.gestorProcesoTitulacionService.buscarResponsableNotaPaso(id, nombre),
-                HttpStatus.OK);
-    }
+        @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<?> actualizarProcesoTitulacion(@PathVariable(name = "id") Integer id,
+                        @RequestBody ProcesoTitulacionLigeroDTO procesoTitulacionDTO) {
 
-    @PostMapping(path = "/{id}/calificacion", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> insertarCalificacionPasoEspecifico(
-            @PathVariable Integer id,
-            @RequestBody TitulacionResponsableNotaLigeroDTO responsableNotaLigeroDTO) {
+                return new ResponseEntity<>(
+                                this.procesoTitulacionService.actualizarProcesoTitulacion(id, procesoTitulacionDTO),
+                                HttpStatus.OK);
+        }
 
-        this.procesoTitulacionService.insertarNotaPasoEspecifico(id, responsableNotaLigeroDTO);
-        return ResponseEntity.ok("El proceso de Tituacion con id: " + id + " se guardo correctamente en el paso: "
-                + responsableNotaLigeroDTO.getNombrePaso());
-    }
+        @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<?> obtenerProcesoTitulacion(@PathVariable(name = "id") Integer id) {
+                return new ResponseEntity<>(this.procesoTitulacionService.obtenerProcesoTitulacion(id),
+                                HttpStatus.OK);
+        }
 
-    @GetMapping(path = "/{id}/tutor", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> obtenerDatosTutorTitulacion(@PathVariable(name = "id") Integer id) {
-        return new ResponseEntity<>(this.procesoTitulacionService.buscarTutorProcesoTitulacion(id),
-                HttpStatus.OK);
-    }
+        // busca una persona (rol-estudiante) a partir de su email para agregarlo a un
+        // proceso de titulacion grupal
+        // @GetMapping(path = "/buscar-persona", produces =
+        // MediaType.APPLICATION_JSON_VALUE)
+        // public ResponseEntity<?> agregarCompaniero(String email) {
 
-    @PostMapping(path = "/{id}/tutor", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> insertarTutorTitulacion(@PathVariable Integer id,
-            @RequestBody PersonaDTO personaTutorDTO) {
+        // return new ResponseEntity<>(this.personaService.findByEmail(email),
+        // HttpStatus.OK);
 
-        this.procesoTitulacionService.agregarTutorProcesoTitulacion(id, personaTutorDTO);
-        return ResponseEntity
-                .ok("El tutor: " + personaTutorDTO.getNombre() + " " + personaTutorDTO.getApellido()
-                        + " se insertor correctamente en el proceso de Tituacion con id: " + id);
-    }
+        // }
 
-    @GetMapping(path = "/{id}/tribunal", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> obtenerPersonaTribunalUno(@PathVariable(name = "id") Integer id) {
-        return new ResponseEntity<>(this.procesoTitulacionService.buscarPersonasTribunal(id),
-                HttpStatus.OK);
-    }
+        // inserta un proceso de titulacion e inicializa todos los valores en las tablas
+        // asociadas
+        @PostMapping("/inscripcion")
+        public ResponseEntity<String> inscribirProceso(@RequestBody ProcesoTitulacionDTO procesoTitulacionDTO) {
+                System.out.println("inscipcion....... " + procesoTitulacionDTO);
+                try {
+                        // Reutiliza la lógica del servicio para insertar un proceso de titulación
+                        ProcesoCompletoTitulacionDTO proceso = (ProcesoCompletoTitulacionDTO) this.gestorProcesoService
+                                        .insert(procesoTitulacionDTO);
+                        this.procesoTitulacionService.asignarSecretariaAlproceso(proceso);
+                        return ResponseEntity.ok("Proceso de titulación creado con éxito.");
+                } catch (Exception e) {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                        .body("Error al crear el proceso: " + e.getMessage());
+                }
+        }
 
-    @PostMapping(path = "/{id}/tribunal-uno", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> insertarPersonaTribunalUno(@PathVariable Integer id,
-            @RequestBody PersonaDTO personaTribunalUnoDto) {
+        @GetMapping(path = "/{id}/paso/{nombre}", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<?> obtenerResponsableNotaPasoEspecifico(@PathVariable(name = "id") Integer id,
+                        @PathVariable(name = "nombre") String nombre) {
+                return new ResponseEntity<>(this.gestorProcesoTitulacionService.buscarResponsableNotaPaso(id, nombre),
+                                HttpStatus.OK);
+        }
 
-        this.procesoTitulacionService.agregarPersonaTribunaUno(id, personaTribunalUnoDto);
-        return ResponseEntity
-                .ok("La persona: " + personaTribunalUnoDto.getNombre() + " " + personaTribunalUnoDto.getApellido()
-                        + " se insertor correctamente en el proceso de Tituacion con id: " + id);
-    }
+        @PostMapping(path = "/{id}/calificacion", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<?> insertarCalificacionPasoEspecifico(
+                        @PathVariable Integer id,
+                        @RequestBody TitulacionResponsableNotaLigeroDTO responsableNotaLigeroDTO) {
 
-    @PostMapping(path = "/{id}/tribunal-dos", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> insertarPersonaTribunalDos(@PathVariable Integer id,
-            @RequestBody PersonaDTO personaTribunalDosDto) {
+                this.procesoTitulacionService.insertarNotaPasoEspecifico(id, responsableNotaLigeroDTO);
+                return ResponseEntity
+                                .ok("El proceso de Tituacion con id: " + id + " se guardo correctamente en el paso: "
+                                                + responsableNotaLigeroDTO.getNombrePaso());
+        }
 
-        this.procesoTitulacionService.agregarPersonaTribunalDos(id, personaTribunalDosDto);
-        return ResponseEntity
-                .ok("La persona: " + personaTribunalDosDto.getNombre() + " " + personaTribunalDosDto.getApellido()
-                        + " se insertor correctamente en el proceso de Tituacion con id: " + id);
-    }
+        @GetMapping(path = "/{id}/tutor", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<?> obtenerDatosTutorTitulacion(@PathVariable(name = "id") Integer id) {
+                return new ResponseEntity<>(this.procesoTitulacionService.buscarTutorProcesoTitulacion(id),
+                                HttpStatus.OK);
+        }
 
-    @PutMapping(path = "/{id}/fecha-defensa/{fecha}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> actualizarFechaDefensa(@PathVariable(name = "id") Integer id,
-            @PathVariable(name = "fecha") LocalDateTime fechaDefensa) {
-        this.procesoTitulacionService.actualizarFechaDefensa(id, fechaDefensa);
-        return ResponseEntity
-                .ok("La fecha de defensa se actualizo correctamente en el proceso de Tituacion con id: " + id);
-    }
+        @PostMapping(path = "/{id}/tutor", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<?> insertarTutorTitulacion(@PathVariable Integer id,
+                        @RequestBody PersonaDTO personaTutorDTO) {
 
-    @GetMapping(path = "/{id}/fecha-defensa", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> obtenerFechaDefensa(@PathVariable(name = "id") Integer id) {
-        return new ResponseEntity<>(this.procesoTitulacionService.buscarFechaDefensa(id),
-                HttpStatus.OK);
-    }
+                this.procesoTitulacionService.agregarTutorProcesoTitulacion(id, personaTutorDTO);
+                return ResponseEntity
+                                .ok("El tutor: " + personaTutorDTO.getNombre() + " " + personaTutorDTO.getApellido()
+                                                + " se insertor correctamente en el proceso de Tituacion con id: "
+                                                + id);
+        }
+
+        @GetMapping(path = "/{id}/tribunal", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<?> obtenerPersonaTribunalUno(@PathVariable(name = "id") Integer id) {
+                return new ResponseEntity<>(this.procesoTitulacionService.buscarPersonasTribunal(id),
+                                HttpStatus.OK);
+        }
+
+        @PostMapping(path = "/{id}/tribunal-uno", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<?> insertarPersonaTribunalUno(@PathVariable Integer id,
+                        @RequestBody PersonaDTO personaTribunalUnoDto) {
+
+                this.procesoTitulacionService.agregarPersonaTribunaUno(id, personaTribunalUnoDto);
+                return ResponseEntity
+                                .ok("La persona: " + personaTribunalUnoDto.getNombre() + " "
+                                                + personaTribunalUnoDto.getApellido()
+                                                + " se insertor correctamente en el proceso de Tituacion con id: "
+                                                + id);
+        }
+
+        @PostMapping(path = "/{id}/tribunal-dos", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<?> insertarPersonaTribunalDos(@PathVariable Integer id,
+                        @RequestBody PersonaDTO personaTribunalDosDto) {
+
+                this.procesoTitulacionService.agregarPersonaTribunalDos(id, personaTribunalDosDto);
+                return ResponseEntity
+                                .ok("La persona: " + personaTribunalDosDto.getNombre() + " "
+                                                + personaTribunalDosDto.getApellido()
+                                                + " se insertor correctamente en el proceso de Tituacion con id: "
+                                                + id);
+        }
+
+        @PutMapping(path = "/{id}/fecha-defensa/{fecha}", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<?> actualizarFechaDefensa(@PathVariable(name = "id") Integer id,
+                        @PathVariable(name = "fecha") LocalDateTime fechaDefensa) {
+                this.procesoTitulacionService.actualizarFechaDefensa(id, fechaDefensa);
+                return ResponseEntity
+                                .ok("La fecha de defensa se actualizo correctamente en el proceso de Tituacion con id: "
+                                                + id);
+        }
+
+        @GetMapping(path = "/{id}/fecha-defensa", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<?> obtenerFechaDefensa(@PathVariable(name = "id") Integer id) {
+                return new ResponseEntity<>(this.procesoTitulacionService.buscarFechaDefensa(id),
+                                HttpStatus.OK);
+        }
 
 }

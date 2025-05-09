@@ -37,6 +37,7 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     @Override
     public PersonaDTO createUser(PersonaDTO personaDTO) {
 
+        System.out.println("personaDTooooooooooooooooooooooO: " + personaDTO);
         String idUser = this.keycloakService.createUser(
                 personaDTO.getCedula(),
                 personaDTO.getCorreo(),

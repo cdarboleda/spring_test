@@ -22,6 +22,7 @@ public class ConvertidorProcesoTitulacion {
         ProcesoTitulacionLigeroDTO.setPersonaTribunal1(procesoTitulacion.getPersonaTribunal1());
         ProcesoTitulacionLigeroDTO.setNotaTribunal2(procesoTitulacion.getNotaTribunal2());
         ProcesoTitulacionLigeroDTO.setPersonaTribunal2(procesoTitulacion.getPersonaTribunal2());
+        ProcesoTitulacionLigeroDTO.setNotaTribunal3(procesoTitulacion.getNotaTribunal3());
         ProcesoTitulacionLigeroDTO.setTutorId(procesoTitulacion.getTutorId());
         // ProcesoTitulacionLigeroDTO.setNotaPropuestaProyecto(procesoTitulacion.getNotaPropuestaProyecto());
 

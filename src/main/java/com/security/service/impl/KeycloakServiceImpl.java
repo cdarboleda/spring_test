@@ -59,7 +59,8 @@ public class KeycloakServiceImpl implements IKeycloakService {
     @Override
     public String createUser(String username, String email, List<String> rolesToAssign) {
         // Usar un Set para evitar roles duplicados
-        Set<String> keycloakRolesToAssign = mapRolesToKeycloakRoles(rolesToAssign);
+        System.out.println("antessssssssssssssssss: " + rolesToAssign);
+        // Set<String> keycloakRolesToAssign = mapRolesToKeycloakRoles(rolesToAssign);
 
         UserRepresentation user = new UserRepresentation();
         user.setUsername(username);
@@ -67,39 +68,52 @@ public class KeycloakServiceImpl implements IKeycloakService {
         user.setEnabled(true);
         user.setEmailVerified(true);
 
-        // Crear el usuario en Keycloak
         Response response = null;
         String userId = null;
+
         try {
+            // Crear el usuario
             response = getKeycloak().users().create(user);
+
+            if (response.getStatus() != 201) {
+                throw new RuntimeException("Error al crear el usuario: " + response.getStatusInfo());
+            }
+
             userId = response.getLocation().getPath()
                     .substring(response.getLocation().getPath().lastIndexOf("/") + 1);
 
+            System.out.println("userId: " + userId);
+
             List<RoleRepresentation> roles = getClientRoles().stream()
-                    .filter(role -> keycloakRolesToAssign.contains(role.getName()))
+                    .filter(role -> rolesToAssign.contains(role.getName()))
                     .collect(Collectors.toList());
 
+            System.out.println("Roles que se asignarán al usuario: " + roles);
+
+            // Asignar roles al usuario (nivel de cliente o realm, según corresponda)
             assignRolesToUser(userId, roles);
 
-            // Enviar correo para que el usuario configure su contraseña
+            // (Opcional) Enviar correo para que el usuario configure su contraseña
             keycloakProvider.getKeycloak()
-            .realm(realmName)
-            .users()
-            .get(userId)
-            .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
+                    .realm(realmName)
+                    .users()
+                    .get(userId)
+                    .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
 
             return userId;
 
         } catch (Exception e) {
-            //return null;
-            this.deleteUser(userId);
+            // Si hubo error, eliminar el usuario creado parcialmente
+            if (userId != null) {
+                this.deleteUser(userId);
+            }
             throw new RuntimeException("Error al crear el usuario en Keycloak en createUser de KeycloakService", e);
+
         } finally {
             if (response != null) {
                 response.close(); // Cerrar la respuesta para evitar fugas
             }
         }
-
     }
 
     @Override
@@ -180,11 +194,11 @@ public class KeycloakServiceImpl implements IKeycloakService {
     @Override
     public String updateUserRoles(String userId, List<String> newRoles) {
 
-        Set<String> keycloakRolesToAssign = mapRolesToKeycloakRoles(newRoles);
+        // Set<String> keycloakRolesToAssign = mapRolesToKeycloakRoles(newRoles);
 
         List<RoleRepresentation> availableRoles = getClientRoles();
         List<RoleRepresentation> rolesToAssign = availableRoles.stream()
-                .filter(role -> keycloakRolesToAssign.contains(role.getName()))
+                .filter(role -> newRoles.contains(role.getName()))
                 .collect(Collectors.toList());
 
         List<RoleRepresentation> currentRoles = getUserClientRoles(userId);
@@ -194,16 +208,16 @@ public class KeycloakServiceImpl implements IKeycloakService {
         return "Roles del usuario actualizados con éxito";
     }
 
-    private Set<String> mapRolesToKeycloakRoles(List<String> roles) {
-        Set<String> keycloakRoles = new HashSet<>();
-        for (String role : roles) {
-            if ("secretaria".equalsIgnoreCase(role)) {
-                keycloakRoles.add("administrador");
-            } else {
-                keycloakRoles.add("usuario");
-            }
-        }
-        return keycloakRoles;
-    }
+    // private Set<String> mapRolesToKeycloakRoles(List<String> roles) {
+    // Set<String> keycloakRoles = new HashSet<>();
+    // for (String role : roles) {
+    // if ("secretaria".equalsIgnoreCase(role)) {
+    // keycloakRoles.add("administrador");
+    // } else {
+    // keycloakRoles.add("usuario");
+    // }
+    // }
+    // return keycloakRoles;
+    // }
 
 }

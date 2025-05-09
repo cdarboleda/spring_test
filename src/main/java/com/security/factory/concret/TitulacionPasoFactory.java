@@ -21,11 +21,11 @@ import jakarta.transaction.Transactional;
 @Component
 public class TitulacionPasoFactory implements IPasoFactory {
 
-        private static final String ROL_ESTUDIANTE = "ESTUDIANTE";
-        private static final String ROL_DOCENTE = "DOCENTE";
+        private static final String ROL_ESTUDIANTE = "estudiante";
+        private static final String ROL_DOCENTE = "docente";
         // private static final String ROL_LECTOR = "LECTOR";
-        private static final String ROL_SECRETARIA = "SECRETARIA";
-        private static final String ROL_DIRECTOR = "DIRECTOR";
+        private static final String ROL_SECRETARIA = "secretaria";
+        private static final String ROL_DIRECTOR = "director";
 
         @Override
         @Transactional
@@ -34,7 +34,7 @@ public class TitulacionPasoFactory implements IPasoFactory {
                 pasos.add(this.crearPaso(PasoTitulacion.REGISTRO_PROYECTO.getNombre(), 1,
                                 "Se registra la propuesta de proyecto",
                                 Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0),
-                                LocalDateTime.now(), "ESTUDIANTE"));
+                                LocalDateTime.now(), ROL_ESTUDIANTE));
                 pasos.add(this.crearPaso(PasoTitulacion.REVISION_DOCUMENTACION.getNombre(), 2,
                                 "Secretaria revisa la documentacion y asigna un docente revisor",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0),
