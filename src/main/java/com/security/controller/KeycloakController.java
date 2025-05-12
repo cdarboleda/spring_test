@@ -34,7 +34,7 @@ public class KeycloakController {
 
     @PostMapping("/create")
     public String createUser(@RequestBody UserDTO dto) {
-        return iKeycloakService.createUser(dto.getUsername(), dto.getEmail(), dto.getRoles());
+        return iKeycloakService.createUser(dto.getUsername(), dto.getEmail(), dto.getRoles(), null, null);
     }
 
 }

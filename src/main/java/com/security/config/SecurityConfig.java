@@ -35,7 +35,16 @@ public class SecurityConfig {
         return httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(http -> http.anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> auth
+                    // Permitir acceso libre a Swagger UI y documentación OpenAPI
+                    .requestMatchers(
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui.html"
+                    ).permitAll()
+                    // Todo lo demás requiere autenticación
+                    .anyRequest().authenticated()
+                )
                 .oauth2ResourceServer(oauth -> {
                     oauth.jwt(jwt -> {
                         jwt.jwtAuthenticationConverter(authenticationConverter);

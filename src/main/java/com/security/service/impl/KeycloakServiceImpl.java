@@ -57,13 +57,21 @@ public class KeycloakServiceImpl implements IKeycloakService {
     }
 
     @Override
-    public String createUser(String username, String email, List<String> rolesToAssign) {
+    public String createUser(String username, String email, List<String> rolesToAssign, String firstName, String lastName ) {
         // Usar un Set para evitar roles duplicados
         Set<String> keycloakRolesToAssign = mapRolesToKeycloakRoles(rolesToAssign);
+
+        System.out.println("-------------------------------------------------");
+        System.out.println("username: "+ username);
+        System.out.println("username: "+ email);
+        System.out.println("username: "+ firstName);
+        System.out.println("username: "+ lastName);
 
         UserRepresentation user = new UserRepresentation();
         user.setUsername(username);
         user.setEmail(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setEnabled(true);
         user.setEmailVerified(true);
 
@@ -151,10 +159,10 @@ public class KeycloakServiceImpl implements IKeycloakService {
         }
     }
 
-    public Boolean updateUser(String userId, String username, String email, List<String> rolesToAssign) {
+    public Boolean updateUser(String userId, String email, List<String> rolesToAssign, String firstName, String lastName) {
         System.out.println(userId + " " + email + " " + rolesToAssign.toString());
         try {
-            String updateDetailsMessage = updateUserDetails(userId, username, email);
+            String updateDetailsMessage = updateUserDetails(userId, email, firstName, lastName);
             System.out.println(updateDetailsMessage);
 
             String updateRolesMessage = updateUserRoles(userId, rolesToAssign);
@@ -168,10 +176,11 @@ public class KeycloakServiceImpl implements IKeycloakService {
     }
 
     @Override
-    public String updateUserDetails(String userId, String newUsername, String newEmail) {
+    public String updateUserDetails(String userId, String newEmail, String firstName, String lastName) {
         UserRepresentation user = getKeycloak().users().get(userId).toRepresentation();
-        user.setUsername(newUsername);
         user.setEmail(newEmail);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
 
         getKeycloak().users().get(userId).update(user);
         return "Detalles del usuario actualizados con éxito";

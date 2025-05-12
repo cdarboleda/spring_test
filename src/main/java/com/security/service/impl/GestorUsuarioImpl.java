@@ -38,10 +38,14 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     //Metodo para ingresar un nuevo registro de usuario
     @Override
     public PersonaDTO createUser(PersonaDTO personaDTO) {
+
         String idUser = this.keycloakService.createUser(
             personaDTO.getCedula(),
             personaDTO.getCorreo(),
-            personaDTO.getRoles());
+            personaDTO.getRoles(),
+            personaDTO.getNombre(),
+            personaDTO.getApellido());
+
             personaDTO.setIdKeycloak(idUser);
             
             return this.gestorPersonaService.insertar(personaDTO);
@@ -65,15 +69,21 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     @Override
     public Boolean updateUser(PersonaDTO personaDTO) {
         try {
-            PersonaDTO dto = this.convertidor.convertirAPersonaDTO(this.gestorPersonaService.actualizar(personaDTO));
 
-            System.out.println(dto);
+            boolean estado = this.keycloakService.updateUser(
+                personaDTO.getIdKeycloak(),
+                personaDTO.getCorreo(),
+                personaDTO.getRoles(),
+                personaDTO.getNombre(),
+                personaDTO.getApellido());
 
-            return this.keycloakService.updateUser(
-                    dto.getIdKeycloak(),
-                    dto.getCedula(),
-                    dto.getCorreo(),
-                    dto.getRoles());
+
+            if(estado){
+                this.gestorPersonaService.actualizar(personaDTO);
+            }
+
+
+            return estado;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
