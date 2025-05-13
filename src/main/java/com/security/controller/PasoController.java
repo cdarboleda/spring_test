@@ -109,21 +109,24 @@ public class PasoController {
     @PutMapping(path = "/rechazar/{idPasoActual}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('administrador', 'usuario')")
     public ResponseEntity<?> rechazarPaso(@PathVariable(name = "idPasoActual") Integer idPasoActual,
-    @RequestBody(required = false)  PasoDTO pasoAnteriorDTO,
-    @RequestParam (name = "observacionesString") String observacionesString) {
-        return new ResponseEntity<>(this.gestorPasoService.rechazarPaso(idPasoActual, pasoAnteriorDTO, observacionesString),
+            @RequestBody(required = false) PasoDTO pasoAnteriorDTO,
+            @RequestParam(name = "observacionesString") String observacionesString,
+            @RequestParam(name = "maestria") String maestria, @RequestParam(name = "materia") String materia) {
+        return new ResponseEntity<>(
+                this.gestorPasoService.rechazarPaso(idPasoActual, pasoAnteriorDTO, observacionesString, maestria, materia),
                 HttpStatus.OK);
     }
 
-    //esto es del paso Anterior
-    //responsableNombre, responsableCorreo, procesoId, tipoProceso, pasoNombre, observaciones
+    // esto es del paso Anterior
+    // responsableNombre, responsableCorreo, procesoId, tipoProceso, pasoNombre,
+    // observaciones
     @Autowired
     private EmailPasoRechazado emailPasoRechazado;
 
     // @PostMapping("/send")
     // public String sendEmail() {
-    //     return this.emailPasoRechazado.send("vavabisga@gmail.com", "Subir documentación del Docente", 45);
+    // return this.emailPasoRechazado.send("vavabisga@gmail.com", "Subir
+    // documentación del Docente", 45);
     // }
-
 
 }

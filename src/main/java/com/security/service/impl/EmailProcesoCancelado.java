@@ -37,12 +37,16 @@ public class EmailProcesoCancelado {
             String requirienteCedula = persona.getCedula();
             String fecha = data.get("fecha").toString();
             String[] motivo = data.get("motivo").toString().split(";");
+            String materia = data.get("materia").toString();
+            String maestria = data.get("maestria").toString();
 
             Map<String, Object> variables = new HashMap<>();
             variables.put("procesoId", procesoId);
             variables.put("requirienteNombre", requirienteNombre);
             variables.put("requirienteApellido", requirienteApellido);
             variables.put("requirienteCedula", requirienteCedula);
+            variables.put("materia", materia);
+            variables.put("maestria", maestria);
             variables.put("fecha", fecha);
             variables.put("motivo", motivo);
 

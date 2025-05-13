@@ -60,6 +60,10 @@
         <p>El paso: "<strong th:text="${pasoNombre}">Enviar documentación</strong>", ha sido
             <strong>RECHAZADO</strong>.
         </p>
+
+        <p><strong>Maestria:</strong> <span th:text="${maestria}">aaa</span></p> 
+        
+        <p><strong>Materia:</strong> <span th:text="${materia}">bbb</span></p>
         <br>
         <p><strong>OBSERVACIONES</strong></p>
         <div th:if="${observaciones != null and not #lists.isEmpty(observaciones)}">
@@ -76,7 +80,7 @@
             href="mailto:fing.consejo.posgrado@uce.edu.ec" target="_blank">fing.consejo.posgrado@uce.edu.ec</a></p>
 
         <p>
-            Cordialmente<br><br>
+            Cordialmente<br>
             Equipo de soporte<br>
             <hr>
         <div class="saludo">

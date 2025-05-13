@@ -17,6 +17,8 @@ public class EmailPasoRechazado {
 
     private List<String> observaciones = null;
     private PasoDTO paso;
+    private String maestria;
+    private String materia;
 
     @Autowired
     private EmailService emailService;
@@ -31,6 +33,8 @@ public class EmailPasoRechazado {
             variables.put("responsableApellido", paso.getResponsableApellido());
             variables.put("responsableCorreo", paso.getResponsableCorreo());
             variables.put("observaciones", observaciones);
+            variables.put("maestria", maestria);
+            variables.put("materia", materia);
         System.out.println("paso.responsableCorreo()"+ paso.getResponsableCorreo());
             try {
                 this.emailService.sendEmail("PasoRechazado", paso.getResponsableCorreo(), "Proceso # "+paso.getIdProceso()+": Un paso ha sido rechazado", variables);
@@ -43,10 +47,12 @@ public class EmailPasoRechazado {
     }
 
     @Async
-    public void send(PasoDTO paso, List<String> observaciones){
+    public void send(PasoDTO paso, List<String> observaciones, String maestria, String materia){
         this.paso = paso;
         System.out.println("el paso: "+paso );
         this.observaciones = observaciones;
+        this.materia = materia;
+        this.maestria = maestria;
         this.useSend();
     }
 

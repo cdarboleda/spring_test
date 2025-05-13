@@ -9,8 +9,6 @@ import lombok.Data;
 public class MateriaDTO {
     private Integer id;
 
-    private String codigo;
-
     private String nombre;
 
     private Integer periodo;

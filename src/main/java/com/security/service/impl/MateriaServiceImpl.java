@@ -54,7 +54,6 @@ public class MateriaServiceImpl implements IMateriaService {
     @Override
     public MateriaTablaDTO update(MateriaDTO materiaDTO) {
         Materia materia = this.findById(materiaDTO.getId());
-        materia.setCodigo(materiaDTO.getCodigo());
         materia.setNombre(materiaDTO.getNombre());
         materia.setPeriodo(materiaDTO.getPeriodo());
         Maestria maestria = this.maestriaRepository

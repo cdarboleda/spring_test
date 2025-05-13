@@ -153,7 +153,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     }
 
     @Override
-    public List<Paso> rechazarPaso(Integer idPasoActual, PasoDTO pasoAnteriorDTO, String observacionesString) {
+    public List<Paso> rechazarPaso(Integer idPasoActual, PasoDTO pasoAnteriorDTO, String observacionesString, String maestria, String materia) {
         PasoDTO pasoActualDTO = new PasoDTO();
         pasoActualDTO.setEstado(Estado.PENDIENTE.toString());
         // pasoActualDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 1));// este 
@@ -182,7 +182,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
             pasos.add(pasoAnterior);
 
             //la notificacion, deshabilitada por el momento hasta tener correos validos
-            this.emailPasoRechazado.send(pasoAnteriorDTO, observaciones);
+            this.emailPasoRechazado.send(pasoAnteriorDTO, observaciones, maestria, materia);
         }
         
         return pasos;

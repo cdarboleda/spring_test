@@ -12,7 +12,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class MiProcesoPagoDocenteDTO extends MiProcesoDTO {
 
-    private String materiaCodigo;
     private String maestriaCodigo;
     private String materiaNombre;
     private String maestriaNombre;
@@ -29,7 +28,7 @@ public class MiProcesoPagoDocenteDTO extends MiProcesoDTO {
             String requirienteNombre, String requirienteApellido,
             String pasoNombre, String pasoEstado, String pasoDescripcionEstado,
             Instant pasoFechaInicio, Integer responsablePasoId,
-            String responsableCedula, String materiaCodigo, String materiaNombre, String maestriaCodigo,
+            String responsableCedula, String materiaNombre, String maestriaCodigo,
             String maestriaNombre, LocalDate fechaInicioClase, LocalDate fechaFinClase, String cohorte) {
 
         super(procesoId, tipoProceso, fechaInicio, fechaFin, finalizado, cancelado,
@@ -37,7 +36,6 @@ public class MiProcesoPagoDocenteDTO extends MiProcesoDTO {
                 pasoNombre, pasoEstado, pasoDescripcionEstado, pasoFechaInicio,
                 responsablePasoId, responsableCedula);
 
-        this.materiaCodigo = materiaCodigo;
         this.materiaNombre = materiaNombre;
         this.maestriaCodigo = maestriaCodigo;
         this.maestriaNombre = maestriaNombre;

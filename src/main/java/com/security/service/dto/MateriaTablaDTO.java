@@ -8,8 +8,6 @@ import lombok.Data;
 public class MateriaTablaDTO {
     private Integer id;
 
-    private String codigo;
-
     private String nombre;
 
     private Integer periodo;
@@ -29,7 +27,6 @@ public class MateriaTablaDTO {
     public MateriaTablaDTO(){}
     public MateriaTablaDTO(
             Integer id,
-            String codigo,
             String nombre,
             Integer periodo,
             Integer maestriaId,
@@ -39,7 +36,6 @@ public class MateriaTablaDTO {
             LocalDate maestriaFechaEjecucionDesde,
             LocalDate maestriaFechaEjecucionHasta) {
                 this.id = id;
-                this.codigo = codigo;
                 this.nombre = nombre;
                 this.periodo = periodo;
                 this.maestriaId = maestriaId;

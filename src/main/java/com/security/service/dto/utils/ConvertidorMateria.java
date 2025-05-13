@@ -12,7 +12,6 @@ public class ConvertidorMateria {
     public Materia convertirAEntidad(MateriaDTO materiaDTO) {
         Materia materia = new Materia();
         materia.setId(materiaDTO.getId());
-        materia.setCodigo(materiaDTO.getCodigo());
         materia.setNombre(materiaDTO.getNombre());
         materia.setPeriodo(materiaDTO.getPeriodo());
         return materia;
@@ -21,7 +20,6 @@ public class ConvertidorMateria {
     public MateriaTablaDTO convertirEntidadATablaDTO(Materia materia) {
         MateriaTablaDTO materiaTablaDTO = new MateriaTablaDTO();
         materiaTablaDTO.setId(materia.getId());
-        materiaTablaDTO.setCodigo(materia.getCodigo());
         materiaTablaDTO.setNombre(materia.getNombre());
         materiaTablaDTO.setPeriodo(materia.getPeriodo());
         materiaTablaDTO.setMaestriaId(materia.getMaestria().getId());

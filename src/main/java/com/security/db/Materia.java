@@ -28,9 +28,6 @@ public class Materia {
     @SequenceGenerator(name = "seq_mate", initialValue = 1, allocationSize = 1)
     private Integer id;
  
-    @Column(name = "mate_codigo")
-    private String codigo;
- 
     @Column(name = "mate_nombre")
     private String nombre;
  
