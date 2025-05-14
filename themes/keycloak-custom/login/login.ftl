@@ -12,6 +12,66 @@
     <#elseif section = "form">
         <div id="kc-form">
           <div id="kc-form-wrapper">
+
+
+            <div style="position: relative; display: block; margin-bottom: 1rem;">
+                <button id="errorInfoBtn" type="button" style="
+                    display: block;
+                    margin-left: auto;
+                    background-color: #facc15;
+                    color: #000;
+                    border: none;
+                    border-radius: 50%;
+                    width: 2rem;
+                    height: 2rem;
+                    font-weight: bold;
+                    cursor: pointer; 
+                ">!</button>
+
+                <div id="errorTooltip" style="
+                    display: block;
+                    margin-left: auto;
+                    visibility: hidden;
+                    width: 300px;
+                    background-color: #333;
+                    color: #fff;
+                    text-align: left;
+                    border-radius: 6px;
+                    padding: 10px;
+                    position: absolute;
+                    z-index: 1;
+                    bottom: 125%;
+                    left: 50%;
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                ">
+                Si se ingresan incorrectamente las credenciales en tres intentos, la cuenta será bloqueada. Se recomienda tener precaución.
+                </div>
+            </div>
+
+            <script>
+                const btn = document.getElementById("errorInfoBtn");
+                const tooltip = document.getElementById("errorTooltip");
+
+                btn.addEventListener("mouseenter", function() {
+                    const isVisible = tooltip.style.visibility === "visible";
+                    tooltip.style.visibility = isVisible ? "hidden" : "visible";
+                    tooltip.style.opacity = isVisible ? "0" : "1";
+                });
+
+                // Oculta el tooltip si se hace clic fuera
+                document.addEventListener("mouseover", function(e) {
+                    if (!btn.contains(e.target)) {
+                        tooltip.style.visibility = "hidden";
+                        tooltip.style.opacity = "0";
+                    }
+                });
+            </script>
+
+
+          
+
+
             <#if realm.password>
                 <form id="kc-form-login" class="${properties.kcFormClass!}" onsubmit="login.disabled = true; return true;" action="${url.loginAction}" method="post" novalidate="novalidate">
                     <#if !usernameHidden??>
