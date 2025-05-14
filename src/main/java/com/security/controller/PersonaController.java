@@ -46,14 +46,14 @@ public class PersonaController {
     private IGestorUsurio gestorUsurio;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('administrador')")
+    @PreAuthorize("hasAnyRole('administrador', 'administrador_usuarios')")
     public ResponseEntity<?> insertar(@Valid @RequestBody PersonaDTO persona) {
         return new ResponseEntity<>(this.gestorUsurio.createUser(persona), HttpStatus.OK);
     }
 
     // Buscar necesita la cedula dentro del body
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('administrador')")
+    @PreAuthorize("hasAnyRole('administrador', 'administrador_usuarios')")
     public ResponseEntity<?> actualizar(@PathVariable(name = "id") Integer id, @RequestBody PersonaDTO personaDTO) {
         personaDTO.setId(id);
         // personaDTO.setCedula(cedula);
@@ -61,13 +61,13 @@ public class PersonaController {
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
+    @PreAuthorize("hasAnyRole('administrador', 'administrador_usuarios', 'usuario')")
     public ResponseEntity<?> buscarPorId(@PathVariable(name = "id") Integer id) {
         return new ResponseEntity<>(this.personaService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping(path = "/idKeycloak/{idKeycloak}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
+    @PreAuthorize("hasAnyRole('administrador', 'administrador_usuarios', 'usuario')")
     public ResponseEntity<?> buscarPorIdKeycloak(@PathVariable(name = "idKeycloak") String idKeycloak) {
         Persona persona = personaService.findByIdKeycloak(idKeycloak);
         return persona != null ? ResponseEntity.ok(persona) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -75,26 +75,26 @@ public class PersonaController {
     }
 
     @GetMapping(path = "/cedula/{cedula}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
+    @PreAuthorize("hasAnyRole('administrador', 'administrador_usuarios', 'usuario')")
     public ResponseEntity<?> buscarPorCedula(@PathVariable(name = "cedula") String cedula) {
         return new ResponseEntity<>(this.personaService.findByCedulaOptional(cedula), HttpStatus.OK);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
+    @PreAuthorize("hasAnyRole('administrador', 'administrador_usuarios', 'usuario')")
     public ResponseEntity<?> buscarTodo() {
         return new ResponseEntity<>(this.gestorUsurio.getUsers(), HttpStatus.OK);
     }
 
     // todos, (id, cedula, nombre, apellido)
     @GetMapping(path = "/todos-min", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('administrador')")
+    @PreAuthorize("hasAnyRole('administrador', 'administrador_usuarios')")
     public ResponseEntity<?> obtenerTodasLasPersonasMin() {
         return new ResponseEntity<>(this.personaService.findAllPersonaLigeroDTO(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/todos-min-rol", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
+    @PreAuthorize("hasAnyRole('administrador', 'usuario', 'administrador_usuarios')")
     public ResponseEntity<?> obtenerTodasLasPersonasMinRol() {
         return new ResponseEntity<>(this.gestorPersonaService.findAllWithRoles(), HttpStatus.OK);
     }
@@ -108,7 +108,7 @@ public class PersonaController {
     }
 
     @GetMapping(path = "/{id}/roles", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('administrador')")
+    @PreAuthorize("hasAnyRole('administrador', 'administrador_usuarios')")
     public ResponseEntity<?> obtenerRolesPorPersonaId(@PathVariable(name = "id") Integer id) {
         return new ResponseEntity<>(this.gestorPersonaService.findRolesByPersonaId(id), HttpStatus.OK);
     }
@@ -128,7 +128,7 @@ public class PersonaController {
     }
 
     @DeleteMapping(path = "/{idKeycloak}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('administrador')")
+    @PreAuthorize("hasAnyRole('administrador', 'administrador_usuarios')")
     public ResponseEntity<?> eliminarPersona(@PathVariable(name = "idKeycloak") String idKeycloak) {
         return new ResponseEntity<>(this.gestorUsurio.deleteUser(idKeycloak), null, HttpStatus.OK);
     }
