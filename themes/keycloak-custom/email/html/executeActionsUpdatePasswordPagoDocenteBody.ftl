@@ -13,10 +13,4 @@
     <a href="${link}" target="_blank">Establecer contraseña</a>
     <p>Este link estará vigente durante <strong>${expirationHoursRounded} horas</strong></p>
     <p>Si lo desea, una vez que haya activado su cuenta, podrá ingresar al Sistema SIGEPRO Consejo de Posgrado de la Facultad de Ingeniería y Ciencias Aplicadas de la UCE desde https://posgrado-app.jollybush-eb2fdd97.westus.azurecontainerapps.io</p>
-    <#if client?? && client.rootUrl??>
-    <p>...desde <a href="${client.rootUrl}">${client.rootUrl}</a></p>
-    </#if>
-    <#if client?? && client.baseUrl??>
-    <p>...desde <a href="${client.baseUrl}">${client.baseUrl}</a></p>
-    </#if>
 </#macro>

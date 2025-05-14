@@ -1,21 +1,38 @@
 <#import "template.ftl" as layout>
 <@layout.registrationLayout displayMessage=false; section> 
+    <#--  ${message.summary}  -->
     <#if section = "header">
     <div class="">
         <#if requiredActions?? && requiredActions?size == 1 && requiredActions[0] == "UPDATE_PASSWORD">
-            <h1 class="">${kcSanitize(msg("requiredAction.UPDATE_PASSWORD"))?no_esc}</h1>
-        <#else>
-            <#if messageHeader??>
-                ${kcSanitize(msg("${messageHeader}"))?no_esc}
-                ${message.summary}
-            </#if>
+            <#--  <h1 class="">${kcSanitize(msg("requiredAction.UPDATE_PASSWORD"))?no_esc}</h1>  -->
+            <h1 class="">Activar cuenta</h1>
+            <#else>
+                <#if messageHeader??>
+                    ${kcSanitize(msg("${messageHeader}"))?no_esc}
+                    ${message.summary}
+                </#if>
         </#if> 
     </div>
 
             
     <#elseif section = "form">
     <div id="kc-info-message">
-        <p class="instruction">${message.summary}<#if requiredActions??><#list requiredActions>: <b><#items as reqActionItem>${kcSanitize(msg("requiredAction.${reqActionItem}"))?no_esc}<#sep>, </#items></b></#list><#else></#if></p>
+        <p class="instruction">${message.summary}
+
+        <#if requiredActions??>
+            <#list requiredActions>: <b>
+                <#items as reqActionItem>
+                    <#if reqActionItem == "UPDATE_PASSWORD">
+                        <span>Activar cuenta</span><#sep>, 
+                        <#else>
+                        ${kcSanitize(msg("requiredAction.${reqActionItem}"))?no_esc}<#sep>, 
+                    </#if>
+                
+                 
+                </#items></b>
+            </#list>
+        <#else>
+        </#if></p>
         <#if skipLink??>
         <#else>
             <#if pageRedirectUri?has_content>
@@ -27,7 +44,6 @@
             </#if>
         </#if>
     </div>
-    <p><a href="https://posgrado-app.jollybush-eb2fdd97.westus.azurecontainerapps.io">${kcSanitize(msg("backToApplication"))?no_esc}</a></p>
     </#if>
        
 

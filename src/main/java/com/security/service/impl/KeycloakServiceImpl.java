@@ -33,6 +33,12 @@ public class KeycloakServiceImpl implements IKeycloakService {
     @Value("${keycloak.client.name}")
     private String clientName;
 
+    @Value("${frontend.client_id}")
+    private String frontendClientId;
+
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
     @Autowired
     private KeycloakProvider keycloakProvider;
 
@@ -57,15 +63,16 @@ public class KeycloakServiceImpl implements IKeycloakService {
     }
 
     @Override
-    public String createUser(String username, String email, List<String> rolesToAssign, String firstName, String lastName ) {
+    public String createUser(String username, String email, List<String> rolesToAssign, String firstName,
+            String lastName) {
         // Usar un Set para evitar roles duplicados
         Set<String> keycloakRolesToAssign = mapRolesToKeycloakRoles(rolesToAssign);
 
         System.out.println("-------------------------------------------------");
-        System.out.println("username: "+ username);
-        System.out.println("username: "+ email);
-        System.out.println("username: "+ firstName);
-        System.out.println("username: "+ lastName);
+        System.out.println("username: " + username);
+        System.out.println("username: " + email);
+        System.out.println("username: " + firstName);
+        System.out.println("username: " + lastName);
 
         UserRepresentation user = new UserRepresentation();
         user.setUsername(username);
@@ -91,15 +98,20 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
             // Enviar correo para que el usuario configure su contraseña
             keycloakProvider.getKeycloak()
-            .realm(realmName)
-            .users()
-            .get(userId)
-            .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
+                    .realm(realmName)
+                    .users()
+                    .get(userId)
+                    .executeActionsEmail(
+                             frontendClientId,// clientId: el ID de tu cliente frontend en Keycloak
+                             frontendUrl, // redirectUri: adonde quieres que el usuario regrese tras
+                            null, // lifespanSeconds, puedes dejarlo null para usar el defaul                             
+                            Arrays.asList("UPDATE_PASSWORD")// cambiar contraseña
+                    );
 
             return userId;
 
         } catch (Exception e) {
-            //return null;
+            // return null;
             this.deleteUser(userId);
             throw new RuntimeException("Error al crear el usuario en Keycloak en createUser de KeycloakService", e);
         } finally {
@@ -159,7 +171,8 @@ public class KeycloakServiceImpl implements IKeycloakService {
         }
     }
 
-    public Boolean updateUser(String userId, String email, List<String> rolesToAssign, String firstName, String lastName) {
+    public Boolean updateUser(String userId, String email, List<String> rolesToAssign, String firstName,
+            String lastName) {
         System.out.println(userId + " " + email + " " + rolesToAssign.toString());
         try {
             String updateDetailsMessage = updateUserDetails(userId, email, firstName, lastName);
