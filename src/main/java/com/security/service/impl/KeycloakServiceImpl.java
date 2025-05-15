@@ -219,7 +219,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
     private Set<String> mapRolesToKeycloakRoles(List<String> roles) {
         Set<String> keycloakRoles = new HashSet<>();
         for (String role : roles) {
-            if ("secretaria".equalsIgnoreCase(role)) {
+            if ("secretaria".equalsIgnoreCase(role) || "director".equalsIgnoreCase(role)) {
                 keycloakRoles.add("administrador");
             } else {
                 keycloakRoles.add("usuario");
