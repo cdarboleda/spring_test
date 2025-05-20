@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -120,7 +121,7 @@ public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
                 Optional.ofNullable(procesoTitulacionDTO.getCalificacionFinal())
                                 .ifPresent(procesoExistente::setCalificacionFinal);
 
-                                //hacer a lguna comprobacion parq no inserte null al inicio
+                // hacer a lguna comprobacion parq no inserte null al inicio
                 procesoExistente.setFechaDefensa(procesoTitulacionDTO.getFechaDefensa());
 
                 // Optional.ofNullable(procesoTitulacionDTO.getNotaPropuestaProyecto())
@@ -140,6 +141,8 @@ public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
                                 .ifPresent(procesoExistente::setPersonaTribunal2);
                 Optional.ofNullable(procesoTitulacionDTO.getNotaTribunal3())
                                 .ifPresent(procesoExistente::setNotaTribunal3);
+                Optional.ofNullable(procesoTitulacionDTO.getPersonaTribunal3())
+                                .ifPresent(procesoExistente::setPersonaTribunal3);
 
                 // Guardar cambios
                 procesoTitulacionRepository.save(procesoExistente);
@@ -276,6 +279,22 @@ public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
                         return null;
                 }
                 return personas;
+        }
+
+        @Override
+        public Integer obtenerCantidadProcesosTitulacion(Integer idPersona) {
+                if (idPersona == null || idPersona <= 0) {
+                        throw new IllegalArgumentException("El ID de la persona no puede ser nulo o menor a cero.");
+                }
+
+                try {
+                        return this.procesoTitulacionRepository.contarProcesosActivosPorTutor(idPersona);
+                } catch (Exception ex) {
+                        // Puedes usar un logger aquí en lugar de imprimir si tienes logging configurado
+                        System.err.println(
+                                        "Error al obtener la cantidad de procesos de titulación: " + ex.getMessage());
+                        throw new RuntimeException("No se pudo obtener la cantidad de procesos de titulación.", ex);
+                }
         }
 
 }

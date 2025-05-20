@@ -41,7 +41,7 @@ public class GestorProcesoTitulacionServiceImpl implements IGestorProcesoTitulac
         @Override
         public TitulacionResponsableNotaLigeroDTO buscarResponsableNotaPaso(Integer idProcesoTitulacion,
                         String nombrePaso) {
-
+                TitulacionResponsableNotaLigeroDTO revisorNotaLigeroDTO = new TitulacionResponsableNotaLigeroDTO();
                 // Buscar el paso correspondiente
                 Paso pasoEspecifico = this.pasoRepository.findByProcesoId(idProcesoTitulacion).stream()
                                 .filter(paso -> paso.getNombre().equals(nombrePaso))
@@ -53,12 +53,12 @@ public class GestorProcesoTitulacionServiceImpl implements IGestorProcesoTitulac
                 Persona persona = Optional.ofNullable(pasoEspecifico.getResponsable())
                                 .flatMap(responsable -> personaRepository.findById(responsable.getId()))
                                 .orElse(null); // Si la persona no existe dejamos el nombre vacio
-
+                revisorNotaLigeroDTO.setId(persona.getId());
                 String observacion = Optional.ofNullable(pasoEspecifico.getObservacion()).orElse(null);
 
                 // Crear el DTO y asignar el nombre del responsable si existe y las
                 // observaciones
-                TitulacionResponsableNotaLigeroDTO revisorNotaLigeroDTO = new TitulacionResponsableNotaLigeroDTO();
+
                 revisorNotaLigeroDTO.setResponsableCalificacion(
                                 persona != null ? formatNombreCompleto(persona) : "No asignado");
                 revisorNotaLigeroDTO.setObservacion(
@@ -70,7 +70,7 @@ public class GestorProcesoTitulacionServiceImpl implements IGestorProcesoTitulac
                 // Obtener la nota del paso específico
                 Double nota = this.procesoTitulacionRepository.findById(idProcesoTitulacion)
                                 .map(proceso -> switch (pasoTitulacion) {
-                                        //case REVISION_IDONEIDAD -> proceso.getNotaPropuestaProyecto();
+                                        // case REVISION_IDONEIDAD -> proceso.getNotaPropuestaProyecto();
                                         case REVISION_LECTOR_1 -> proceso.getNotaLector1();
                                         case REVISION_LECTOR_2 -> proceso.getNotaLector2();
                                         default -> null; // null si el paso no tienecalificacion

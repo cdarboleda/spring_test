@@ -191,4 +191,10 @@ public class ProcesoTitulacionController {
                                 HttpStatus.OK);
         }
 
+        @GetMapping(path = "/cantidad-procesos/persona/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<?> obtenerCantidadProcesosTitulacionActivos(@PathVariable(name = "id") Integer id) {
+                return new ResponseEntity<>(this.procesoTitulacionService.obtenerCantidadProcesosTitulacion(id),
+                                HttpStatus.OK);
+        }
+
 }

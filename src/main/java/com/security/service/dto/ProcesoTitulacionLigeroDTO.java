@@ -19,6 +19,7 @@ public class ProcesoTitulacionLigeroDTO {
     private String personaTribunal2;
     private Integer tutorId;
     private Double notaTribunal3;
+    private String personaTribunal3;
     private Double notaPropuestaProyecto;
 
     // public ProcesoTitulacionDTO() {} // Constructor vacío necesario

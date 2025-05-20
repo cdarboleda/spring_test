@@ -38,4 +38,6 @@ public interface IProcesoTitulacionService {
 
         public LocalDateTime buscarFechaDefensa(Integer idProcesoTitulacion);
 
+        public Integer obtenerCantidadProcesosTitulacion(Integer idPersona);
+
 }

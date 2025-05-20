@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 import com.security.db.ProcesoTitulacion;
 
-
 import jakarta.transaction.Transactional;
 
 public interface IProcesoTitulacionRepository extends JpaRepository<ProcesoTitulacion, Integer> {
@@ -23,5 +22,13 @@ public interface IProcesoTitulacionRepository extends JpaRepository<ProcesoTitul
     // "FROM ProcesoTitulacion t WHERE t.procesoId = :procesoId")
     // TitulacionRevisorNotaLigeroDTO
     // buscarCalificacionPlanTitulacion(@Param("procesoId") Integer procesoId);
+    @Query("""
+                SELECT COUNT(pt)
+                FROM ProcesoTitulacion pt
+                WHERE pt.tutorId = :tutorId
+                  AND pt.proceso.finalizado = false
+                  AND pt.proceso.cancelado = false
+            """)
+    Integer contarProcesosActivosPorTutor(@Param("tutorId") Integer tutorId);
 
 }
