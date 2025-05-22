@@ -31,6 +31,7 @@ public class MateriaController {
     private IMateriaService materiaService;
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('administrador')")
     public ResponseEntity<?> buscarPorId(@PathVariable(name = "id") Integer id) {
         return new ResponseEntity<>(this.materiaService.findById(id), HttpStatus.OK);
     }
@@ -49,6 +50,7 @@ public class MateriaController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('administrador')")
     public ResponseEntity<?> buscarTodo() {
         return new ResponseEntity<>(this.materiaService.findAll(), HttpStatus.OK);
     }

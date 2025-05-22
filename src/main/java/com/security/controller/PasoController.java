@@ -117,16 +117,5 @@ public class PasoController {
                 HttpStatus.OK);
     }
 
-    // esto es del paso Anterior
-    // responsableNombre, responsableCorreo, procesoId, tipoProceso, pasoNombre,
-    // observaciones
-    @Autowired
-    private EmailPasoRechazado emailPasoRechazado;
-
-    // @PostMapping("/send")
-    // public String sendEmail() {
-    // return this.emailPasoRechazado.send("vavabisga@gmail.com", "Subir
-    // documentación del Docente", 45);
-    // }
 
 }
