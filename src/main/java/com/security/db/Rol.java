@@ -23,6 +23,13 @@ import lombok.ToString;
 @Data
 public class Rol {
 
+    public Rol() {}
+ 
+    public Rol(String descripcion, String nombre) {
+        this.descripcion = descripcion;
+        this.nombre = nombre;
+    }
+
     @Id
     @Column(name = "rol_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_rol")
