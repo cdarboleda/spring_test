@@ -2,7 +2,7 @@
         <p>Si necesita ayuda con su cuenta, por favor envíe un e-mail a <a style="display:inline;"
                 href="fing.consejo.posgrado@uce.edu.ec" target="_blank">fing.consejo.posgrado@uce.edu.ec</a></p>
 
-        <p>Muchas gracias.
+        <p>
             <br>
             Cordialmente<br><br>
             Equipo de soporte<br>
