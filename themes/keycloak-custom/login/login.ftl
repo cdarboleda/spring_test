@@ -12,8 +12,6 @@
     <#elseif section = "form">
         <div id="kc-form">
           <div id="kc-form-wrapper">
-
-
             <div style="position: relative; display: block; margin-bottom: 1rem;">
                 <button id="errorInfoBtn" type="button" style="
                     display: block;
@@ -45,6 +43,7 @@
                     opacity: 0;
                     transition: opacity 0.3s;
                 ">
+                <p>¡¡¡Advertencia!!!</p>
                 Si se ingresan incorrectamente las credenciales en tres intentos, la cuenta será bloqueada. Se recomienda tener precaución.
                 </div>
             </div>
@@ -97,6 +96,10 @@
                 </form>
             </#if>
             </div>
+                <div class="footerLogin">
+        <span>© 2025 SIGEPROCP</span>
+        <span><a style="display:inline;" href="mailto:fing.consejo.posgrado@uce.edu.ec" target="_blank">fing.consejo.posgrado@uce.edu.ec</a></span>
+    </div>
         </div>
     <#elseif section = "socialProviders" >
         <#if realm.password && social.providers?? && social.providers?has_content>
@@ -111,5 +114,19 @@
             </div>
         </#if>
     </#if>
+
+
+
+    <style>
+    .footerLogin{
+        display:flex;
+        flex-direction:row;
+        justify-content:space-between;
+        gap:2rem;
+        color: #9ca3af;
+        margin-top:0.5rem;
+        font-size:0.75rem;
+    }
+    </style>
 
 </@layout.registrationLayout>

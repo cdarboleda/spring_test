@@ -20,7 +20,7 @@
         <p class="instruction">${message.summary}
 
         <#if requiredActions??>
-            <#list requiredActions>: <b>
+            <#list requiredActions><b>
                 <#items as reqActionItem>
                     <#if reqActionItem == "UPDATE_PASSWORD">
                         <span>Activar cuenta</span><#sep>, 

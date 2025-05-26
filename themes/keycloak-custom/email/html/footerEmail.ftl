@@ -1,7 +1,6 @@
 <#macro footerEmail>
         <p>Si necesita ayuda con su cuenta, por favor envíe un e-mail a <a style="display:inline;"
-                href="fing.consejo.posgrado@uce.edu.ec" target="_blank">fing.consejo.posgrado@uce.edu.ec</a></p>
-
+                href="mailto:fing.consejo.posgrado@uce.edu.ec" target="_blank">fing.consejo.posgrado@uce.edu.ec</a></p>
         <p>
             <br>
             Cordialmente<br><br>
@@ -9,12 +8,22 @@
         </p>
             <hr>
         <div style="margin-top: 20px; font-size: 0.75rem; line-height: 1rem;">
-            <!-- <p>Saludos,<br>Equipo de Posgrado</p> -->
-            Facultad de Ingeneiría y Ciencias Aplicadas<br>
-            Ubicación: Ciudadela Universitaria, Edificio de Aulas de la Facultad de Ingeniería y Ciencias Aplicadas,
-            Cuarto Piso<br>
-            Mapa: <a style="display:inline;" href="https://maps.app.goo.gl/n1QtFFtyyYdXRpEC9" target="_blank">Dirección
-                en Google Maps</a><br>
-            Teléfonos: (593-02) 2551 270 / (593-02) 3216975 / +593 98 374 7088<br>
+            <strong> Dirección: </strong>Gilberto Gato Sobral S/N y Gaspar de Carvajal. Facultad de Ingeniería y Ciencias Aplicadas. Edificio de Aulas, 4to. Piso.<br>
+            <strong> Ubicación: </strong><a style="display:inline;" href="https://maps.app.goo.gl/n1QtFFtyyYdXRpEC9" target="_blank">Facultad de Ingeniería y Ciencias Aplicadas </a><br>
+            <div class="numerosContainer">
+            <strong>Teléfonos: </strong>
+            <div style="margin-left: 0.2rem;"><p>(593-02) 2551 270</p> <p>(593-02) 3216975</p>  <p>+593 98 374 7088</p></div>
+            </div>
         </div>
+
+        <style>
+        .numerosContainer{
+            display:flex;
+            flex-direction:row;
+            text-align: left;
+        }
+        .numerosContainer p{
+            margin: 0 0 0.25rem 0;
+        }
+        </style>
 </#macro>
