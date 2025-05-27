@@ -3,7 +3,7 @@
                 href="mailto:fing.consejo.posgrado@uce.edu.ec" target="_blank">fing.consejo.posgrado@uce.edu.ec</a></p>
         <p>
             <br>
-            Cordialmente<br><br>
+            Cordialmente<br>
             Equipo de soporte<br>
         </p>
             <hr>

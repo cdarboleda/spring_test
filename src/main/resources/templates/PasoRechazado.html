@@ -55,10 +55,14 @@
 
 <body>
     <div class="container">
-        <img class="logo" src="https://posgrado-fica-uce.netlify.app/img/logo-posgrado.0df946c7.png"
-            alt="Logo posgrado">
-        <h1>Sistema de Gestión de Procesos del Consejo de Posgrado SIGEPROCP</h1>
-        <h2>Notificación de Paso Rechazado</h2>
+        <p style="text-align: center;">
+        <img src="https://posgrado-fica-uce.netlify.app/img/logo-posgrado.0df946c7.png"
+            alt="Logo posgrado"
+            width="75"
+            style="max-width: 100%; height: auto;">
+        </p>
+        <h2>Sistema de Gestión de Procesos del Consejo de Posgrado SIGEPROCP</h2>
+        <h3 style="text-align: center;">Notificación de Paso Rechazado</h3>
         <br>
         <p>Saludos <strong th:text="${responsableNombre} + ' ' + ${responsableApellido}">Nombre Apellido</strong></p>
 
@@ -69,7 +73,7 @@
             <strong>RECHAZADO</strong>.
         </p>
 
-        <p><strong>Maestria:</strong> <span th:text="${maestria}">aaa</span></p> 
+        <p><strong>Programa:</strong> <span th:text="${maestria}">aaa</span></p> 
         
         <p><strong>Materia:</strong> <span th:text="${materia}">bbb</span></p>
         <br>

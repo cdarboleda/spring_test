@@ -1,5 +1,6 @@
 package com.security.service.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
 @Service
@@ -41,7 +43,13 @@ public class EmailService {
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlContent, true);
-        helper.setFrom(emailUsername);
+        // helper.setFrom(emailUsername);
+        try {
+            helper.setFrom(new InternetAddress(emailUsername, "Administrador SIGEPROCP"));
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         mailSender.send(message);
     }

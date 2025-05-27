@@ -53,7 +53,7 @@ public class EmailProcesoCancelado {
             emailService.sendEmail(
                     "ProcesoCancelado", // nombre del archivo Thymeleaf sin .html
                     persona.getCorreo(), // Puedes reemplazar con correo dinámico si aplica
-                    "Cancelación del Proceso #" + procesoId,
+                    "Proceso #" + procesoId +" ha sido cancelado",
                     variables);
         } catch (MessagingException e) {
             e.printStackTrace();
