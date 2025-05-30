@@ -21,6 +21,7 @@ import com.security.service.IGestorProcesoService;
 import com.security.service.IProcesoService;
 import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.ProcesoDTO;
+import com.security.service.dto.ProcesoPagoDocenteResponsablesDTO;
 
 import jakarta.validation.Valid;
 
@@ -61,6 +62,13 @@ public class ProcesoController {
      public ResponseEntity<?> insertarProceso(@Valid @RequestBody ProcesoDTO procesoDTO) {
          return new ResponseEntity<>(this.gestorProceso.insert(procesoDTO), HttpStatus.OK);
      }
+
+    @PreAuthorize("hasAnyRole('administrador')")
+    @PostMapping(path="/insertar-pago-docente", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+     public ResponseEntity<?> insertarProcesoPagoDocente(@Valid @RequestBody ProcesoPagoDocenteResponsablesDTO procesoDTO) {
+         return new ResponseEntity<>(this.gestorProceso.insertProcesoPagoDocente(procesoDTO), HttpStatus.OK);
+     }
+
      @PreAuthorize("hasAnyRole('administrador')")
      @PutMapping(path="/{id}")
      public ResponseEntity<?> actualizar(@PathVariable(name = "id") Integer id, @RequestBody ProcesoDTO procesoDTO) {

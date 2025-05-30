@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.security.db.enums.Estado;
 import com.security.db.enums.EstadoHelper;
+import com.security.db.enums.Rol;
 import com.security.factory.IPasoFactory;
 import com.security.service.dto.PasoDTO;
 
@@ -21,28 +22,28 @@ public class PagoDocentePasoFactory implements IPasoFactory {
     public List<PasoDTO> generatePasos() {
         List<PasoDTO> pasos = new ArrayList<>();
 
-        pasos.add(this.crearPasoPrimero("documentacion_docente", "docente"));
-        pasos.add(this.crearPasoDefault("revision_coordinador", 2, "coordinador"));
-        pasos.add(this.crearPasoDefault("revision_secretaria", 3, "secretaria"));
-        pasos.add(this.crearPasoDefault("pedido_asistencia", 4, "secretaria"));
-        pasos.add(this.crearPasoDefault("validacion_asistencia_docente", 5, "docente"));
-        pasos.add(this.crearPasoDefault("validacion_asistencia_coordinador", 6, "coordinador"));
-        pasos.add(this.crearPasoDefault("autorizacion_director", 7, "director"));
-        pasos.add(this.crearPasoDefault("aprobacion_decano", 8, "secretaria"));
-        pasos.add(this.crearPasoDefault("revision_financiero", 9, "secretaria"));
-        pasos.add(this.crearPasoDefault("factura_docente", 10, "docente"));
-        pasos.add(this.crearPasoDefault("revision_factura_director", 11, "director"));
-        pasos.add(this.crearPasoDefault("desembolso_financiero", 12, "secretaria"));
+        pasos.add(this.crearPasoPrimero("documentacion_docente", Rol.DOCENTE));
+        pasos.add(this.crearPasoDefault("revision_coordinador", 2, Rol.COORDINADOR));
+        pasos.add(this.crearPasoDefault("revision_secretaria", 3, Rol.SECRETARIA));
+        pasos.add(this.crearPasoDefault("pedido_asistencia", 4, Rol.SECRETARIA));
+        pasos.add(this.crearPasoDefault("validacion_asistencia_docente", 5, Rol.DOCENTE));
+        pasos.add(this.crearPasoDefault("validacion_asistencia_coordinador", 6, Rol.COORDINADOR));
+        pasos.add(this.crearPasoDefault("autorizacion_director", 7, Rol.DIRECTOR));
+        pasos.add(this.crearPasoDefault("aprobacion_decano", 8, Rol.SECRETARIA));
+        pasos.add(this.crearPasoDefault("revision_financiero", 9, Rol.SECRETARIA));
+        pasos.add(this.crearPasoDefault("factura_docente", 10, Rol.DOCENTE));
+        pasos.add(this.crearPasoDefault("revision_factura_director", 11, Rol.DIRECTOR));
+        pasos.add(this.crearPasoDefault("desembolso_financiero", 12, Rol.SECRETARIA));
         
         return pasos;
     }
 
-    private PasoDTO crearPasoPrimero(String nombrePaso, String rol){
-        return this.crearPaso(nombrePaso, 1, Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), Instant.now(), rol);
+    private PasoDTO crearPasoPrimero(String nombrePaso, Rol rol){
+        return this.crearPaso(nombrePaso, 1, Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0), Instant.now(), rol.getNombre());
     }
 
-    private PasoDTO crearPasoDefault(String nombrePaso, Integer orden, String rol){
-        return this.crearPaso(nombrePaso, orden, Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, rol);
+    private PasoDTO crearPasoDefault(String nombrePaso, Integer orden, Rol rol){
+        return this.crearPaso(nombrePaso, orden, Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null, rol.getNombre());
     }
 
     private PasoDTO crearPaso(String nombre,

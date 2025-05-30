@@ -22,6 +22,7 @@ import lombok.Data;
 )
 @JsonSubTypes({
     @JsonSubTypes.Type(value = ProcesoPagoDocenteDTO.class, name = "PAGO_DOCENTE"),
+    @JsonSubTypes.Type(value = ProcesoPagoDocenteResponsablesDTO.class, name = "PAGO_DOCENTE"),
     @JsonSubTypes.Type(value = ProcesoTitulacionDTO.class, name = "TITULACION")
 })
 public class ProcesoDTO {

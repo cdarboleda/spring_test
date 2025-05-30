@@ -2,7 +2,6 @@ package com.security.service.dto;
 
 import java.time.LocalDate;
 
-import com.security.db.Materia;
 import com.security.db.ProcesoPagoDocente;
 
 import lombok.Data;
@@ -13,14 +12,13 @@ import lombok.EqualsAndHashCode;
 
 public class ProcesoCompletoPagoDocenteDTO extends ProcesoCompletoDTO{
     private Boolean modalidadVirtual;
-    private Materia materia;
+    private MateriaTablaDTO materia;
     private LocalDate fechaInicioClase;
     private LocalDate fechaFinClase;
-    // private Integer cohorte;
 
-    public ProcesoCompletoPagoDocenteDTO(ProcesoPagoDocente pagoDocente) {
+    public ProcesoCompletoPagoDocenteDTO(ProcesoPagoDocente pagoDocente, MateriaTablaDTO materiaDTO) {
         this.modalidadVirtual=pagoDocente.getModalidadVirtual();
-        this.materia = pagoDocente.getMateria();
+        this.materia = materiaDTO;
         this.fechaInicioClase = pagoDocente.getFechaInicioClase();
         this.fechaFinClase = pagoDocente.getFechaFinClase();
         // this.cohorte = pagoDocente.getCohorte();

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.security.db.enums.Estado;
+import com.security.db.enums.Rol;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -62,14 +63,18 @@ public class Paso {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pers_id")
     @JsonIgnore
+        @ToString.Exclude
     private Persona responsable;
 
     @OneToMany(mappedBy = "paso", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JsonIgnore
     private List<CarpetaDocumento> carpetaDocumentos;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rol_id", nullable = false)
-    @JsonIgnore
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "rol_id", nullable = false)
+    // @JsonIgnore
+    // private Rol rol;
+
+    @Column(name = "paso_rol", nullable = true)
     private Rol rol;
 }

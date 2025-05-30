@@ -24,7 +24,7 @@ public interface IPasoRepository extends JpaRepository<Paso, Integer>{
     void deleteByProcesoId(@Param("procesoId") Integer procesoId);
 
     @Query("SELECT new com.security.service.dto.PasoDTO("+
-    "p.id, p.nombre, p.responsable.id, p.rol.nombre)"+
+    "p.id, p.nombre, p.responsable.id, CAST(p.rol AS string))"+
     "FROM Paso p WHERE p.proceso.id = :procesoId")
     List<PasoDTO> findPasosDTOByProcesoId(@Param("procesoId") Integer procesoId);
 

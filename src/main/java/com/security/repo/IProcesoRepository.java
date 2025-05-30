@@ -82,7 +82,7 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
         List<MiProcesoDTO> findMisProcesosGeneralPorResponsable(@Param("responsableId") Integer responsableId);
 
         @Query("SELECT new com.security.service.dto.ProcesoPasoDocumentoDTO(" +
-                        "pa.id, pa.nombre, pa.estado, pa.descripcionEstado, pa.fechaInicio, pa.fechaFin, pa.orden, pa.observacion, pa.rol.nombre, " +
+                        "pa.id, pa.nombre, pa.estado, pa.descripcionEstado, pa.fechaInicio, pa.fechaFin, pa.orden, pa.observacion, CAST(pa.rol AS string), " +
                         "per.id, per.nombre, per.cedula, per.apellido, per.telefono, per.correo, " +
                         "cd.id, cd.url) " +
                         "FROM Paso pa " +

@@ -3,20 +3,17 @@ package com.security.service.dto.utils;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.security.db.Proceso;
 import com.security.db.ProcesoPagoDocente;
 import com.security.db.ProcesoTitulacion;
-import com.security.service.dto.MateriaTablaDTO;
 import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoCompletoPagoDocenteDTO;
 import com.security.service.dto.ProcesoCompletoTitulacionDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteDTO;
 
-@Component
-public class ConvertidorProceso {
+public class ConvertidorProcesoPagoDocente {
 
     @Autowired
     private ConvertidorCarpetaDocumento convertidorCarpetaDocumento;
@@ -24,59 +21,43 @@ public class ConvertidorProceso {
     private ConvertidorPersona convertidorPersona;
     @Autowired
     private ConvertidorPaso convertidorPaso;
-    @Autowired
-    private ConvertidorMateria convertidorMateria;
 
-    public Object convertirACompletoDTO(Object procesoEspecifico) {
+    // public Object convertirACompletoDTO(ProcesoPagoDocente proceso) {
 
-        ProcesoCompletoDTO procesoDTO = null;
+    //     ProcesoPagoDocenteDTO procesoDTO = null;
 
-        // Verificamos el tipo del proceso específico
-        if (procesoEspecifico instanceof ProcesoPagoDocente) {
-            ProcesoPagoDocente pagoDocente = (ProcesoPagoDocente) procesoEspecifico;
-            MateriaTablaDTO materiaDTO = convertidorMateria.convertirEntidadATablaDTO(pagoDocente.getMateria());
+    //     // Seteamos los campos comunes
+    //     if (procesoDTO != null) {
 
-            procesoDTO = new ProcesoCompletoPagoDocenteDTO(pagoDocente, materiaDTO);
+    //         procesoDTO.setId(proceso.getId());
 
-        } else if (procesoEspecifico instanceof ProcesoTitulacion) {
-            ProcesoTitulacion titulacion = (ProcesoTitulacion) procesoEspecifico;
-            procesoDTO = new ProcesoCompletoTitulacionDTO(titulacion);
+            
+    //         procesoDTO.setDescripcion(proceso.getDescripcion());
+    //         procesoDTO.setFechaInicio(proceso.getFechaInicio());
+    //         procesoDTO.setFechaFin(proceso.getFechaFin());
+    //         procesoDTO.setFinalizado(proceso.getFinalizado());
+    //         //TODO: el de cancelado
+    //         procesoDTO.setTipoProceso(procesoEspecifico.getTipoProceso().toString());
 
-        } else {
-            throw new IllegalArgumentException("Tipo de proceso desconocido");
-        }
+    //         procesoDTO.setCarpetasDocumento(
+    //                 proceso.getCarpetasDocumento()!=null?
+    //                 proceso.getCarpetasDocumento().stream()
+    //                         .map(convertidorCarpetaDocumento::convertirALigeroDTO)
+    //                         .collect(Collectors.toList())
+    //                         :null);
 
-        // Seteamos los campos comunes
-        if (procesoDTO != null) {
-            Proceso proceso = procesoEspecifico instanceof ProcesoPagoDocente
-                    ? ((ProcesoPagoDocente) procesoEspecifico).getProceso()
-                    : ((ProcesoTitulacion) procesoEspecifico).getProceso();
+    //         procesoDTO.setPasos(
+    //                 proceso.getPasos()!=null?
+    //                 proceso.getPasos().stream()
+    //                         .map(convertidorPaso::convertirAPasoDTO)
+    //                         .collect(Collectors.toList())
+    //                         :null);
+    //         procesoDTO.setRequiriente(convertidorPersona.convertirALigeroDTO(proceso.getRequiriente()));
 
-            procesoDTO.setId(proceso.getId());
-            procesoDTO.setDescripcion(proceso.getDescripcion());
-            procesoDTO.setFechaInicio(proceso.getFechaInicio());
-            procesoDTO.setFechaFin(proceso.getFechaFin());
-            procesoDTO.setFinalizado(proceso.getFinalizado());
-            // TODO: el de cancelado
-            procesoDTO.setTipoProceso(proceso.getTipoProceso().toString());
+    //     }
 
-            procesoDTO.setCarpetasDocumento(
-                    proceso.getCarpetasDocumento() != null ? proceso.getCarpetasDocumento().stream()
-                            .map(convertidorCarpetaDocumento::convertirALigeroDTO)
-                            .collect(Collectors.toList())
-                            : null);
-
-            procesoDTO.setPasos(
-                    proceso.getPasos() != null ? proceso.getPasos().stream()
-                            .map(convertidorPaso::convertirAPasoDTO)
-                            .collect(Collectors.toList())
-                            : null);
-            procesoDTO.setRequiriente(convertidorPersona.convertirALigeroDTO(proceso.getRequiriente()));
-
-        }
-
-        return procesoDTO;
-    }
+    //     return procesoDTO;
+    // }
 
     // public ProcesoCompletoDTO convertirACompletoDTO(Proceso proceso) {
 

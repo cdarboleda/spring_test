@@ -1,11 +1,16 @@
 package com.security.service.impl;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +20,8 @@ import com.security.db.Persona;
 import com.security.db.Proceso;
 import com.security.db.ProcesoPagoDocente;
 import com.security.db.ProcesoTitulacion;
+import com.security.db.enums.Estado;
+import com.security.db.enums.Rol;
 import com.security.db.enums.TipoProceso;
 import com.security.repo.ICarpetaDocumentoRepository;
 import com.security.repo.IPasoRepository;
@@ -34,6 +41,7 @@ import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.MiProcesoPagoDocenteDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteDTO;
+import com.security.service.dto.ProcesoPagoDocenteResponsablesDTO;
 import com.security.service.dto.ProcesoPasoDocumentoDTO;
 import com.security.service.dto.ProcesoTitulacionDTO;
 import com.security.service.dto.utils.ConvertidorCarpetaDocumento;
@@ -153,15 +161,16 @@ public class GestorProcesoImpl implements IGestorProcesoService {
                     Paso paso = new Paso();
                     convertidorPaso.convertirAEntidad(paso, pasoDTO);
                     paso.setProceso(proceso);
-                    paso.setRol(this.rolService.buscarPorNombre(pasoDTO.getRol()).get());
+                    // paso.setRol(this.rolService.buscarPorNombre(pasoDTO.getRol()).get());
+                    paso.setRol(Rol.fromNombre(pasoDTO.getRol())); // aqui tengo el pasoDTO.getRol() que es un string
+                                                                   // suelto que representa el nombre ejemplo "docente"
                     return paso;
                 }).collect(Collectors.toList());
 
         // pasos.get(0).setResponsable(requiriente);
         if (procesoDTO.getTipoProceso().equals(TipoProceso.PAGO_DOCENTE.toString())) {
             pasos.stream().filter(
-                    paso -> paso.getNombre() == "documentacion_docente" || paso.getNombre() == "factura_docente"
-                            || paso.getNombre() == "validacion_asistencia_docente")
+                    paso -> paso.getRol() == Rol.DOCENTE)
                     .forEach((paso -> paso.setResponsable(requiriente)));
         } else if (procesoDTO.getTipoProceso().equals(TipoProceso.TITULACION.toString())) {
             pasos.stream().filter(paso -> paso.getNombre() == "titu_paso1")
@@ -171,7 +180,66 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         proceso.setPasos(pasos);
         this.procesoRepository.save(proceso);
         var procesoEspecifico = this.insertarProcesoEspecifico(proceso, procesoDTO);
-        // pasos.forEach(paso -> gestorProcesoLogService.insertarProcesoLog(paso, Evento.CREACION));
+        // pasos.forEach(paso -> gestorProcesoLogService.insertarProcesoLog(paso,
+        // Evento.CREACION));
+        return convertidorProceso.convertirACompletoDTO(procesoEspecifico);
+    }
+
+    @Override
+    @Transactional
+    public Object insertProcesoPagoDocente(ProcesoPagoDocenteResponsablesDTO procesoDTO) {
+
+        Proceso proceso = new Proceso();
+        proceso.setFinalizado(false);
+        proceso.setCancelado(false);
+        proceso.setFechaInicio(Instant.now());
+        proceso.setTipoProceso(TipoProceso.valueOf(procesoDTO.getTipoProceso()));
+        Persona requiriente = this.personaService.findById(procesoDTO.getRequirienteId());
+        proceso.setRequiriente(requiriente);
+
+        List<Paso> pasos = this.gestorPasoService.crearPasos(procesoDTO.getTipoProceso())
+                .stream()
+                .map(pasoDTO -> {
+                    Paso paso = new Paso();
+                    convertidorPaso.convertirAEntidad(paso, pasoDTO);
+                    paso.setProceso(proceso);
+                    paso.setRol(Rol.fromNombre(pasoDTO.getRol()));
+                    return paso;
+                }).collect(Collectors.toList());
+
+        pasos.stream().filter(
+                paso -> paso.getRol() == Rol.DOCENTE)
+                .forEach((paso -> paso.setResponsable(requiriente)));
+
+        if (procesoDTO.getMapaRolResponsable() != null) {
+            // Mapa de rol a lista de pasos
+            Map<String, List<Paso>> mapaRolPasos = pasos.stream()
+                    .collect(Collectors.groupingBy(paso -> paso.getRol().getNombre()));
+
+            mapaRolPasos.forEach((rol, pasosPorRol) -> {
+                Integer idResponsable = procesoDTO.getMapaRolResponsable().get(rol); // procesoDTO.getMapaRolResponsable()
+                                                                                     // => Map<String, Integer>
+
+                pasosPorRol.stream().forEach((pasoPR) -> {
+                    if (idResponsable != null)
+                        pasoPR.setResponsable(this.personaService.findById(idResponsable));
+                });
+
+            });
+        }
+
+        proceso.setPasos(pasos); // el chat dijo que estos "pasos" son los mismos que los del mapaRolPasos
+        this.procesoRepository.save(proceso);
+        ProcesoPagoDocente pagoDocente = new ProcesoPagoDocente();
+        pagoDocente.setProceso(proceso);
+        pagoDocente.setModalidadVirtual(procesoDTO.getModalidadVirtual());
+        pagoDocente.setFechaInicioClase(procesoDTO.getFechaInicioClase());
+        pagoDocente.setFechaFinClase(procesoDTO.getFechaFinClase());
+        Materia materia = this.materiaService.findById(procesoDTO.getMateriaId());
+        pagoDocente.setMateria(materia);
+
+        var procesoEspecifico = procesoPagoDocenteRepository.save(pagoDocente);
+
         return convertidorProceso.convertirACompletoDTO(procesoEspecifico);
     }
 

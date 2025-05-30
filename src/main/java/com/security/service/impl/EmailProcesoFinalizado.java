@@ -45,7 +45,7 @@ public class EmailProcesoFinalizado {
             emailService.sendEmail(
                 "ProcesoFinalizado", // archivo Thymeleaf sin extensión
                 persona.getCorreo(),
-                "Proceso Finalizado #"+procesoId,
+                "Proceso #"+procesoId+ " ha finalizado",
                 variables
             );
 
