@@ -14,6 +14,7 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.security.controller.NotificacionController;
 import com.security.db.Materia;
 import com.security.db.Paso;
 import com.security.db.Persona;
@@ -304,8 +305,13 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         return this.procesoRepository.findMisProcesosPagoDocentePorResponsable(responsableId);
     }
 
+    @Autowired
+    NotificacionController notificacionController;
+
     @Override
     public List<ProcesoPasoDocumentoDTO> obtenerDetalleProcesoId(Integer procesoId) {
+
+        notificacionController.notificarCambioProceso(procesoId);
         return this.procesoRepository.findProcesoDetalleById(procesoId);
     }
 

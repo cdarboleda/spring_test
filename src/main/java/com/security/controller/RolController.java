@@ -25,25 +25,25 @@ import jakarta.persistence.EntityNotFoundException;
 @RequestMapping("/rol")
 public class RolController {
 
-    @Autowired
-    private IRolService rolService;
+    // @Autowired
+    // private IRolService rolService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> insertar(@RequestBody Rol rol){
-        return new ResponseEntity<>(this.rolService.insert(rol), null, HttpStatus.OK);
-    }
+    // @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    // public ResponseEntity<?> insertar(@RequestBody Rol rol){
+    //     return new ResponseEntity<>(this.rolService.insert(rol), null, HttpStatus.OK);
+    // }
 
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> buscarPorId(@PathVariable(name = "id") Integer id){
+    // @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    // public ResponseEntity<?> buscarPorId(@PathVariable(name = "id") Integer id){
 
-        Rol rol = this.rolService.findByIdOptional(id).orElseThrow(() -> new EntityNotFoundException("Rol con el id "+ id + " no encontrado."));
+    //     Rol rol = this.rolService.findByIdOptional(id).orElseThrow(() -> new EntityNotFoundException("Rol con el id "+ id + " no encontrado."));
 
-        return new ResponseEntity<>(rol , null, HttpStatus.OK);
-    }
+    //     return new ResponseEntity<>(rol , null, HttpStatus.OK);
+    // }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> buscarRoles(){
-        return new ResponseEntity<>(this.rolService.findAll(), null, HttpStatus.OK);
-    }    
+    // @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    // public ResponseEntity<?> buscarRoles(){
+    //     return new ResponseEntity<>(this.rolService.findAll(), null, HttpStatus.OK);
+    // }    
     
 }

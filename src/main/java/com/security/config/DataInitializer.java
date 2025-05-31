@@ -16,7 +16,7 @@ public class DataInitializer {
     @Autowired
     private IRolRepository rolRepository;
  
-    @PostConstruct
+    //@PostConstruct
     public void initData() {
         if (rolRepository.count() == 0) {
             List<Rol> roles = List.of(
