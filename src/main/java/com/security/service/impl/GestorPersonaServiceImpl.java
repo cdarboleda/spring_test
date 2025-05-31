@@ -3,6 +3,7 @@ package com.security.service.impl;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +12,16 @@ import org.springframework.stereotype.Service;
 
 import com.security.db.Paso;
 import com.security.db.Persona;
-import com.security.db.Rol;
+// import com.security.db.Rol;
+import com.security.db.enums.Rol;
 import com.security.exception.CustomException;
 import com.security.repo.IPasoRepository;
 import com.security.repo.IPersonaRepository;
-import com.security.repo.IRolRepository;
+
 import com.security.service.IGestorPersonaService;
 import com.security.service.IPasoService;
 import com.security.service.IPersonaService;
-import com.security.service.IRolService;
+
 import com.security.service.dto.PersonaDTO;
 import com.security.service.dto.PersonaLigeroDTO;
 import com.security.service.dto.utils.Convertidor;
@@ -36,12 +38,6 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
 
     @Autowired
     private IPersonaService personaService;
-
-    @Autowired
-    private IRolRepository rolRepository;
-
-    @Autowired
-    private IRolService rolService;
 
     @Autowired
     private Convertidor convertidor;
@@ -65,9 +61,10 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
         Persona persona = new Persona();
         convertidor.convertirAPersona(persona, personaDTO);
 
-        List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
+        // List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
+        Set<Rol> roles = Rol.obtenerRolesFromNombre(personaDTO.getRoles());
 
-        this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
+        // this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
         persona.setRoles(new HashSet<>(roles));
         return convertidor.convertirAPersonaDTO(personaRepository.save(persona));
     }
@@ -82,13 +79,11 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
             throw new CustomException("Hay campos erróneos, por favor revise antes de enviar", HttpStatus.BAD_REQUEST);
         }
         Persona persona = this.personaService.findById(personaDTO.getId());
-        List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
-
-        this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
+        // List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
+        Set<Rol> roles = Rol.obtenerRolesFromNombre(personaDTO.getRoles());
+        persona.setRoles(new HashSet<>(roles));
 
         convertidor.convertirAPersona(persona, personaDTO);
-        // personaDTOPersona.setProcesos(persona.getProcesos());
-        persona.setRoles(new HashSet<>(roles));
 
         return persona;
     }
@@ -110,12 +105,14 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
 
     @Override
     public List<Rol> findRolesByPersonaId(Integer id) {
-        this.personaService.existsById(id);
-        List<Rol> roles = this.rolRepository.findByPersonasId(id);
+        
+        Persona persona = personaService.findById(id);
+
+        Set<Rol> roles = persona.getRoles();
         if (roles.isEmpty()) {
             throw new EntityNotFoundException("No hay roles para persona con id " + id);
         }
-        return roles;
+        return new ArrayList<Rol>(roles);
     }
 
     @Override
@@ -126,37 +123,37 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
         }
         return pasos;
     }
-    
-    @Override
-    public List<PersonaLigeroDTO> findAllWithRoles() {
-        List<PersonaLigeroDTO> dtos = this.personaRepository.findAllWithRoles().stream()
-                .map(p -> new PersonaLigeroDTO(
-                        p.getId(),
-                        p.getCedula(),
-                        p.getNombre(),
-                        p.getApellido(),
-                        p.getRoles().stream().map(Rol::getNombre).collect(Collectors.toList())))
-                .collect(Collectors.toList());
-                return dtos;
-    }
 
-    private void rolesInvalidosMensaje(List<Rol> roles, List<String> rolesIds) {
+    // @Override
+    // public List<PersonaLigeroDTO> findAllWithRoles() {
+    //     List<PersonaLigeroDTO> dtos = this.personaRepository.findAllWithRoles().stream()
+    //             .map(p -> new PersonaLigeroDTO(
+    //                     p.getId(),
+    //                     p.getCedula(),
+    //                     p.getNombre(),
+    //                     p.getApellido(),
+    //                     p.getRoles().stream().map(Rol::getNombre).collect(Collectors.toList())))
+    //             .collect(Collectors.toList());
+    //     return dtos;
+    // }
 
-        if (roles.size() != rolesIds.size()) {
-            List<String> foundIds = roles.stream()
-                    .map(Rol::getNombre)
-                    .collect(Collectors.toList());
+    // private void rolesInvalidosMensaje(List<Rol> roles, List<String> rolesIds) {
 
-            List<String> missingIds = new ArrayList<>(rolesIds);
-            missingIds.removeAll(foundIds);
+    //     if (roles.size() != rolesIds.size()) {
+    //         List<String> foundIds = roles.stream()
+    //                 .map(Rol::getNombre)
+    //                 .collect(Collectors.toList());
 
-            if (!missingIds.isEmpty()) {
-                throw new CustomException("Los siguientes IDs de roles no existen: " + missingIds,
-                        HttpStatus.BAD_REQUEST);
-            }
+    //         List<String> missingIds = new ArrayList<>(rolesIds);
+    //         missingIds.removeAll(foundIds);
 
-        }
+    //         if (!missingIds.isEmpty()) {
+    //             throw new CustomException("Los siguientes IDs de roles no existen: " + missingIds,
+    //                     HttpStatus.BAD_REQUEST);
+    //         }
 
-    }
+    //     }
+
+    // }
 
 }

@@ -37,7 +37,7 @@ import com.security.service.IMateriaService;
 import com.security.service.IPasoService;
 import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
-import com.security.service.IRolService;
+
 import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.MiProcesoPagoDocenteDTO;
 import com.security.service.dto.ProcesoDTO;
@@ -69,8 +69,6 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     @Autowired
     private ICarpetaDocumentoRepository carpetaDocumentoRepository;
 
-    @Autowired
-    private IRolService rolService;
 
     @Autowired
     private IPasoRepository pasoRepository;

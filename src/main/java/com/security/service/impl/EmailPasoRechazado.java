@@ -49,7 +49,6 @@ public class EmailPasoRechazado {
     @Async
     public void send(PasoDTO paso, List<String> observaciones, String maestria, String materia){
         this.paso = paso;
-        System.out.println("el paso: "+paso );
         this.observaciones = observaciones;
         this.materia = materia;
         this.maestria = maestria;

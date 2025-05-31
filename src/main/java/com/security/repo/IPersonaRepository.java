@@ -26,7 +26,7 @@ public interface IPersonaRepository extends JpaRepository<Persona, Integer> {
             "FROM Persona p")
     public List<PersonaLigeroDTO> findAllPersonaLigeroDTO();
 
-    @Query("SELECT p FROM Persona p LEFT JOIN FETCH p.roles")
-    List<Persona> findAllWithRoles();
+    // @Query("SELECT p FROM Persona p LEFT JOIN FETCH p.roles")
+    // List<Persona> findAllWithRoles();
 
 }

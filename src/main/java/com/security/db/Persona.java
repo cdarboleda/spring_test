@@ -5,10 +5,15 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.security.db.enums.converter.RolConverter;
+import com.security.db.enums.Rol;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,7 +35,7 @@ public class Persona {
 
     @Id
     @Column(name = "pers_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="seq_pers")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_pers")
     @SequenceGenerator(name = "seq_pers", initialValue = 1, allocationSize = 1)
     private Integer id;
 
@@ -45,7 +50,7 @@ public class Persona {
     private String apellido;
     @Column(name = "pers_correo", nullable = false)
     private String correo;
-    @Column(name = "pers_cedula", unique = true , nullable = false)
+    @Column(name = "pers_cedula", unique = true, nullable = false)
     private String cedula;
     @Column(name = "pers_telefono")
     private String telefono;
@@ -54,21 +59,27 @@ public class Persona {
     @Column(name = "pers_observacion")
     private String observacion;
 
-    @OneToMany(mappedBy = "requiriente",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "requiriente", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JsonIgnore
     private List<Proceso> procesos;
 
-    @OneToMany(mappedBy = "responsable", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "responsable", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JsonIgnore
     private List<Paso> pasos;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "persona_rol", // Nombre de la tabla de unión
-        joinColumns = @JoinColumn(name = "pers_id"), // Columna que referencia a Persona
-        inverseJoinColumns = @JoinColumn(name = "rol_id") // Columna que referencia a Rol
-    )
-    // @JsonIgnore
+    // @ManyToMany(fetch = FetchType.LAZY)
+    // @JoinTable(
+    //     name = "persona_rol", // Nombre de la tabla de unión
+    //     joinColumns = @JoinColumn(name = "pers_id"), // Columna que referencia a Persona
+    //     inverseJoinColumns = @JoinColumn(name = "rol_id") // Columna que referencia a Rol
+    // )
+    // // @JsonIgnore
+    // private Set<Rol> roles = new HashSet<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    // @Convert(converter = RolConverter.class)
+    @CollectionTable(name = "persona_roles", joinColumns = @JoinColumn(name = "pers_id"))
+    @Column(name = "rol")
     private Set<Rol> roles = new HashSet<>();
 
 }

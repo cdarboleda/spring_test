@@ -93,12 +93,6 @@ public class PersonaController {
         return new ResponseEntity<>(this.personaService.findAllPersonaLigeroDTO(), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/todos-min-rol", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('administrador', 'usuario', 'administrador_usuarios')")
-    public ResponseEntity<?> obtenerTodasLasPersonasMinRol() {
-        return new ResponseEntity<>(this.gestorPersonaService.findAllWithRoles(), HttpStatus.OK);
-    }
-
     //Este es el de la tabla de procesos cuando no soy admin
     //El de cuando si es admin esta en el proceso controller
     @GetMapping("{id}/mis-procesos")
