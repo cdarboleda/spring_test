@@ -13,5 +13,5 @@ public interface IMaestriaRepository extends JpaRepository<Maestria, Integer> {
     "AND m.nombre = :nombre " +
     "AND m.cohorte = :cohorte ")
     Maestria findMaestriaPorCodigoNombreCohorte(@Param("codigo") String codigo,
-     @Param("nombre") String nombre, @Param("cohorte") String cohorte);
+     @Param("nombre") String nombre, @Param("cohorte") Integer cohorte);
 }

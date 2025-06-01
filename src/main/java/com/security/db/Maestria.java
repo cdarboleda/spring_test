@@ -36,7 +36,7 @@ public class Maestria {
     private String codigo;
 
     @Column(name = "maes_cohorte")
-    private String cohorte;
+    private Integer cohorte;
 
     @Column(name = "maes_fecha_inicio_ejecucion")
     private LocalDate fechaInicio;

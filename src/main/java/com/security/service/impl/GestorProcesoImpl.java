@@ -1,6 +1,7 @@
 package com.security.service.impl;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -311,6 +312,12 @@ public class GestorProcesoImpl implements IGestorProcesoService {
 
         notificacionController.notificarCambioProceso(procesoId);
         return this.procesoRepository.findProcesoDetalleById(procesoId);
+    }
+
+    @Override
+    public Boolean existsProcesoPagoDocenteIdentico(Integer requirienteId, Integer maestriaId, Integer cohorte,
+            Integer materiaId, LocalDate fechaInicioClase, LocalDate fechaFinClase) {
+        return this.procesoPagoDocenteRepository.existsProcesoPagoDocenteIdentico(requirienteId, maestriaId, cohorte, materiaId, fechaInicioClase, fechaFinClase);
     }
 
 }

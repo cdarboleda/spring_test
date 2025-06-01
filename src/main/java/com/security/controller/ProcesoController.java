@@ -1,5 +1,6 @@
 package com.security.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +16,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.service.IGestorProcesoService;
 import com.security.service.IProcesoService;
 import com.security.service.dto.MiProcesoDTO;
+import com.security.service.dto.PasoDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteResponsablesDTO;
 
 import jakarta.validation.Valid;
-
 
 @RestController
 @CrossOrigin
@@ -32,20 +34,21 @@ import jakarta.validation.Valid;
 @PreAuthorize("hasAnyRole('administrador', 'usuario')")
 public class ProcesoController {
 
-     @Autowired
-     private IProcesoService procesoService;
+    @Autowired
+    private IProcesoService procesoService;
 
-     @Autowired
-     private IGestorProcesoService gestorProceso;
+    @Autowired
+    private IGestorProcesoService gestorProceso;
 
-    //  @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    //  public ResponseEntity<?> obtenerProcesoById(@PathVariable Integer id) {
-    //      return new ResponseEntity<>(this.procesoService.findById(id), HttpStatus.OK);
-    //  }
-     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-     public ResponseEntity<?> obtenerProcesoDTOById(@PathVariable(name = "id") Integer id) {
-         return new ResponseEntity<>(this.gestorProceso.findByIdCompletoDTO(id), HttpStatus.OK);
-     }
+    // @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    // public ResponseEntity<?> obtenerProcesoById(@PathVariable Integer id) {
+    // return new ResponseEntity<>(this.procesoService.findById(id), HttpStatus.OK);
+    // }
+
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerProcesoDTOById(@PathVariable(name = "id") Integer id) {
+        return new ResponseEntity<>(this.gestorProceso.findByIdCompletoDTO(id), HttpStatus.OK);
+    }
 
     @GetMapping("/mis-procesos")
     public ResponseEntity<?> obtenerMisProcesosPagoDocente() {
@@ -59,28 +62,46 @@ public class ProcesoController {
 
     @PreAuthorize("hasAnyRole('administrador')")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-     public ResponseEntity<?> insertarProceso(@Valid @RequestBody ProcesoDTO procesoDTO) {
-         return new ResponseEntity<>(this.gestorProceso.insert(procesoDTO), HttpStatus.OK);
-     }
+    public ResponseEntity<?> insertarProceso(@Valid @RequestBody ProcesoDTO procesoDTO) {
+        return new ResponseEntity<>(this.gestorProceso.insert(procesoDTO), HttpStatus.OK);
+    }
 
     @PreAuthorize("hasAnyRole('administrador')")
-    @PostMapping(path="/insertar-pago-docente", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-     public ResponseEntity<?> insertarProcesoPagoDocente(@Valid @RequestBody ProcesoPagoDocenteResponsablesDTO procesoDTO) {
-         return new ResponseEntity<>(this.gestorProceso.insertProcesoPagoDocente(procesoDTO), HttpStatus.OK);
-     }
+    @PostMapping(path = "/insertar-pago-docente", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> insertarProcesoPagoDocente(
+            @Valid @RequestBody ProcesoPagoDocenteResponsablesDTO procesoDTO) {
+        return new ResponseEntity<>(this.gestorProceso.insertProcesoPagoDocente(procesoDTO), HttpStatus.OK);
+    }
 
-     @PreAuthorize("hasAnyRole('administrador')")
-     @PutMapping(path="/{id}")
-     public ResponseEntity<?> actualizar(@PathVariable(name = "id") Integer id, @RequestBody ProcesoDTO procesoDTO) {
-         procesoDTO.setId(id);         
-         return new ResponseEntity<>(this.gestorProceso.update(procesoDTO), HttpStatus.OK);
-     }
+    @PreAuthorize("hasAnyRole('administrador')")
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<?> actualizar(@PathVariable(name = "id") Integer id, @RequestBody ProcesoDTO procesoDTO) {
+        procesoDTO.setId(id);
+        return new ResponseEntity<>(this.gestorProceso.update(procesoDTO), HttpStatus.OK);
+    }
 
-     @PreAuthorize("hasAnyRole('administrador')")
-     @DeleteMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-     public ResponseEntity<?> eliminarProcesoById(@PathVariable(name = "id") Integer id){
+    @PreAuthorize("hasAnyRole('administrador')")
+    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> eliminarProcesoById(@PathVariable(name = "id") Integer id) {
         this.gestorProceso.delete(id);
-        return new ResponseEntity<>("Proceso con id: "+id+" eliminado", null, HttpStatus.OK);
-     }
+        return new ResponseEntity<>("Proceso con id: " + id + " eliminado", null, HttpStatus.OK);
+    }
 
+    // // toco poner una ruta pago-docente porque se mezclaba con la de {id}
+    // @GetMapping(path = "/pago/verificar")
+    // // @PreAuthorize("hasAnyRole('administrador')")
+    // public ResponseEntity<?> verificarProcesoUnico(
+    //         @RequestParam("requirienteId") Integer requirienteId,
+    //         @RequestParam("maestriaId") Integer maestriaId,
+    //         @RequestParam("cohorte") Integer cohorte,
+    //         @RequestParam("materiaId") Integer materiaId,
+    //         @RequestParam("fechaInicioClase") LocalDate fechaInicioClase,
+    //         @RequestParam("fechaFinClase") LocalDate fechaFinClase) {
+    //             System.out.println("llegue al metodo");
+    //     return new ResponseEntity<>(
+            
+    //             this.gestorProceso.existsProcesoPagoDocenteIdentico(requirienteId, maestriaId, cohorte, materiaId,
+    //                     fechaInicioClase, fechaFinClase),
+    //             HttpStatus.OK);
+    // }
 }

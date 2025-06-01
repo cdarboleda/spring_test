@@ -1,5 +1,6 @@
 package com.security.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.security.service.dto.MiProcesoDTO;
@@ -21,4 +22,6 @@ public interface IGestorProcesoService {
     public List<MiProcesoPagoDocenteDTO> findMisProcesosPagoDocente();
     public List<MiProcesoPagoDocenteDTO> findMisProcesosPagoDocentePorResponsable(Integer responsableId);   
     public List<ProcesoPasoDocumentoDTO> obtenerDetalleProcesoId(Integer procesoId);
+
+    public Boolean existsProcesoPagoDocenteIdentico(Integer requirienteId, Integer maestriaId, Integer cohorte, Integer materiaId, LocalDate fechaInicioClase, LocalDate fechaFinClase);
 }

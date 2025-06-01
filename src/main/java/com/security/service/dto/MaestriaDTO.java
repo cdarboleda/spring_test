@@ -13,7 +13,7 @@ public class MaestriaDTO {
     private String nombre;
     private String codigo;
 
-    private String cohorte;
+    private Integer cohorte;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private String estado;

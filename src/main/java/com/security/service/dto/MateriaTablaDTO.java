@@ -18,7 +18,7 @@ public class MateriaTablaDTO {
 
     private String maestriaCodigo;
 
-    private String maestriaCohorte;
+    private Integer maestriaCohorte;
 
     private LocalDate maestriaFechaEjecucionDesde;
 
@@ -32,7 +32,7 @@ public class MateriaTablaDTO {
             Integer maestriaId,
             String maestriaNombre,
             String maestriaCodigo,
-            String maestriaCohorte,
+            Integer maestriaCohorte,
             LocalDate maestriaFechaEjecucionDesde,
             LocalDate maestriaFechaEjecucionHasta) {
                 this.id = id;

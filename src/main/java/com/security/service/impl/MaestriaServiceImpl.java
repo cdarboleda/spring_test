@@ -69,7 +69,7 @@ public class MaestriaServiceImpl implements IMaestriaService {
     }
 
     @Override
-    public void existeMaestriaPorCodigoNombreCohorte(String codigo, String nombre, String cohorte) {
+    public void existeMaestriaPorCodigoNombreCohorte(String codigo, String nombre, Integer cohorte) {
         Maestria maestria = this.maestriaRepository.findMaestriaPorCodigoNombreCohorte(codigo, nombre, cohorte);
         if (maestria != null) {
             throw new CustomException(

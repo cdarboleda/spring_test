@@ -17,5 +17,5 @@ public interface IMaestriaService {
 
     public Maestria findById(Integer id);
 
-    public void existeMaestriaPorCodigoNombreCohorte(String codigo, String nombre, String cohorte);
+    public void existeMaestriaPorCodigoNombreCohorte(String codigo, String nombre, Integer cohorte);
 }
