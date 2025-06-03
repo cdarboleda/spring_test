@@ -1,8 +1,5 @@
 package com.security.controller;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,13 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.service.IGestorProcesoService;
-import com.security.service.IProcesoService;
-import com.security.service.dto.MiProcesoDTO;
-import com.security.service.dto.PasoDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteResponsablesDTO;
 
@@ -33,9 +26,6 @@ import jakarta.validation.Valid;
 @RequestMapping("/proceso")
 @PreAuthorize("hasAnyRole('administrador', 'usuario')")
 public class ProcesoController {
-
-    @Autowired
-    private IProcesoService procesoService;
 
     @Autowired
     private IGestorProcesoService gestorProceso;
@@ -53,6 +43,11 @@ public class ProcesoController {
     @GetMapping("/mis-procesos")
     public ResponseEntity<?> obtenerMisProcesosPagoDocente() {
         return ResponseEntity.ok(this.gestorProceso.findMisProcesosPagoDocente());
+    }
+
+    @GetMapping(path="/mis-procesos/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> obtenerMiProcesoPagoDocenteById(@PathVariable(name = "id") Integer id) {
+        return ResponseEntity.ok(this.gestorProceso.findMiProcesoPagoDocenteById(id));
     }
 
     @GetMapping("/{id}/pasos")
@@ -87,21 +82,4 @@ public class ProcesoController {
         return new ResponseEntity<>("Proceso con id: " + id + " eliminado", null, HttpStatus.OK);
     }
 
-    // // toco poner una ruta pago-docente porque se mezclaba con la de {id}
-    // @GetMapping(path = "/pago/verificar")
-    // // @PreAuthorize("hasAnyRole('administrador')")
-    // public ResponseEntity<?> verificarProcesoUnico(
-    //         @RequestParam("requirienteId") Integer requirienteId,
-    //         @RequestParam("maestriaId") Integer maestriaId,
-    //         @RequestParam("cohorte") Integer cohorte,
-    //         @RequestParam("materiaId") Integer materiaId,
-    //         @RequestParam("fechaInicioClase") LocalDate fechaInicioClase,
-    //         @RequestParam("fechaFinClase") LocalDate fechaFinClase) {
-    //             System.out.println("llegue al metodo");
-    //     return new ResponseEntity<>(
-            
-    //             this.gestorProceso.existsProcesoPagoDocenteIdentico(requirienteId, maestriaId, cohorte, materiaId,
-    //                     fechaInicioClase, fechaFinClase),
-    //             HttpStatus.OK);
-    // }
 }

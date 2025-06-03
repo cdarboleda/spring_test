@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -24,6 +25,7 @@ import com.security.db.ProcesoPagoDocente;
 import com.security.db.ProcesoTitulacion;
 import com.security.db.enums.Estado;
 import com.security.db.enums.Rol;
+import com.security.db.enums.TipoEventoProceso;
 import com.security.db.enums.TipoProceso;
 import com.security.repo.ICarpetaDocumentoRepository;
 import com.security.repo.IPasoRepository;
@@ -41,6 +43,7 @@ import com.security.service.IProcesoService;
 
 import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.MiProcesoPagoDocenteDTO;
+import com.security.service.dto.ProcesoActualizadoDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteDTO;
 import com.security.service.dto.ProcesoPagoDocenteResponsablesDTO;
@@ -70,31 +73,27 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     @Autowired
     private ICarpetaDocumentoRepository carpetaDocumentoRepository;
 
-
     @Autowired
     private IPasoRepository pasoRepository;
     @Autowired
     private IProcesoLogRepository procesoLogRepository;
     @Autowired
     private ConvertidorProceso convertidorProceso;
-    @Autowired
-    private ConvertidorPersona convertidorPersona;
-    @Autowired
-    private ConvertidorCarpetaDocumento convertidorDocumento;
-    @Autowired
-    private IPasoService pasoService;
+
     @Autowired
     private IGestorPasoService gestorPasoService;
     @Autowired
     private IProcesoPagoDocenteRepository procesoPagoDocenteRepository;
     @Autowired
     private IProcesoTitulacionRepository procesoTitulacionRepository;
-
-    @Autowired
-    private IGestorProcesoLogService gestorProcesoLogService;
-
     @Autowired
     private ConvertidorPaso convertidorPaso;
+
+    @Autowired
+    private ProcesoResponsablesCache procesoResponsablesCache;
+
+    @Autowired
+    NotificacionController notificacionController;
 
     @Override
     public List<ProcesoDTO> findProcesosByRequirienteId(Integer id) {
@@ -229,9 +228,18 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         }
 
         proceso.setPasos(pasos); // el chat dijo que estos "pasos" son los mismos que los del mapaRolPasos
-        this.procesoRepository.save(proceso);
+        Proceso procesoGuardado = this.procesoRepository.save(proceso);
+
+        // Guardar el cache de responsables de un proceso
+        procesoResponsablesCache.setResponsables(procesoGuardado.getId(),
+                pasos.stream()
+                        .map(Paso::getResponsable)
+                        .filter(Objects::nonNull)
+                        .map(Persona::getIdKeycloak)
+                        .collect(Collectors.toSet()));
+
         ProcesoPagoDocente pagoDocente = new ProcesoPagoDocente();
-        pagoDocente.setProceso(proceso);
+        pagoDocente.setProceso(procesoGuardado);
         pagoDocente.setModalidadVirtual(procesoDTO.getModalidadVirtual());
         pagoDocente.setFechaInicioClase(procesoDTO.getFechaInicioClase());
         pagoDocente.setFechaFinClase(procesoDTO.getFechaFinClase());
@@ -239,6 +247,8 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         pagoDocente.setMateria(materia);
 
         var procesoEspecifico = procesoPagoDocenteRepository.save(pagoDocente);
+
+        notificacionController.notificarProcesoCreacion(procesoGuardado.getId());
 
         return convertidorProceso.convertirACompletoDTO(procesoEspecifico);
     }
@@ -253,6 +263,8 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             proceso.setCancelado(procesoDTO.getCancelado());
         }
 
+        notificacionController.notificarProcesoActualizacion(procesoDTO.getId());
+
         return convertidorProceso.convertirALigeroDTO(proceso);
     }
 
@@ -260,13 +272,17 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     // aaaaaaasdasdasdasd
     @Override
     public void delete(Integer id) {
+        var ids = procesoResponsablesCache.getResponsables(id);
+
+        this.procesoRepository.responsablesDeUnProceso(id);
         this.procesoPagoDocenteRepository.deleteById(id);
         this.procesoTitulacionRepository.deleteById(id);
         carpetaDocumentoRepository.deleteByProcesoId(id);
         pasoRepository.deleteByProcesoId(id);
         procesoLogRepository.deleteByProcesoId(id);
-
         this.procesoRepository.deleteById(id);
+        notificacionController.notificarProcesoEliminacion(id, ids);
+
     }
 
     @Override
@@ -300,24 +316,32 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     }
 
     @Override
+    public MiProcesoPagoDocenteDTO findMiProcesoPagoDocenteById(Integer procesoId) {
+        return this.procesoRepository.findMiProcesoPagoDocenteById(procesoId);
+    }
+
+    @Override
     public List<MiProcesoPagoDocenteDTO> findMisProcesosPagoDocentePorResponsable(Integer responsableId) {
         return this.procesoRepository.findMisProcesosPagoDocentePorResponsable(responsableId);
     }
 
-    @Autowired
-    NotificacionController notificacionController;
-
     @Override
     public List<ProcesoPasoDocumentoDTO> obtenerDetalleProcesoId(Integer procesoId) {
 
-        notificacionController.notificarCambioProceso(procesoId);
+        // notificacionController.notificarCambio(procesoId);
         return this.procesoRepository.findProcesoDetalleById(procesoId);
     }
 
     @Override
     public Boolean existsProcesoPagoDocenteIdentico(Integer requirienteId, Integer maestriaId, Integer cohorte,
             Integer materiaId, LocalDate fechaInicioClase, LocalDate fechaFinClase) {
-        return this.procesoPagoDocenteRepository.existsProcesoPagoDocenteIdentico(requirienteId, maestriaId, cohorte, materiaId, fechaInicioClase, fechaFinClase);
+        return this.procesoPagoDocenteRepository.existsProcesoPagoDocenteIdentico(requirienteId, maestriaId, cohorte,
+                materiaId, fechaInicioClase, fechaFinClase);
+    }
+
+    @Override
+    public List<String> obtenerResponsablesDeUnProceso(Integer procesoId) {
+        return this.procesoRepository.responsablesDeUnProceso(procesoId);
     }
 
 }

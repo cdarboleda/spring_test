@@ -24,4 +24,6 @@ public interface IGestorProcesoService {
     public List<ProcesoPasoDocumentoDTO> obtenerDetalleProcesoId(Integer procesoId);
 
     public Boolean existsProcesoPagoDocenteIdentico(Integer requirienteId, Integer maestriaId, Integer cohorte, Integer materiaId, LocalDate fechaInicioClase, LocalDate fechaFinClase);
+    public List<String> obtenerResponsablesDeUnProceso(Integer procesoId);
+    public MiProcesoPagoDocenteDTO findMiProcesoPagoDocenteById(Integer procesoId);
 }

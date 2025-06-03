@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.security.controller.NotificacionController;
 import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.Proceso;
@@ -59,6 +60,12 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     @Autowired
     private PasoFactoryManager factoryManager;
 
+    @Autowired
+    private ProcesoResponsablesCache procesoResponsablesCache;
+
+    @Autowired
+    NotificacionController notificacionController;
+
     @Override
     public List<PasoDTO> crearPasos(String proceso) {
         return this.factoryManager.generarPasosPorProceso(proceso);
@@ -69,13 +76,8 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         Paso paso = this.pasoService.findById(idPaso);
         Persona responsable = this.personaService.findById(idResponsable);
 
-        // if(responsable.activo!=null){
-        // paso.setResponsable(responsable);
-        // }
-        // el filtro de rol de un responsable le hacemos en el front
         if (responsable.getRoles().contains(paso.getRol())) {
             paso.setResponsable(responsable);
-            // agregar procesoLog TODO
             this.gestorProcesoLogService.insertarProcesoLog(paso, Evento.RESPONSABLE);
         } else {
             throw new RuntimeException("El responsable no tiene el rol");
@@ -110,7 +112,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         paso.setEstado(Estado.valueOf(pasoDTO.getEstado()));
 
         // if (pasoDTO.getObservacion() != null)
-            paso.setObservacion(pasoDTO.getObservacion());
+        paso.setObservacion(pasoDTO.getObservacion());
 
         paso.setDescripcionEstado(pasoDTO.getDescripcionEstado() == null
                 ? EstadoHelper.getDescripcionPorIndice(Estado.valueOf(pasoDTO.getEstado()), 0)
@@ -154,38 +156,39 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     }
 
     @Override
-    public List<Paso> rechazarPaso(Integer idPasoActual, PasoDTO pasoAnteriorDTO, String observacionesString, String maestria, String materia) {
+    public List<Paso> rechazarPaso(Integer idPasoActual, PasoDTO pasoAnteriorDTO, String observacionesString,
+            String maestria, String materia) {
         PasoDTO pasoActualDTO = new PasoDTO();
         pasoActualDTO.setEstado(Estado.PENDIENTE.toString());
-        // pasoActualDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 1));// este 
-        pasoActualDTO.setDescripcionEstado("Rechazado");//o este
+        // pasoActualDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE,
+        // 1));// este
+        pasoActualDTO.setDescripcionEstado("Rechazado");// o este
 
         List<Paso> pasos = new ArrayList<>();
         Paso pasoActual = this.updatePaso(idPasoActual, pasoActualDTO);
         pasos.add(pasoActual);
 
-        if(pasoAnteriorDTO!=null){
+        if (pasoAnteriorDTO != null) {
             pasoAnteriorDTO.setEstado(Estado.EN_CURSO.toString());
-            pasoAnteriorDTO.setDescripcionEstado("En correcciones");//o este
+            pasoAnteriorDTO.setDescripcionEstado("En correcciones");// o este
             pasoAnteriorDTO.setObservacion(observacionesString);
 
             if (observacionesString.trim().isEmpty()) {
                 pasoAnteriorDTO.setObservacion(null);
             }
-            
+
             Paso pasoAnterior = this.updatePaso(pasoAnteriorDTO.getId(), pasoAnteriorDTO);
 
-            List<String> observaciones=  Arrays.stream(observacionesString.split(";")) // Divide por ";"
+            List<String> observaciones = Arrays.stream(observacionesString.split(";")) // Divide por ";"
                     .map(String::trim) // Elimina espacios en blanco alrededor de cada elemento
                     .filter(obs -> !obs.isEmpty()) // Filtra los vacíos
                     .collect(Collectors.toList()); // Lo convierte en una lista
 
             pasos.add(pasoAnterior);
 
-            //la notificacion, deshabilitada por el momento hasta tener correos validos
             this.emailPasoRechazado.send(pasoAnteriorDTO, observaciones, maestria, materia);
         }
-        
+
         return pasos;
 
     }
