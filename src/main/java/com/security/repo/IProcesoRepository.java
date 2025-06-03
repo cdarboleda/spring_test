@@ -41,7 +41,7 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         "req.id, req.cedula, req.nombre, req.apellido, " +
                         "paso.nombre, CAST(paso.estado AS string), paso.descripcionEstado, paso.fechaInicio, " +
                         "resp.id, resp.cedula, mat.nombre, mae.codigo, mae.nombre, " +
-                        "ppd.fechaInicioClase, ppd.fechaFinClase, mae.cohorte ) " +
+                        "ppd.fechaInicioClase, ppd.fechaFinClase, mae.cohorte, mae.estado ) " +
                         "FROM ProcesoPagoDocente ppd " +
                         "LEFT JOIN ppd.proceso p " +
                         "LEFT JOIN p.requiriente req " +
@@ -57,7 +57,7 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         "req.id, req.cedula, req.nombre, req.apellido, " +
                         "paso.nombre, CAST(paso.estado AS string), paso.descripcionEstado, paso.fechaInicio, " +
                         "resp.id, resp.cedula, mat.nombre, mae.codigo, mae.nombre, " +
-                        "ppd.fechaInicioClase, ppd.fechaFinClase, mae.cohorte ) " +
+                        "ppd.fechaInicioClase, ppd.fechaFinClase, mae.cohorte, mae.estado ) " +
                         "FROM ProcesoPagoDocente ppd " +
                         "LEFT JOIN ppd.proceso p " +
                         "LEFT JOIN p.requiriente req " +
@@ -75,7 +75,7 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         "req.id, req.cedula, req.nombre, req.apellido, " +
                         "paso.nombre, CAST(paso.estado AS string), paso.descripcionEstado, paso.fechaInicio, " +
                         "resp.id, resp.cedula, mat.nombre, mae.codigo, mae.nombre, " +
-                        "ppd.fechaInicioClase, ppd.fechaFinClase, mae.cohorte ) " +
+                        "ppd.fechaInicioClase, ppd.fechaFinClase, mae.cohorte, mae.estado ) " +
                         "FROM ProcesoPagoDocente ppd " +
                         "LEFT JOIN ppd.proceso p " +
                         "LEFT JOIN p.requiriente req " +

@@ -20,6 +20,7 @@ public class MiProcesoPagoDocenteDTO extends MiProcesoDTO {
     private LocalDate fechaFinClase;
 
     private Integer cohorte;
+    private String estado;
 
     public MiProcesoPagoDocenteDTO(
             Integer procesoId, TipoProceso tipoProceso, Instant fechaInicio,
@@ -29,7 +30,7 @@ public class MiProcesoPagoDocenteDTO extends MiProcesoDTO {
             String pasoNombre, String pasoEstado, String pasoDescripcionEstado,
             Instant pasoFechaInicio, Integer responsablePasoId,
             String responsableCedula, String materiaNombre, String maestriaCodigo,
-            String maestriaNombre, LocalDate fechaInicioClase, LocalDate fechaFinClase, Integer cohorte) {
+            String maestriaNombre, LocalDate fechaInicioClase, LocalDate fechaFinClase, Integer cohorte, String estado) {
 
         super(procesoId, tipoProceso, fechaInicio, fechaFin, finalizado, cancelado,
                 requirienteId, requirienteCedula, requirienteNombre, requirienteApellido,
@@ -42,6 +43,7 @@ public class MiProcesoPagoDocenteDTO extends MiProcesoDTO {
         this.fechaInicioClase = fechaInicioClase;
         this.fechaFinClase = fechaFinClase;
         this.cohorte = cohorte;
+        this.estado  = estado;
 
     }
 
