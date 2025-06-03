@@ -171,12 +171,6 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
 
     }
 
-    public PersonaLigeroDTO getDatosPersonaByEmail(String email) {
-        Persona persona = this.personaService.findByEmail(email);
-        return this.convertidorPersona.convertirALigeroDTO(persona);
-
-    }
-
     @Override
     public List<Persona> findPersonasByRol(String nombreRol) {
 

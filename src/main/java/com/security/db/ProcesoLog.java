@@ -40,6 +40,9 @@ public class ProcesoLog {
     @Column(name = "proc_log_responsable_nombre")
     private String responsableNombre;
 
+    @Column(name = "proc_log_responsable_rol")
+    private String responsableRol;
+
     // @Column(name = "proc_log_paso_id")
     // private Integer pasoId;
 

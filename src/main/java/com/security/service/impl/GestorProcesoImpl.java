@@ -146,31 +146,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         return null;
     }
 
-    private void asociarCompañerosAlProceso(Proceso proceso, List<Integer> idsCompañeros) {
 
-        // Asegura que el requiriente también sea parte del de Involucrados
-        if (!idsCompañeros.contains(proceso.getRequiriente().getId())) {
-            idsCompañeros.add(proceso.getRequiriente().getId());
-        }
-
-        // Validar que los IDs de los compañeros
-
-        List<Persona> compañeros = idsCompañeros.stream()
-                .map(this.personaService::findById)
-                .collect(Collectors.toList());
-
-        // Asociar cada compañero al proceso con pasos y carpetas
-        for (Persona compañero : compañeros) {
-
-            CarpetaDocumento carpeta = new CarpetaDocumento();
-            // carpeta.setPersona(compañero);
-            carpeta.setProceso(proceso);
-            carpeta.setUrl("test"); // resolver este campo
-            this.carpetaDocumentoRepository.save(carpeta);
-
-        }
-
-    }
 
     // Método para insertar un nuevo registro de Proceso
     @Override

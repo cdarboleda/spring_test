@@ -18,7 +18,7 @@ import com.security.repo.IProcesoTitulacionRepository;
 import com.security.service.IGestorProcesoTitulacionService;
 
 import com.security.service.dto.PasoDTO;
-import com.security.service.dto.TitulacionResponsableNotaLigeroDTO;
+import com.security.service.dto.TitulacionPasoResponsableLigeroDTO;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -33,15 +33,12 @@ public class GestorProcesoTitulacionServiceImpl implements IGestorProcesoTitulac
         @Autowired
         private IPersonaRepository personaRepository;
 
-        @Autowired
-        private IProcesoTitulacionRepository procesoTitulacionRepository;
-
         // obtiene el nombre del responsable de un paso y la nota
         // se usa para obtener el nombre del revisor, tutor, lectores y sus notas
         @Override
-        public TitulacionResponsableNotaLigeroDTO buscarResponsableNotaPaso(Integer idProcesoTitulacion,
+        public TitulacionPasoResponsableLigeroDTO buscarResponsablePaso(Integer idProcesoTitulacion,
                         String nombrePaso) {
-                TitulacionResponsableNotaLigeroDTO revisorNotaLigeroDTO = new TitulacionResponsableNotaLigeroDTO();
+                TitulacionPasoResponsableLigeroDTO personaResponsablePaso = new TitulacionPasoResponsableLigeroDTO();
                 // Buscar el paso correspondiente
                 Paso pasoEspecifico = this.pasoRepository.findByProcesoId(idProcesoTitulacion).stream()
                                 .filter(paso -> paso.getNombre().equals(nombrePaso))
@@ -53,33 +50,21 @@ public class GestorProcesoTitulacionServiceImpl implements IGestorProcesoTitulac
                 Persona persona = Optional.ofNullable(pasoEspecifico.getResponsable())
                                 .flatMap(responsable -> personaRepository.findById(responsable.getId()))
                                 .orElse(null); // Si la persona no existe dejamos el nombre vacio
-                revisorNotaLigeroDTO.setId(persona.getId());
+                personaResponsablePaso.setDescripcionEstado(pasoEspecifico.getDescripcionEstado());
+                personaResponsablePaso.setId(persona.getId());
                 String observacion = Optional.ofNullable(pasoEspecifico.getObservacion()).orElse(null);
-
-                // Crear el DTO y asignar el nombre del responsable si existe y las
-                // observaciones
-
-                revisorNotaLigeroDTO.setResponsableCalificacion(
+                personaResponsablePaso.setCorreo(
+                                persona != null ? persona.getCorreo() : "error al obtener correo");
+                personaResponsablePaso.setResponsablePaso(
                                 persona != null ? formatNombreCompleto(persona) : "No asignado");
-                revisorNotaLigeroDTO.setObservacion(
+                personaResponsablePaso.setObservacion(
                                 observacion == null ? "No se ha registrado observaciones" : observacion);
-
                 // Convertir nombrePaso en un enum
                 PasoTitulacion pasoTitulacion = Optional.ofNullable(PasoTitulacion.fromString(nombrePaso))
                                 .orElseThrow(() -> new IllegalArgumentException("Paso inválido: " + nombrePaso));
-                // Obtener la nota del paso específico
-                Double nota = this.procesoTitulacionRepository.findById(idProcesoTitulacion)
-                                .map(proceso -> switch (pasoTitulacion) {
-                                        // case REVISION_IDONEIDAD -> proceso.getNotaPropuestaProyecto();
-                                        case REVISION_LECTOR_1 -> proceso.getNotaLector1();
-                                        case REVISION_LECTOR_2 -> proceso.getNotaLector2();
-                                        default -> null; // null si el paso no tienecalificacion
-                                })
-                                .orElse(null);
+                personaResponsablePaso.setNombrePaso(pasoTitulacion.getNombre());
 
-                revisorNotaLigeroDTO.setCalificacionPaso(nota);
-
-                return revisorNotaLigeroDTO;
+                return personaResponsablePaso;
         }
 
         private String formatNombreCompleto(Persona persona) {

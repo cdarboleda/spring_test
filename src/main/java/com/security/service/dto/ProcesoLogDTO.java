@@ -18,6 +18,8 @@ public class ProcesoLogDTO {
 
     private String responsableNombre;
 
+    private String responsableRol;
+
     private Integer pasoOrden;
 
     private String pasoNombre;

@@ -102,6 +102,11 @@ public class PasoController {
         return new ResponseEntity<>(this.pasoService.findByProcesoId(id), null, HttpStatus.OK);
     }
 
+    // deberia ser un metodo interno no un endpoint, invetigar como manjear la
+    // validacion de un metodo
+    // cuando se lanza un a excepcion, por ejemplo si no es el responsable del paso,
+    // tira una excepcion
+    // como recibir en el front para poder mostrar la vista que noes el responsable
     @GetMapping(path = "/{id}/validar-responsable/{idPersona}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> validarUsuarioResponsablePaso(@PathVariable(name = "id") Integer id,
             @PathVariable(name = "idPersona") Integer idPersona) {

@@ -11,6 +11,7 @@ public enum PasoTitulacion {
     DESIGNACION_LECTORES("designacion_lectores"),
     REVISION_LECTOR_1("revision_lector_1"),
     REVISION_LECTOR_2("revision_lector_2"),
+    RVISION_INFORMES_LECTORES("revision_informes_lectores"),
     CORRECCION_OBSERVACION_LECTORES("correccion_observacion_lectores"),
     DOCUMENTACION_DEFENSA("documentacion_defensa"),
     DEFENSA("defensa");

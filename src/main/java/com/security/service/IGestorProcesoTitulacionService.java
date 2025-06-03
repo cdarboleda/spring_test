@@ -1,9 +1,9 @@
 package com.security.service;
 
-import com.security.service.dto.TitulacionResponsableNotaLigeroDTO;
+import com.security.service.dto.TitulacionPasoResponsableLigeroDTO;
 
 public interface IGestorProcesoTitulacionService {
 
-    public TitulacionResponsableNotaLigeroDTO buscarResponsableNotaPaso(Integer idProcesoTitulacion, String nombrePaso);
+    public TitulacionPasoResponsableLigeroDTO buscarResponsablePaso(Integer idProcesoTitulacion, String nombrePaso);
 
 }
