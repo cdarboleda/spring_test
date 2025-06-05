@@ -11,6 +11,8 @@ import com.security.db.Paso;
 import com.security.db.enums.Estado;
 import com.security.repo.IPasoRepository;
 import com.security.service.IPasoService;
+import com.security.service.dto.PasoDTO;
+import com.security.service.dto.utils.ConvertidorPaso;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -22,10 +24,18 @@ public class PasoServiceImpl implements IPasoService {
     @Autowired
     private IPasoRepository pasoRepository;
 
+    @Autowired
+    private ConvertidorPaso convertidorPaso;
+
     @Override
     public Paso findById(Integer id) {
         return this.pasoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Paso con id: " + id + " no encontrado."));
+    }
+
+    @Override
+    public PasoDTO findByIdDTO(Integer id) {
+        return convertidorPaso.convertirAPasoDTO(this.findById(id));
     }
 
     @Override

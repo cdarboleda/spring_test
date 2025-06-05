@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.service.IGestorPasoService;
+import com.security.service.IGestorProcesoService;
 import com.security.service.IPasoService;
 import com.security.service.dto.CarpetaDocumentoDTO;
 import com.security.service.dto.PasoDTO;
@@ -34,6 +35,8 @@ public class PasoController {
     @Autowired
     private IGestorPasoService gestorPasoService;
 
+    @Autowired
+    private IGestorProcesoService gestorProcesoService;
     /*
      * @GetMapping(path = "/{proceso}", produces = MediaType.APPLICATION_JSON_VALUE)
      * public ResponseEntity<?> crearPasos(@PathVariable String proceso){
@@ -45,7 +48,8 @@ public class PasoController {
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('administrador', 'usuario')")
     public ResponseEntity<?> buscarPorId(@PathVariable(name = "id") Integer id) {
-        return new ResponseEntity<>(this.pasoService.findById(id), null, HttpStatus.OK);
+        // return new ResponseEntity<>(this.pasoService.findByIdDTO(id), HttpStatus.OK);
+        return new ResponseEntity<>(this.gestorProcesoService.obtenerDetallePasoId(id), HttpStatus.OK);
     }
 
     @GetMapping(path = "proceso/{idProceso}", produces = MediaType.APPLICATION_JSON_VALUE)

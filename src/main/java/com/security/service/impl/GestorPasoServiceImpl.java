@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,7 +154,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
             pasoDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0));
             Paso paso = this.updatePaso(pasoSiguienteId, pasoDTO);
 
-            notificacionController.notificarPasoActualizacion(paso.getProceso().getId());
+            // notificacionController.notificarPasoActualizacion(paso.getProceso().getId(), Arrays.asList(pasoActualId, pasoSiguienteId));
             return true;
 
         } catch (Exception e) {
@@ -212,7 +213,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
             pasos.add(pasoAnterior);
 
             this.emailPasoRechazado.sendFromBackend(pasoAnteriorDTO, observaciones, maestria, materia);
-            notificacionController.notificarPasoActualizacion(pasoActual.getProceso().getId());
+            // notificacionController.notificarPasoActualizacion(pasoActual.getProceso().getId(), Arrays.asList(idPasoActual, pasoAnteriorDTO.getId()));
         }
 
         return pasos;

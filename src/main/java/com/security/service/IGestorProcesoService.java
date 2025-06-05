@@ -17,6 +17,7 @@ public interface IGestorProcesoService {
     public ProcesoDTO update(ProcesoDTO dto);
     public void delete(Integer id);
     public Object  findByIdCompletoDTO(Integer id);
+    public ProcesoPasoDocumentoDTO obtenerDetallePasoId(Integer procesoId);
     public List<MiProcesoDTO> findMisProcesosGeneral();
     public List<MiProcesoDTO> findMisProcesosGeneralPorResponsable(Integer responsableId);   
     public List<MiProcesoPagoDocenteDTO> findMisProcesosPagoDocente();

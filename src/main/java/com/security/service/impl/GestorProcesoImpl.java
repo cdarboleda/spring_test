@@ -248,7 +248,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
 
         var procesoEspecifico = procesoPagoDocenteRepository.save(pagoDocente);
 
-        notificacionController.notificarProcesoCreacion(procesoGuardado.getId());
+        // notificacionController.notificarProcesoCreacion(procesoGuardado.getId());
 
         return convertidorProceso.convertirACompletoDTO(procesoEspecifico);
     }
@@ -263,7 +263,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             proceso.setCancelado(procesoDTO.getCancelado());
         }
 
-        notificacionController.notificarProcesoActualizacion(procesoDTO.getId());
+        // notificacionController.notificarProcesoActualizacion(procesoDTO.getId());
 
         return convertidorProceso.convertirALigeroDTO(proceso);
     }
@@ -281,7 +281,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         pasoRepository.deleteByProcesoId(id);
         procesoLogRepository.deleteByProcesoId(id);
         this.procesoRepository.deleteById(id);
-        notificacionController.notificarProcesoEliminacion(id, ids);
+        // notificacionController.notificarProcesoEliminacion(id, ids);
 
     }
 
@@ -330,6 +330,12 @@ public class GestorProcesoImpl implements IGestorProcesoService {
 
         // notificacionController.notificarCambio(procesoId);
         return this.procesoRepository.findProcesoDetalleById(procesoId);
+    }
+    @Override
+    public ProcesoPasoDocumentoDTO obtenerDetallePasoId(Integer procesoId) {
+
+        // notificacionController.notificarCambio(procesoId);
+        return this.procesoRepository.findPasoDetalleById(procesoId);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class SecurityConfig {
                     // Permitir libre acceso a websocket handshake
                     // Permitir acceso libre a Swagger UI y documentación OpenAPI
                     .requestMatchers(
-                        "/ws/**",
+                        // "/ws/**",
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
                         "/swagger-ui.html"

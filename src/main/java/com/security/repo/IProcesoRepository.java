@@ -51,7 +51,7 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         "LEFT JOIN paso.responsable resp ") // Información del responsable del paso
         List<MiProcesoPagoDocenteDTO> findMisProcesosPagoDocente();
 
-        //buscar un proceso por id, para la tabla de mis procesos pago docente
+        // buscar un proceso por id, para la tabla de mis procesos pago docente
         @Query("SELECT new com.security.service.dto.MiProcesoPagoDocenteDTO( " +
                         "p.id, p.tipoProceso, p.fechaInicio, p.fechaFin, p.finalizado, p.cancelado, " +
                         "req.id, req.cedula, req.nombre, req.apellido, " +
@@ -112,6 +112,17 @@ public interface IProcesoRepository extends JpaRepository<Proceso, Integer> {
                         "WHERE pa.proceso.id = :procesoId " +
                         "ORDER BY pa.orden")
         List<ProcesoPasoDocumentoDTO> findProcesoDetalleById(@Param("procesoId") Integer procesoId);
+
+        @Query("SELECT new com.security.service.dto.ProcesoPasoDocumentoDTO(" +
+                        "pa.id, pa.nombre, pa.estado, pa.descripcionEstado, pa.fechaInicio, pa.fechaFin, pa.orden, pa.observacion, CAST(pa.rol AS string), "
+                        +
+                        "per.id, per.nombre, per.cedula, per.apellido, per.telefono, per.correo, " +
+                        "cd.id, cd.url) " +
+                        "FROM Paso pa " +
+                        "LEFT JOIN pa.responsable per " +
+                        "LEFT JOIN pa.carpetaDocumentos cd " +
+                        "WHERE pa.id = :pasoId")
+        ProcesoPasoDocumentoDTO findPasoDetalleById(@Param("pasoId") Integer pasoId);
 
         @Query("SELECT DISTINCT pa.responsable.idKeycloak " +
                         "FROM Paso pa " +
