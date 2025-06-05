@@ -9,7 +9,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-import com.security.service.dto.ProcesoActualizadoDTO;
+import com.security.service.dto.notificacionDTO;
 
 @Configuration
 @EnableWebSocketMessageBroker

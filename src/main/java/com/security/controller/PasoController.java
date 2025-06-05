@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.security.service.IGestorPasoService;
 import com.security.service.IPasoService;
+import com.security.service.dto.CarpetaDocumentoDTO;
 import com.security.service.dto.PasoDTO;
 import com.security.service.impl.EmailPasoRechazado;
 
@@ -113,9 +114,19 @@ public class PasoController {
             @RequestParam(name = "observacionesString") String observacionesString,
             @RequestParam(name = "maestria") String maestria, @RequestParam(name = "materia") String materia) {
         return new ResponseEntity<>(
-                this.gestorPasoService.rechazarPaso(idPasoActual, pasoAnteriorDTO, observacionesString, maestria, materia),
+                this.gestorPasoService.rechazarPaso(idPasoActual, pasoAnteriorDTO, observacionesString, maestria,
+                        materia),
                 HttpStatus.OK);
     }
 
+    @PutMapping(path = "/avanzar/{idPasoActual}/{idPasoSiguiente}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('administrador', 'usuario')")
+    public ResponseEntity<?> avanzarPaso(@PathVariable(name = "idPasoActual") Integer idPasoActual,
+            @PathVariable(name = "idPasoSiguiente") Integer idPasoSiguiente,
+            @RequestBody(required = true) CarpetaDocumentoDTO documentoDTO) {
+        return new ResponseEntity<>(
+                this.gestorPasoService.avanzarPaso(idPasoActual, idPasoSiguiente, documentoDTO),
+                HttpStatus.OK);
+    }
 
 }

@@ -2,13 +2,7 @@
     <#assign expirationMinutes = linkExpiration?number>
     <#assign expirationHours = expirationMinutes / 60>
     <#assign expirationHoursRounded = expirationHours?string("0.#")>
-        <p style="text-align: center;">
-        <img src="https://posgrado-fica-uce.netlify.app/img/logo-posgrado.0df946c7.png"
-            alt="Logo posgrado"
-            width="75"
-            style="max-width: 100%; height: auto;">
-        </p>
-        <h2>Sistema de Gestión de Procesos del Consejo de Posgrado SIGEPROCP</h2>
+
         <h3 style="text-align: center;">Alta de usuario</h3>
         <br>
     <p>Saludos <strong>${user.firstName} ${user.lastName}</strong></p>

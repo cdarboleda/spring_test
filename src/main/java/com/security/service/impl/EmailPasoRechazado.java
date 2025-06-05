@@ -47,12 +47,38 @@ public class EmailPasoRechazado {
     }
 
     @Async
-    public void send(PasoDTO paso, List<String> observaciones, String maestria, String materia){
+    public void sendFromBackend(PasoDTO paso, List<String> observaciones, String maestria, String materia) {
         this.paso = paso;
         this.observaciones = observaciones;
         this.materia = materia;
         this.maestria = maestria;
         this.useSend();
+    }
+
+    @Async
+    public void send(Map<String, Object> data) {
+        try {
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("procesoId", data.get("procesoId").toString());
+            variables.put("materia", data.get("materia").toString());
+            variables.put("maestria", data.get("maestria").toString());
+            variables.put("fecha", data.get("fecha").toString());
+            variables.put("pasoNombre", data.get("pasoNombre").toString());
+            variables.put("tipoProceso", data.get("tipoProceso").toString());
+            variables.put("responsableNombre", data.get("responsableNombre").toString());
+            variables.put("responsableApellido", data.get("responsableApellido").toString());
+            variables.put("responsableCorreo", data.get("responsableCorreo").toString());
+            variables.put("observaciones", data.get("observaciones").toString().split(";"));
+
+            emailService.sendEmail(
+                    "ProcesoCancelado", // nombre del archivo Thymeleaf sin .html
+                    data.get("responsableCorreo").toString(), // Puedes reemplazar con correo dinámico si aplica
+                    "Proceso #" + data.get("procesoId").toString() + " ha sido cancelado",
+                    variables);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

@@ -39,6 +39,18 @@ public class EmailController {
     // responsableNombre, responsableCorreo, procesoId, tipoProceso, pasoNombre,
     // observaciones
 
+    
+    @PostMapping(path = "/paso/rechazado", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String notificacionPasoRechazado(@RequestBody Map<String, Object> data) {
+        try {
+            emailPasoRechazado.send(data);
+            return "{\"mensaje\": \"Correo de rechazado enviado correctamente\"}";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{\"mensaje\": \"No se pudo enviar el correo de rechazado. Ocurrió un error.\"}";
+        }
+    }
+
     @PostMapping(path = "/proceso/cancelado", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public String notificacionProcesoCancelado(@RequestBody Map<String, Object> data) {
         try {

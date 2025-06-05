@@ -3,7 +3,7 @@
 </#outputformat>
 
 <#import "template.ftl" as layout>
-<#import "footerEmail.ftl" as footerEmail>
+<#--  <#import "footerEmail.ftl" as footerEmail>  -->
 <#import "executeActionsUpdatePasswordPagoDocenteBody.ftl" as updatePasswordPagoDocenteBody>
 <@layout.emailLayout>
 <#-- Verificamos si la única acción requerida es UPDATE_PASSWORD -->
@@ -12,5 +12,5 @@
     <#else>
         ${kcSanitize(msg("executeActionsBodyHtml", link, linkExpiration, realmName, requiredActionsText, linkExpirationFormatter(linkExpiration)))?no_esc}
     </#if>
-    <@footerEmail.footerEmail />
+    <#--  <@footerEmail.footerEmail />  -->
 </@layout.emailLayout>

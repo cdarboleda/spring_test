@@ -25,7 +25,7 @@ import com.security.db.ProcesoPagoDocente;
 import com.security.db.ProcesoTitulacion;
 import com.security.db.enums.Estado;
 import com.security.db.enums.Rol;
-import com.security.db.enums.TipoEventoProceso;
+import com.security.db.enums.TipoEventoNotificacion;
 import com.security.db.enums.TipoProceso;
 import com.security.repo.ICarpetaDocumentoRepository;
 import com.security.repo.IPasoRepository;
@@ -43,7 +43,7 @@ import com.security.service.IProcesoService;
 
 import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.MiProcesoPagoDocenteDTO;
-import com.security.service.dto.ProcesoActualizadoDTO;
+import com.security.service.dto.notificacionDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteDTO;
 import com.security.service.dto.ProcesoPagoDocenteResponsablesDTO;

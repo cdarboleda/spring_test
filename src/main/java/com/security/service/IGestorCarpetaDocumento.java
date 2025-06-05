@@ -5,4 +5,5 @@ import com.security.service.dto.CarpetaDocumentoLigeroDTO;
 
 public interface IGestorCarpetaDocumento {
     CarpetaDocumentoLigeroDTO insert(CarpetaDocumentoDTO documentoDTO);
+    public CarpetaDocumentoLigeroDTO insertarActualizar(CarpetaDocumentoDTO documentoDTO) ;
 }

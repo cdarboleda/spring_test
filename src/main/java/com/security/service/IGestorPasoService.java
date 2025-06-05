@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.security.db.Paso;
+import com.security.service.dto.CarpetaDocumentoDTO;
 import com.security.service.dto.PasoDTO;
 
 public interface IGestorPasoService {
@@ -14,5 +15,6 @@ public interface IGestorPasoService {
     public List<PasoDTO> updatePasosMismoResponsable(List<Integer> pasoIds, Integer idResponsable, String rol);
     public List<PasoDTO> findPasosDTOByProcesoId(Integer procesoId);
     public Paso updatePaso(Integer idPaso, PasoDTO pasoDTO);
+    public Boolean avanzarPaso(Integer pasoActualId, Integer pasoSiguienteId, CarpetaDocumentoDTO documentoDTO);
     public List<Paso> rechazarPaso(Integer idPasoActual,  PasoDTO pasoAnteriorDTO, String observaciones, String maestria, String materia);
 }

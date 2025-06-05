@@ -22,11 +22,13 @@ import com.security.db.enums.Rol;
 import com.security.exception.CustomException;
 import com.security.factory.PasoFactoryManager;
 import com.security.repo.IPasoRepository;
+import com.security.service.IGestorCarpetaDocumento;
 import com.security.service.IGestorPasoService;
 import com.security.service.IGestorProcesoLogService;
 import com.security.service.IPasoService;
 import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
+import com.security.service.dto.CarpetaDocumentoDTO;
 import com.security.service.dto.PasoDTO;
 import com.security.service.dto.utils.ConvertidorPaso;
 
@@ -61,10 +63,10 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     private PasoFactoryManager factoryManager;
 
     @Autowired
-    private ProcesoResponsablesCache procesoResponsablesCache;
+    NotificacionController notificacionController;
 
     @Autowired
-    NotificacionController notificacionController;
+    private IGestorCarpetaDocumento carpetaDocumento;
 
     @Override
     public List<PasoDTO> crearPasos(String proceso) {
@@ -137,6 +139,29 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         return this.pasoRepository.findPasosDTOByProcesoId(procesoId);
     }
 
+    @Override
+    public Boolean avanzarPaso(Integer pasoActualId, Integer pasoSiguienteId, CarpetaDocumentoDTO documentoDTO) {
+        try {
+            carpetaDocumento.insertarActualizar(documentoDTO);
+
+            PasoDTO pasoDTO = new PasoDTO();
+            pasoDTO.setEstado(Estado.FINALIZADO.toString());
+            pasoDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.FINALIZADO, 0));
+
+            this.updatePaso(pasoActualId, pasoDTO);
+            pasoDTO.setEstado(Estado.EN_CURSO.toString());
+            pasoDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0));
+            Paso paso = this.updatePaso(pasoSiguienteId, pasoDTO);
+
+            notificacionController.notificarPasoActualizacion(paso.getProceso().getId());
+            return true;
+
+        } catch (Exception e) {
+            throw new RuntimeException("No se pudo actualizar los pasos: Siguiente", e);
+        }
+
+    }
+
     // inserta un paso con responsable y proceso
     // el orden no verifica
     @Override
@@ -186,7 +211,8 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
 
             pasos.add(pasoAnterior);
 
-            this.emailPasoRechazado.send(pasoAnteriorDTO, observaciones, maestria, materia);
+            this.emailPasoRechazado.sendFromBackend(pasoAnteriorDTO, observaciones, maestria, materia);
+            notificacionController.notificarPasoActualizacion(pasoActual.getProceso().getId());
         }
 
         return pasos;
