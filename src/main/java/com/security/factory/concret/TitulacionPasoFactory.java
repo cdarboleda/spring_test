@@ -67,22 +67,21 @@ public class TitulacionPasoFactory implements IPasoFactory {
                                 "El Lector 2 revisan el proyecto y emiten sus observaciones",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_DOCENTE));
-                // pasos.add(this.crearPaso(PasoTitulacion.RVISION_INFORMES_LECTORES.getNombre(),
-                // 10,
-                // "Secretaria recibe los informes y notifica al estudiante si aprobaron o no
-                // los lectores",
-                // Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0),
-                // null,
-                // ROL_SECRETARIA));
-                pasos.add(this.crearPaso(PasoTitulacion.CORRECCION_OBSERVACION_LECTORES.getNombre(), 10,
+                pasos.add(this.crearPaso(PasoTitulacion.REVISION_INFORMES_LECTORES.getNombre(),
+                                10,
+                                "Secretaria recibe los informes y notifica al estudiante si aprobaron o no los lectores",
+                                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0),
+                                null,
+                                ROL_SECRETARIA));
+                pasos.add(this.crearPaso(PasoTitulacion.CORRECCION_OBSERVACION_LECTORES.getNombre(), 11,
                                 "Estudiante corrige las observaciones emitidas por los lectores",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_ESTUDIANTE));
-                pasos.add(this.crearPaso(PasoTitulacion.DOCUMENTACION_DEFENSA.getNombre(), 11,
+                pasos.add(this.crearPaso(PasoTitulacion.DOCUMENTACION_DEFENSA.getNombre(), 12,
                                 "El estudiante entrega la documentacion final para la defensa",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_ESTUDIANTE));
-                pasos.add(this.crearPaso(PasoTitulacion.DEFENSA.getNombre(), 12,
+                pasos.add(this.crearPaso(PasoTitulacion.DEFENSA.getNombre(), 13,
                                 "Secretaria coordina la defensa y se asigna un tribunal",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_SECRETARIA));

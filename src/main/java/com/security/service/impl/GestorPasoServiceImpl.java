@@ -55,28 +55,27 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     public List<PasoDTO> crearPasos(String proceso) {
         return this.factoryManager.generarPasosPorProceso(proceso);
     }
-    
+
     @Override
     public PasoDTO updatePasoResponsable(Integer idPaso, Integer idResponsable) {
         Paso paso = this.pasoService.findById(idPaso);
         Persona responsable = this.personaService.findById(idResponsable);
 
         // if(responsable.activo!=null){
-        //     paso.setResponsable(responsable);
+        // paso.setResponsable(responsable);
         // }
-        //el filtro de rol de un responsable le hacemos en el front
-        if(responsable.getRoles().contains(paso.getRol())){
+        // el filtro de rol de un responsable le hacemos en el front
+        if (responsable.getRoles().contains(paso.getRol())) {
             paso.setResponsable(responsable);
-            //agregar procesoLog TODO
+            // agregar procesoLog TODO
             this.gestorProcesoLogService.insertarProcesoLog(paso, Evento.RESPONSABLE);
-        }else{
+        } else {
             throw new RuntimeException("El responsable no tiene el rol");
         }
         return convertidorPaso.convertirAPasoDTO(paso);
 
     }
 
-    
     @Override
     public Paso updatePaso(Integer idPaso, PasoDTO pasoDTO) {
         Paso paso = this.pasoService.findById(idPaso);
@@ -88,6 +87,10 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         paso.setDescripcionEstado(pasoDTO.getDescripcionEstado() == null
                 ? EstadoHelper.getDescripcionPorIndice(Estado.valueOf(pasoDTO.getEstado()), 0)
                 : pasoDTO.getDescripcionEstado());
+        // si envia un idResponsble se actualiza si envia null se mantiene el campo
+        paso.setResponsable(
+                pasoDTO.getIdResponsable() != null ? this.personaService.findById(pasoDTO.getIdResponsable())
+                        : paso.getResponsable());
 
         if (pasoDTO.getEstado().equalsIgnoreCase("FINALIZADO")) {
             paso.setFechaFin(LocalDateTime.now());
@@ -104,7 +107,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     }
 
     @Override
-    public List<PasoDTO> findPasosDTOByProcesoId(Integer procesoId){
+    public List<PasoDTO> findPasosDTOByProcesoId(Integer procesoId) {
         return this.pasoRepository.findPasosDTOByProcesoId(procesoId);
     }
 
@@ -125,8 +128,5 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         paso.setResponsable(persona);
         return this.pasoRepository.save(paso);
     }
-
-    
-
 
 }
