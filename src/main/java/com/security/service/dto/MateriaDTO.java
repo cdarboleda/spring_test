@@ -15,4 +15,6 @@ public class MateriaDTO {
 
     private Integer maestriaId;
 
+    private Integer horas;
+
 }

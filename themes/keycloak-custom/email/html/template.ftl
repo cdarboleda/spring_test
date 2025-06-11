@@ -65,7 +65,7 @@
             <strong> Ubicación: </strong><a style="display:inline;" href="https://maps.app.goo.gl/n1QtFFtyyYdXRpEC9" target="_blank">Facultad de Ingeniería y Ciencias Aplicadas </a><br>
             <div style="display:flex; flex-direction:row; text-align: left;">
             <strong>Teléfonos: </strong>
-            <div style="margin-left: 0.2rem;"><p style="margin: 0 0 0.25rem 0;">(593-02) 2551 270</p> <p style="margin: 0 0 0.25rem 0;">(593-02) 3216975</p>  <p style="margin: 0 0 0.25rem 0;">+593 98 374 7088</p></div>
+            <div style="margin-left: 0.2rem;"><p style="margin: 0 0 0.25rem 0;">(593-02) 2551 270</p> <p style="margin: 0 0 0.25rem 0;">(593-02) 3216975</p>  <p style="margin: 0 0 0.25rem 0;"><a href="https://wa.me/+593983747088"  target="_blank">+593 98 374 7088</a></p></div>
             </div>
         </div>
     </div>

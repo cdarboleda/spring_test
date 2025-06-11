@@ -1,0 +1,20 @@
+<div th:fragment="content">
+    <h3 style="text-align: center;">Notificación de Paso Completado</h3>
+    <br>
+    <p>Saludos <strong th:text="${responsableNombre} + ' ' + ${responsableApellido}">Nombre Apellido</strong></p>
+
+    <p>Le informamos que se ha completado un paso en el Proceso Pago Docente #<strong th:text="${procesoId}">45</strong></p>
+
+    <p>El paso: "<strong th:text="${pasoAnterior}">Enviar documentación</strong>", ha sido 
+        <strong>COMPLETADO</strong> correctamente.
+    </p>
+
+    <p>Ahora se encuentra en el paso: "<strong th:text="${pasoActual}">Revisión de documentos</strong>".</p>
+
+    <p><strong>Programa:</strong> <span th:text="${maestria}">aaa</span></p>
+
+    <p><strong>Materia:</strong> <span th:text="${materia}">bbb</span></p>
+   <br>
+    <p>Por favor, continúe con las acciones correspondientes a este nuevo paso.</p>
+    <br>
+</div>

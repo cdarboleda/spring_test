@@ -1,6 +1,13 @@
 package com.security.service.impl;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -8,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.security.db.enums.Rol;
 import com.security.service.IKeycloakService;
 import com.security.service.dto.UserDTO;
 import com.security.util.KeycloakProvider;
@@ -15,12 +23,7 @@ import com.security.util.KeycloakProvider;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 @Transactional
 @Service
@@ -81,7 +84,9 @@ public class KeycloakServiceImpl implements IKeycloakService {
         user.setLastName(lastName);
         user.setEnabled(true);
         user.setEmailVerified(true);
-
+        Map<String, List<String>> attributes = new HashMap<>();
+        attributes.put("roles_info", List.of(rolesToAssign.stream().map(r -> Rol.fromNombre(r).getAlias()).collect(Collectors.joining(",")))); // ¡Nota! Un solo string, con coma
+        user.setAttributes(attributes);
         // Crear el usuario en Keycloak
         Response response = null;
         String userId = null;
@@ -95,6 +100,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
                     .collect(Collectors.toList());
 
             assignRolesToUser(userId, roles);
+
 
             // Enviar correo para que el usuario configure su contraseña
             keycloakProvider.getKeycloak()
@@ -219,7 +225,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
     private Set<String> mapRolesToKeycloakRoles(List<String> roles) {
         Set<String> keycloakRoles = new HashSet<>();
         for (String role : roles) {
-            if ("secretaria".equalsIgnoreCase(role) || "director".equalsIgnoreCase(role)) {
+            if (Rol.SECRETARIA.getNombre().equalsIgnoreCase(role)|| Rol.DIRECTOR.getNombre().equalsIgnoreCase(role)) {
                 keycloakRoles.add("administrador");
             } else {
                 keycloakRoles.add("usuario");

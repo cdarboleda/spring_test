@@ -34,6 +34,9 @@ public class Materia {
     @Column(name = "mate_periodo")
     private Integer periodo;
 
+    @Column(name = "mate_horas")
+    private Integer horas;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     // @ToString.Exclude

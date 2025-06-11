@@ -38,7 +38,6 @@ public class EmailPasoRechazado {
         System.out.println("paso.responsableCorreo()"+ paso.getResponsableCorreo());
             try {
                 this.emailService.sendEmail("PasoRechazado", paso.getResponsableCorreo(), "Proceso # "+paso.getIdProceso()+": Un paso ha sido rechazado", variables);
-                // this.emailService.sendEmail("PasoRechazado", "kpchiguano@uce.edu.ec", "Proceso "+paso.getTipoProceso()+" # "+paso.getIdProceso()+": Un paso ha sido rechazado", variables);
                 return "Mensaje enviado con exito";
             } catch (MessagingException e) {
                 // TODO Auto-generated catch block
@@ -64,16 +63,15 @@ public class EmailPasoRechazado {
             variables.put("maestria", data.get("maestria").toString());
             variables.put("fecha", data.get("fecha").toString());
             variables.put("pasoNombre", data.get("pasoNombre").toString());
-            variables.put("tipoProceso", data.get("tipoProceso").toString());
             variables.put("responsableNombre", data.get("responsableNombre").toString());
             variables.put("responsableApellido", data.get("responsableApellido").toString());
             variables.put("responsableCorreo", data.get("responsableCorreo").toString());
             variables.put("observaciones", data.get("observaciones").toString().split(";"));
 
             emailService.sendEmail(
-                    "ProcesoCancelado", // nombre del archivo Thymeleaf sin .html
+                    "PasoRechazado", // nombre del archivo Thymeleaf sin .html
                     data.get("responsableCorreo").toString(), // Puedes reemplazar con correo dinámico si aplica
-                    "Proceso #" + data.get("procesoId").toString() + " ha sido cancelado",
+                    "Proceso #" + data.get("procesoId").toString() + ": Un paso ha sido rechazado",
                     variables);
         } catch (MessagingException e) {
             e.printStackTrace();

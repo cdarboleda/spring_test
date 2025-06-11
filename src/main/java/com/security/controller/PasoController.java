@@ -2,6 +2,7 @@ package com.security.controller;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -111,15 +112,13 @@ public class PasoController {
         return new ResponseEntity<>(this.pasoService.buscarEstados(), HttpStatus.OK);
     }
 
-    @PutMapping(path = "/rechazar/{idPasoActual}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/rechazar/{idPasoActual}/{idPasoAnterior}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('administrador', 'usuario')")
     public ResponseEntity<?> rechazarPaso(@PathVariable(name = "idPasoActual") Integer idPasoActual,
-            @RequestBody(required = false) PasoDTO pasoAnteriorDTO,
-            @RequestParam(name = "observacionesString") String observacionesString,
-            @RequestParam(name = "maestria") String maestria, @RequestParam(name = "materia") String materia) {
+    @PathVariable(name = "idPasoAnterior") Integer idPasoAnterior,
+            @RequestBody(required = false) Map<String, Object> observacionesDTO) {
         return new ResponseEntity<>(
-                this.gestorPasoService.rechazarPaso(idPasoActual, pasoAnteriorDTO, observacionesString, maestria,
-                        materia),
+                this.gestorPasoService.rechazarPaso(idPasoActual, idPasoAnterior, observacionesDTO),
                 HttpStatus.OK);
     }
 

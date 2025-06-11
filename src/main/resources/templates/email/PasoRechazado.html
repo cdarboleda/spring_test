@@ -1,0 +1,26 @@
+<div th:fragment="content">
+    <h3 style="text-align: center;">Notificación de Paso Rechazado</h3>
+    <br>
+    <p>Saludos <strong th:text="${responsableNombre} + ' ' + ${responsableApellido}">Nombre Apellido</strong></p>
+
+    <p>Información sobre el Proceso Pago Docente #<strong th:text="${procesoId}">45</strong></p>
+
+    <p>El paso: "<strong th:text="${pasoNombre}">Enviar documentación</strong>", ha sido
+        <strong>RECHAZADO</strong>.
+    </p>
+
+    <p><strong>Programa:</strong> <span th:text="${maestria}">aaa</span></p>
+
+    <p><strong>Materia:</strong> <span th:text="${materia}">bbb</span></p>
+    <br>
+    <p><strong>OBSERVACIONES</strong></p>
+    <div th:if="${observaciones != null and not #lists.isEmpty(observaciones)}">
+        <ul>
+            <li th:each="item : ${observaciones}" th:text="${item}"></li>
+        </ul>
+        <p>Debe corregir las observaciones y volver a subir la documentación correcta, para poder continuar
+            al siguiente paso.</p>
+    </div>
+    <p th:unless="${observaciones != null and not #lists.isEmpty(observaciones)}">No hay observaciones.</p>
+    <br>
+</div>

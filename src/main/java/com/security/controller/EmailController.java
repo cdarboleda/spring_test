@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.service.dto.PasoDTO;
-import com.security.service.impl.EmailPasoRechazado;
-import com.security.service.impl.EmailProcesoCancelado;
-import com.security.service.impl.EmailProcesoFinalizado;
+import com.security.service.impl.*;
 
 @RestController
 @RequestMapping("/notificacion")
 public class EmailController {
+
+    @Autowired
+    private EmailPasoCompletado emailPasoCompletado;
 
     @Autowired
     private EmailPasoRechazado emailPasoRechazado;
@@ -26,6 +27,9 @@ public class EmailController {
 
     @Autowired
     private EmailProcesoFinalizado emailProcesoFinalizado;
+
+    @Autowired
+    private EmailProcesoIniciado emailProcesoIniciado;
 
     // @PostMapping(path ="/paso/rechazado", produces =
     // MediaType.APPLICATION_JSON_VALUE)
@@ -39,7 +43,6 @@ public class EmailController {
     // responsableNombre, responsableCorreo, procesoId, tipoProceso, pasoNombre,
     // observaciones
 
-    
     @PostMapping(path = "/paso/rechazado", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public String notificacionPasoRechazado(@RequestBody Map<String, Object> data) {
         try {
@@ -62,8 +65,6 @@ public class EmailController {
         }
     }
 
-
-
     @PostMapping(path = "/proceso/finalizado", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public String notificacionProcesoFinalizado(@RequestBody Map<String, Object> data) {
 
@@ -75,7 +76,28 @@ public class EmailController {
             return "{\"mensaje\": \"No se pudo enviar el correo de finalización. Ocurrió un error.\"}";
         }
 
+    }
 
+    @PostMapping(path = "/proceso/iniciado", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String notificacionProcesoIniciado(@RequestBody Map<String, Object> data) {
+        try {
+            emailProcesoIniciado.send(data);
+            return "{\"mensaje\": \"Correo de inicialización enviado correctamente\"}";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{\"mensaje\": \"No se pudo enviar el correo de inicialización. Ocurrió un error.\"}";
+        }
+    }
+
+    @PostMapping(path = "/paso/completado", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String notificacionPasoCompletado(@RequestBody Map<String, Object> data) {
+        try {
+            emailPasoCompletado.send(data);
+            return "{\"mensaje\": \"Correo de paso completado enviado correctamente\"}";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{\"mensaje\": \"No se pudo enviar el correo de paso completado. Ocurrió un error.\"}";
+        }
     }
 
 }

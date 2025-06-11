@@ -3,8 +3,9 @@ package com.security.service.impl;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collector;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.security.db.enums.Estado;
 import com.security.db.enums.EstadoHelper;
 import com.security.db.enums.Evento;
 import com.security.db.enums.Rol;
+import com.security.db.enums.TipoProceso;
 import com.security.exception.CustomException;
 import com.security.factory.PasoFactoryManager;
 import com.security.repo.IPasoRepository;
@@ -68,6 +70,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
 
     @Autowired
     private IGestorCarpetaDocumento carpetaDocumento;
+
 
     @Override
     public List<PasoDTO> crearPasos(String proceso) {
@@ -140,28 +143,47 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         return this.pasoRepository.findPasosDTOByProcesoId(procesoId);
     }
 
-    @Override
-    public Boolean avanzarPaso(Integer pasoActualId, Integer pasoSiguienteId, CarpetaDocumentoDTO documentoDTO) {
-        try {
+@Override
+public Map<String, Object> avanzarPaso(Integer pasoActualId, Integer pasoSiguienteId, CarpetaDocumentoDTO documentoDTO) {
+   
+    Map<String, Object> respuesta = new HashMap<>();
+    List<PasoDTO> pasosModificados = new ArrayList<>();
+
+    try {
+        if (documentoDTO.getUrl() != null) {
             carpetaDocumento.insertarActualizar(documentoDTO);
-
-            PasoDTO pasoDTO = new PasoDTO();
-            pasoDTO.setEstado(Estado.FINALIZADO.toString());
-            pasoDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.FINALIZADO, 0));
-
-            this.updatePaso(pasoActualId, pasoDTO);
-            pasoDTO.setEstado(Estado.EN_CURSO.toString());
-            pasoDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0));
-            Paso paso = this.updatePaso(pasoSiguienteId, pasoDTO);
-
-            // notificacionController.notificarPasoActualizacion(paso.getProceso().getId(), Arrays.asList(pasoActualId, pasoSiguienteId));
-            return true;
-
-        } catch (Exception e) {
-            throw new RuntimeException("No se pudo actualizar los pasos: Siguiente", e);
         }
 
+        PasoDTO pasoActualDTO = new PasoDTO();
+        pasoActualDTO.setEstado(Estado.FINALIZADO.toString());
+        pasoActualDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.FINALIZADO, 0));
+
+        Paso pasoActual = this.updatePaso(pasoActualId, pasoActualDTO);
+        pasosModificados.add(convertidorPaso.convertirAPasoDTO(pasoActual));
+
+        if (pasoSiguienteId >0) {
+            PasoDTO pasoSiguienteDTO = new PasoDTO();
+            pasoSiguienteDTO.setEstado(Estado.EN_CURSO.toString());
+            pasoSiguienteDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0));
+
+            Paso pasoSiguiente = this.updatePaso(pasoSiguienteId, pasoSiguienteDTO);
+            pasosModificados.add(convertidorPaso.convertirAPasoDTO(pasoSiguiente));
+        } else {
+            Paso paso = this.pasoService.findById(pasoActualId);
+            Proceso proceso = this.procesoService.findById(paso.getProceso().getId());
+            proceso.setFechaFin(Instant.now());
+            proceso.setFinalizado(true);
+            respuesta.put("procesoFechaFin", proceso.getFechaFin());
+        }
+
+        // notificacionController.notificarPasoActualizacion(procesoId, pasosModificados.stream().map(Paso::getId).collect(Collectors.toList()));
+        respuesta.put("pasos", pasosModificados);
+        return respuesta;
+
+    } catch (Exception e) {
+        throw new RuntimeException("No se pudo actualizar los pasos: Siguiente", e);
     }
+}
 
     // inserta un paso con responsable y proceso
     // el orden no verifica
@@ -182,37 +204,35 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     }
 
     @Override
-    public List<Paso> rechazarPaso(Integer idPasoActual, PasoDTO pasoAnteriorDTO, String observacionesString,
-            String maestria, String materia) {
+    public List<Paso> rechazarPaso(Integer idPasoActual, Integer idPasoAnterior, Map<String, Object> observacionesDTO) {
+
         PasoDTO pasoActualDTO = new PasoDTO();
         pasoActualDTO.setEstado(Estado.PENDIENTE.toString());
-        // pasoActualDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE,
-        // 1));// este
-        pasoActualDTO.setDescripcionEstado("Rechazado");// o este
+        pasoActualDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE,
+        1));// este
+        // pasoActualDTO.setDescripcionEstado("Rechazado");// o este
 
         List<Paso> pasos = new ArrayList<>();
         Paso pasoActual = this.updatePaso(idPasoActual, pasoActualDTO);
         pasos.add(pasoActual);
 
-        if (pasoAnteriorDTO != null) {
+        if (idPasoAnterior != null) {
+            PasoDTO pasoAnteriorDTO = new PasoDTO();
             pasoAnteriorDTO.setEstado(Estado.EN_CURSO.toString());
             pasoAnteriorDTO.setDescripcionEstado("En correcciones");// o este
-            pasoAnteriorDTO.setObservacion(observacionesString);
+        //     pasoAnteriorDTO.setDescripcionEstado(EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO,
+        // 2));// este
+            String observaciones = observacionesDTO.get("observaciones").toString();
+            pasoAnteriorDTO.setObservacion(observaciones);
 
-            if (observacionesString.trim().isEmpty()) {
+            if (observaciones.trim().isEmpty()) {
                 pasoAnteriorDTO.setObservacion(null);
             }
 
-            Paso pasoAnterior = this.updatePaso(pasoAnteriorDTO.getId(), pasoAnteriorDTO);
-
-            List<String> observaciones = Arrays.stream(observacionesString.split(";")) // Divide por ";"
-                    .map(String::trim) // Elimina espacios en blanco alrededor de cada elemento
-                    .filter(obs -> !obs.isEmpty()) // Filtra los vacíos
-                    .collect(Collectors.toList()); // Lo convierte en una lista
+            Paso pasoAnterior = this.updatePaso(idPasoAnterior, pasoAnteriorDTO);
 
             pasos.add(pasoAnterior);
 
-            this.emailPasoRechazado.sendFromBackend(pasoAnteriorDTO, observaciones, maestria, materia);
             // notificacionController.notificarPasoActualizacion(pasoActual.getProceso().getId(), Arrays.asList(idPasoActual, pasoAnteriorDTO.getId()));
         }
 

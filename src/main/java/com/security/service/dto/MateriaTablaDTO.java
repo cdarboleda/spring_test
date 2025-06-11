@@ -12,6 +12,8 @@ public class MateriaTablaDTO {
 
     private Integer periodo;
 
+    private Integer horas;
+
     private Integer maestriaId;
 
     private String maestriaNombre;
@@ -29,6 +31,7 @@ public class MateriaTablaDTO {
             Integer id,
             String nombre,
             Integer periodo,
+            Integer horas,
             Integer maestriaId,
             String maestriaNombre,
             String maestriaCodigo,
@@ -38,6 +41,7 @@ public class MateriaTablaDTO {
                 this.id = id;
                 this.nombre = nombre;
                 this.periodo = periodo;
+                this.horas = horas;
                 this.maestriaId = maestriaId;
                 this.maestriaNombre = maestriaNombre;
                 this.maestriaCodigo = maestriaCodigo;

@@ -4,7 +4,7 @@ import java.util.List;
 
 public enum Estado {
     PENDIENTE(List.of("Pendiente", "Rechazado")),
-    EN_CURSO(List.of("En curso","En correcciones")),
+    EN_CURSO(List.of("En curso","En correcciones", "Rechazado")),
     FINALIZADO(List.of("Completado","Cancelado"));
 
     private final List<String> descripciones;

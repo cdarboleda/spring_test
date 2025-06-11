@@ -32,9 +32,9 @@ public class EmailService {
         // Crear el contexto de Thymeleaf con variables dinámicas
         Context context = new Context();
         context.setVariables(variables);
-
+        context.setVariable("bodyTemplate", "email/" + plantilla); // ejemplo: email/procesoCancelado
         // Procesar la plantilla
-        String htmlContent = templateEngine.process(plantilla, context);
+       String htmlContent = templateEngine.process("email/layout", context);
 
         // Crear y enviar el correo
         MimeMessage message = mailSender.createMimeMessage();

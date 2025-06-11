@@ -14,6 +14,7 @@ public class ConvertidorMateria {
         materia.setId(materiaDTO.getId());
         materia.setNombre(materiaDTO.getNombre());
         materia.setPeriodo(materiaDTO.getPeriodo());
+        materia.setHoras(materiaDTO.getHoras());
         return materia;
     }
 
@@ -22,6 +23,7 @@ public class ConvertidorMateria {
         materiaTablaDTO.setId(materia.getId());
         materiaTablaDTO.setNombre(materia.getNombre());
         materiaTablaDTO.setPeriodo(materia.getPeriodo());
+        materiaTablaDTO.setHoras(materia.getHoras());
         materiaTablaDTO.setMaestriaId(materia.getMaestria().getId());
         materiaTablaDTO.setMaestriaNombre(materia.getMaestria().getNombre());
         materiaTablaDTO.setMaestriaCodigo(materia.getMaestria().getCodigo());

@@ -56,6 +56,7 @@ public class MateriaServiceImpl implements IMateriaService {
         Materia materia = this.findById(materiaDTO.getId());
         materia.setNombre(materiaDTO.getNombre());
         materia.setPeriodo(materiaDTO.getPeriodo());
+        materia.setHoras(materiaDTO.getHoras());
         Maestria maestria = this.maestriaRepository
                 .findById(materiaDTO.getMaestriaId())
                 .orElseThrow(() -> new CustomException(
