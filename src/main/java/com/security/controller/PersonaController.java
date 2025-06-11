@@ -1,6 +1,7 @@
 package com.security.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -126,5 +127,16 @@ public class PersonaController {
     public ResponseEntity<?> eliminarPersona(@PathVariable(name = "idKeycloak") String idKeycloak) {
         return new ResponseEntity<>(this.gestorUsurio.deleteUser(idKeycloak), null, HttpStatus.OK);
     }
+
+    @PostMapping(path = "/bulk", consumes = MediaType.APPLICATION_JSON_VALUE)
+@PreAuthorize("hasAnyRole('administrador', 'administrador_usuarios')")
+public ResponseEntity<?> insertarUsuariosMasivamente(@RequestBody List<PersonaDTO> personas) {
+    List<PersonaDTO> personasGuardadas = personas.stream()
+        .map(gestorUsurio::createUser)
+        .collect(Collectors.toList());
+
+    return new ResponseEntity<>(personasGuardadas, HttpStatus.CREATED);
+}
+
 
 }

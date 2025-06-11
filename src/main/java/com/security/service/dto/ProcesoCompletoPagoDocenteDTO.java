@@ -15,12 +15,14 @@ public class ProcesoCompletoPagoDocenteDTO extends ProcesoCompletoDTO{
     private MateriaTablaDTO materia;
     private LocalDate fechaInicioClase;
     private LocalDate fechaFinClase;
+    private PersonaLigeroDTO coordinador;
 
-    public ProcesoCompletoPagoDocenteDTO(ProcesoPagoDocente pagoDocente, MateriaTablaDTO materiaDTO) {
+    public ProcesoCompletoPagoDocenteDTO(ProcesoPagoDocente pagoDocente, MateriaTablaDTO materiaDTO, PersonaLigeroDTO coordinador) {
         this.modalidadVirtual=pagoDocente.getModalidadVirtual();
         this.materia = materiaDTO;
         this.fechaInicioClase = pagoDocente.getFechaInicioClase();
         this.fechaFinClase = pagoDocente.getFechaFinClase();
+        this.coordinador = coordinador;
         // this.cohorte = pagoDocente.getCohorte();
     }
 }

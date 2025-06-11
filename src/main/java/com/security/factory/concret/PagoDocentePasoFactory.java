@@ -24,16 +24,15 @@ public class PagoDocentePasoFactory implements IPasoFactory {
 
         pasos.add(this.crearPasoPrimero("documentacion_docente", Rol.DOCENTE));
         pasos.add(this.crearPasoDefault("revision_coordinador", 2, Rol.COORDINADOR));
-        pasos.add(this.crearPasoDefault("revision_secretaria", 3, Rol.SECRETARIA));
-        pasos.add(this.crearPasoDefault("pedido_asistencia", 4, Rol.SECRETARIA));
-        pasos.add(this.crearPasoDefault("validacion_asistencia_docente", 5, Rol.DOCENTE));
-        pasos.add(this.crearPasoDefault("validacion_asistencia_coordinador", 6, Rol.COORDINADOR));
-        pasos.add(this.crearPasoDefault("autorizacion_director", 7, Rol.DIRECTOR));
-        pasos.add(this.crearPasoDefault("aprobacion_decano", 8, Rol.SECRETARIA));
+        pasos.add(this.crearPasoDefault("revision_pedido_asistencia", 3, Rol.SECRETARIA));
+        pasos.add(this.crearPasoDefault("validacion_asistencia_docente", 4, Rol.DOCENTE));
+        pasos.add(this.crearPasoDefault("validacion_asistencia_coordinador", 5, Rol.COORDINADOR));
+        pasos.add(this.crearPasoDefault("autorizacion_director", 6, Rol.DIRECTOR));
+        pasos.add(this.crearPasoDefault("aprobacion_decano", 7, Rol.SECRETARIA));
+        pasos.add(this.crearPasoDefault("factura_docente", 8, Rol.DOCENTE));
         pasos.add(this.crearPasoDefault("revision_financiero", 9, Rol.SECRETARIA));
-        pasos.add(this.crearPasoDefault("factura_docente", 10, Rol.DOCENTE));
-        pasos.add(this.crearPasoDefault("revision_factura_director", 11, Rol.DIRECTOR));
-        pasos.add(this.crearPasoDefault("desembolso_financiero", 12, Rol.SECRETARIA));
+        pasos.add(this.crearPasoDefault("revision_factura_director", 10, Rol.DIRECTOR));
+        pasos.add(this.crearPasoDefault("desembolso_financiero", 11, Rol.SECRETARIA));
         
         return pasos;
     }

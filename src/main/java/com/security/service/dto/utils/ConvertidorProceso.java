@@ -1,14 +1,19 @@
 package com.security.service.dto.utils;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.security.db.Persona;
 import com.security.db.Proceso;
 import com.security.db.ProcesoPagoDocente;
 import com.security.db.ProcesoTitulacion;
+import com.security.service.IPersonaService;
 import com.security.service.dto.MateriaTablaDTO;
+import com.security.service.dto.PasoDTO;
+import com.security.service.dto.PersonaLigeroDTO;
 import com.security.service.dto.ProcesoCompletoDTO;
 import com.security.service.dto.ProcesoCompletoPagoDocenteDTO;
 import com.security.service.dto.ProcesoCompletoTitulacionDTO;
@@ -27,6 +32,9 @@ public class ConvertidorProceso {
     @Autowired
     private ConvertidorMateria convertidorMateria;
 
+    @Autowired
+    private IPersonaService personaService;
+
     public Object convertirACompletoDTO(Object procesoEspecifico) {
 
         ProcesoCompletoDTO procesoDTO = null;
@@ -36,7 +44,7 @@ public class ConvertidorProceso {
             ProcesoPagoDocente pagoDocente = (ProcesoPagoDocente) procesoEspecifico;
             MateriaTablaDTO materiaDTO = convertidorMateria.convertirEntidadATablaDTO(pagoDocente.getMateria());
 
-            procesoDTO = new ProcesoCompletoPagoDocenteDTO(pagoDocente, materiaDTO);
+            procesoDTO = new ProcesoCompletoPagoDocenteDTO(pagoDocente, materiaDTO, null);
 
         } else if (procesoEspecifico instanceof ProcesoTitulacion) {
             ProcesoTitulacion titulacion = (ProcesoTitulacion) procesoEspecifico;
@@ -72,6 +80,27 @@ public class ConvertidorProceso {
                             .collect(Collectors.toList())
                             : null);
             procesoDTO.setRequiriente(convertidorPersona.convertirALigeroDTO(proceso.getRequiriente()));
+
+
+
+            if (procesoEspecifico instanceof ProcesoPagoDocente && procesoDTO.getPasos() != null) {
+                ProcesoCompletoPagoDocenteDTO dtoPago = (ProcesoCompletoPagoDocenteDTO) procesoDTO;
+
+                Optional<PasoDTO> pasoCoordinador = procesoDTO.getPasos().stream()
+                        .filter(p -> "COORDINADOR".equalsIgnoreCase(p.getRol()) && p.getIdResponsable() != null)
+                        .findFirst();
+
+                pasoCoordinador.ifPresent(paso -> {
+                    Integer idResponsable = paso.getIdResponsable();
+                    Persona persona = personaService.findById(idResponsable); // o
+                                                                                 // personaRepository.findById(idResponsable).orElse(null);
+
+                    if (persona != null) {
+                        PersonaLigeroDTO coordinador = convertidorPersona.convertirALigeroDTO(persona);
+                        dtoPago.setCoordinador(coordinador);
+                    }
+                });
+            }
 
         }
 
