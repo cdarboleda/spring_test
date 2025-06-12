@@ -12,6 +12,11 @@ public enum PasoTitulacion {
     REVISION_LECTOR_1("revision_lector_1"),
     REVISION_LECTOR_2("revision_lector_2"),
     REVISION_INFORMES_LECTORES("revision_informes_lectores"),
+    POSTULACION("postulacion_defensa"),
+    CERTIFICADO_NO_ADEUDAMIENTO("certificado_no_adeudamiento"),
+    MECANISCMOS_DE_TITULACION("mecanismos_de_titulacion"),
+    VERIFICACION_DATOS_TITULACION_SECRETARIA("verificacion_datos_titulacion_secretaria"),
+    VERIFICACION_DATOS_TITULACION_SEC_ABOGADO("verificacion_datos_titulacion_sec_abogado"),
     CORRECCION_OBSERVACION_LECTORES("correccion_observacion_lectores"),
     DOCUMENTACION_DEFENSA("documentacion_defensa"),
     DEFENSA("defensa");

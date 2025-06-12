@@ -47,9 +47,7 @@ public class PersonaController {
     private IGestorUsurio gestorUsurio;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    // CONTROLAR ARREGLAR SOLO MINUSCULAS LAS LETRAS DEL CORREO PARA QUE SEA IGUAL
-    // EN
-    // KEYCLAOK (4//11/2025)
+
     public ResponseEntity<?> insertar(@Valid @RequestBody PersonaDTO persona) {
         return new ResponseEntity<>(this.gestorUsurio.createUser(persona), HttpStatus.OK);
     }

@@ -173,14 +173,28 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
 
     @Override
     public List<Persona> findPersonasByRol(String nombreRol) {
-
         Optional<Rol> rol = this.rolService.buscarPorNombre(nombreRol);
+
         if (rol.isEmpty()) {
             throw new CustomException("No existe el rol con nombre: " + nombreRol, HttpStatus.BAD_REQUEST);
-        } else {
-            return new ArrayList<>(rol.get().getPersonas());
         }
 
+        Set<Persona> personas = rol.get().getPersonas();
+
+        if (personas == null || personas.isEmpty()) {
+            throw new CustomException("No hay personas asociadas al rol: " + nombreRol, HttpStatus.NOT_FOUND);
+        }
+
+        // Filtrar las personas activas
+        List<Persona> personasActivas = personas.stream()
+                .filter(Persona::getActivo) 
+                .collect(Collectors.toList());
+
+        if (personasActivas.isEmpty()) {
+            throw new CustomException("No hay personas activas con el rol: " + nombreRol, HttpStatus.NOT_FOUND);
+        }
+
+        return personasActivas;
     }
 
 }

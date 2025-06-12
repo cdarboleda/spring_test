@@ -6,8 +6,10 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.security.exception.CustomException;
 import com.security.service.IKeycloakService;
 import com.security.service.dto.UserDTO;
 import com.security.util.KeycloakProvider;
@@ -17,9 +19,7 @@ import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -59,7 +59,6 @@ public class KeycloakServiceImpl implements IKeycloakService {
     @Override
     public String createUser(String username, String email, List<String> rolesToAssign) {
         // Usar un Set para evitar roles duplicados
-        System.out.println("antessssssssssssssssss: " + rolesToAssign);
         // Set<String> keycloakRolesToAssign = mapRolesToKeycloakRoles(rolesToAssign);
 
         UserRepresentation user = new UserRepresentation();
@@ -75,6 +74,10 @@ public class KeycloakServiceImpl implements IKeycloakService {
             // Crear el usuario
             response = getKeycloak().users().create(user);
 
+            if (response.getStatus() == 409) {
+                throw new CustomException("El email y la cédula deben ser únicos", HttpStatus.CONFLICT);
+            }
+
             if (response.getStatus() != 201) {
                 throw new RuntimeException("Error al crear el usuario: " + response.getStatusInfo());
             }
@@ -82,13 +85,9 @@ public class KeycloakServiceImpl implements IKeycloakService {
             userId = response.getLocation().getPath()
                     .substring(response.getLocation().getPath().lastIndexOf("/") + 1);
 
-            System.out.println("userId: " + userId);
-
             List<RoleRepresentation> roles = getClientRoles().stream()
                     .filter(role -> rolesToAssign.contains(role.getName()))
                     .collect(Collectors.toList());
-
-            System.out.println("Roles que se asignarán al usuario: " + roles);
 
             // Asignar roles al usuario (nivel de cliente o realm, según corresponda)
             assignRolesToUser(userId, roles);
