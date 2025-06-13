@@ -67,16 +67,16 @@ public class TitulacionPasoFactory implements IPasoFactory {
                                 "El Lector 2 revisan el proyecto y emiten sus observaciones",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_DOCENTE));
+                pasos.add(this.crearPaso(PasoTitulacion.CORRECCION_OBSERVACION_LECTORES.getNombre(), 10,
+                                "Estudiante corrige las observaciones emitidas por los lectores",
+                                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
+                                ROL_ESTUDIANTE));
                 pasos.add(this.crearPaso(PasoTitulacion.REVISION_INFORMES_LECTORES.getNombre(),
-                                10,
+                                11,
                                 "Secretaria recibe los informes y notifica al estudiante si aprobaron o no los lectores",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0),
                                 null,
                                 ROL_SECRETARIA));
-                pasos.add(this.crearPaso(PasoTitulacion.CORRECCION_OBSERVACION_LECTORES.getNombre(), 11,
-                                "Estudiante corrige las observaciones emitidas por los lectores",
-                                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
-                                ROL_ESTUDIANTE));
                 pasos.add(this.crearPaso(PasoTitulacion.POSTULACION.getNombre(), 12,
                                 "El estudiante se postula en el sitema SIIU para la titulacion",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
