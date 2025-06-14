@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 
 public class ProcesoPagoDocenteDTO extends ProcesoDTO{
-    private Boolean modalidadVirtual;
+    private String modalidad;
     private Integer materiaId;
     private LocalDate fechaInicioClase;
     private LocalDate fechaFinClase;

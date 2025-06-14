@@ -31,8 +31,8 @@ public class ProcesoPagoDocente {
     @JsonIgnore
     private Proceso proceso;
 
-    @Column(name = "pago_doce_modalidad_virtual")
-    private Boolean modalidadVirtual;
+    @Column(name = "pago_doce_modalidad")
+    private String modalidad;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     // @JsonIgnore

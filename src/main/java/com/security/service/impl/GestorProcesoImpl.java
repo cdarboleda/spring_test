@@ -120,7 +120,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             ProcesoPagoDocente pagoDocente = new ProcesoPagoDocente();
             proceso.setDescripcion("En este proceso se realiza el trámite de pago para un docente");
             pagoDocente.setProceso(proceso);
-            pagoDocente.setModalidadVirtual(procesoPDDTO.getModalidadVirtual());
+            pagoDocente.setModalidad(procesoPDDTO.getModalidad());
             pagoDocente.setFechaInicioClase(procesoPDDTO.getFechaInicioClase());
             pagoDocente.setFechaFinClase(procesoPDDTO.getFechaFinClase());
             // pagoDocente.setCohorte(procesoPDDTO.getCohorte());
@@ -240,7 +240,7 @@ public class GestorProcesoImpl implements IGestorProcesoService {
 
         ProcesoPagoDocente pagoDocente = new ProcesoPagoDocente();
         pagoDocente.setProceso(procesoGuardado);
-        pagoDocente.setModalidadVirtual(procesoDTO.getModalidadVirtual());
+        pagoDocente.setModalidad(procesoDTO.getModalidad());
         pagoDocente.setFechaInicioClase(procesoDTO.getFechaInicioClase());
         pagoDocente.setFechaFinClase(procesoDTO.getFechaFinClase());
         Materia materia = this.materiaService.findById(procesoDTO.getMateriaId());

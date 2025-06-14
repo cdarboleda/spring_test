@@ -11,14 +11,14 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 
 public class ProcesoCompletoPagoDocenteDTO extends ProcesoCompletoDTO{
-    private Boolean modalidadVirtual;
+    private String modalidad;
     private MateriaTablaDTO materia;
     private LocalDate fechaInicioClase;
     private LocalDate fechaFinClase;
     private PersonaLigeroDTO coordinador;
 
     public ProcesoCompletoPagoDocenteDTO(ProcesoPagoDocente pagoDocente, MateriaTablaDTO materiaDTO, PersonaLigeroDTO coordinador) {
-        this.modalidadVirtual=pagoDocente.getModalidadVirtual();
+        this.modalidad=pagoDocente.getModalidad();
         this.materia = materiaDTO;
         this.fechaInicioClase = pagoDocente.getFechaInicioClase();
         this.fechaFinClase = pagoDocente.getFechaFinClase();
