@@ -127,6 +127,8 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             proceso.setDescripcion("En este proceso se realiza el trámite titulación de un estudiante de maestría");
             titulacion.setProceso(proceso);
             titulacion.setGrupo(procesoTDTO.getGrupo());
+            // validar el id del companiero qu exista en la base
+            titulacion.setCompanieroId(procesoTDTO.getGrupo() == true ? procesoTDTO.getCompanieroId() : null);
             titulacion.setCalificacionFinal(procesoTDTO.getCalificacionFinal());
             titulacion.setFechaDefensa(procesoTDTO.getFechaDefensa());
             titulacion.setNotaLector1(procesoTDTO.getNotaLector1());
@@ -145,8 +147,6 @@ public class GestorProcesoImpl implements IGestorProcesoService {
 
         return null;
     }
-
-
 
     // Método para insertar un nuevo registro de Proceso
     @Override

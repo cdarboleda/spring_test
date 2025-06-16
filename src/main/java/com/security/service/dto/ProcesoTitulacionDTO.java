@@ -21,6 +21,7 @@ public class ProcesoTitulacionDTO extends ProcesoDTO {
     private Double notaLector2;
     private String tutorPoyecto;
     private Double notaPropuestaProyecto;
+    private Integer companieroId;
 
     // public ProcesoTitulacionDTO() {} // Constructor vacío necesario
 
