@@ -36,6 +36,8 @@ import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
 import com.security.service.IRolService;
 import com.security.service.dto.MiProcesoDTO;
+import com.security.service.dto.ProcesoCompletoPagoDocenteDTO;
+import com.security.service.dto.ProcesoCompletoTitulacionDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteDTO;
 import com.security.service.dto.ProcesoPasoDocumentoDTO;
@@ -250,7 +252,14 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     }
 
     public List<MiProcesoDTO> obtenerMisProcesos(Integer responsableId) {
-        List<Proceso> procesos = procesoRepository.findProcesosByResponsableId(responsableId);
+        List<Proceso> procesos = new ArrayList<>();
+        procesos = procesoRepository.findProcesosByResponsableId(responsableId);
+
+        // busca si la persona esta asociado al proceso, pero no es responsable ni es
+        // responsable de algun paso
+        if (procesos.isEmpty()) {
+            procesos = encontrarProcesoByIdPersonaNoResponsable(responsableId);
+        }
 
         // Crear una lista de DTOs para devolver
         List<MiProcesoDTO> resultado = new ArrayList<>();
@@ -289,6 +298,19 @@ public class GestorProcesoImpl implements IGestorProcesoService {
                             ? pasoEnCurso.getResponsable().getCedula()
                             : null);
 
+            // En ProcesoTitulacion GRPAL se agrega el compañero a la lista del procesoDTO
+            if (proceso.getTipoProceso().equals(TipoProceso.TITULACION)) {
+                ProcesoCompletoTitulacionDTO procesoCompletoTitulacion = (ProcesoCompletoTitulacionDTO) findByIdCompletoDTO(
+                        proceso.getId());
+                if (procesoCompletoTitulacion.getGrupo()) {
+                    Persona requiriente2 = this.personaService.findById(procesoCompletoTitulacion.getCompanieroId());
+                    dto.setRequiriente2Nombre(requiriente2.getNombre());
+                    dto.setRequiriente2Apellido(requiriente2.getApellido());
+                    dto.setRequiriente2Id(requiriente2.getId());
+                }
+                dto.setGrupo(procesoCompletoTitulacion.getGrupo());
+            }
+
             // Agregar a la lista de resultados
             resultado.add(dto);
         }
@@ -299,6 +321,26 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     @Override
     public List<ProcesoPasoDocumentoDTO> obtenerDetalleProcesoId(Integer procesoId) {
         return this.procesoRepository.findProcesoDetalleById(procesoId);
+    }
+
+    private List<Proceso> encontrarProcesoByIdPersonaNoResponsable(Integer personaId) {
+        List<Proceso> procesosFiltrados = new ArrayList<>();
+
+        List<Proceso> todosLosProcesos = this.procesoRepository.findAll();
+
+        for (Proceso proceso : todosLosProcesos) {
+            Object optTitulacion = findByIdCompletoDTO(proceso.getId()); // this.procesoTitulacionRepository
+            if (optTitulacion instanceof ProcesoCompletoTitulacionDTO) {
+                ProcesoCompletoTitulacionDTO procesoTitulacion = (ProcesoCompletoTitulacionDTO) optTitulacion;
+                if (Boolean.TRUE.equals(procesoTitulacion.getGrupo())
+                        && personaId.equals(procesoTitulacion.getCompanieroId())) {
+                    procesosFiltrados.add(proceso);
+                } else if (personaId.equals(procesoTitulacion.getTutorId())) {
+                    procesosFiltrados.add(proceso);
+                }
+            }
+        }
+        return procesosFiltrados;
     }
 
 }

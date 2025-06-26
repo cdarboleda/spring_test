@@ -1,19 +1,20 @@
-
 -- Insertar personas
 INSERT INTO app_schema.persona (
-    pers_id,pers_activo, pers_apellido, pers_cedula, pers_correo,
+    pers_id, pers_activo, pers_apellido, pers_cedula, pers_correo,
     pers_id_keycloak, pers_nombre, pers_telefono
 ) VALUES
+(1, true, 'admin', null, 'administradorSigepro@ejemplo.com', null, 'Sigepro', null);
 
+-- Insertar roles
+INSERT INTO app_schema.rol (
+    rol_id, rol_descripcion, rol_nombre
+) VALUES
+(1, 'Administrador', 'administrador'),
+(2, 'Secretaria', 'secretaria'),
+(3, 'Director', 'director'),
+(4, 'Estudiante', 'estudiante'),
+(5, 'Docente', 'docente');
 
--- Secretaria
-(1, true, 'Torres Avila',     '0808080808', 'torres.secretaria@ejemplo.com',  null , 'Lucía Diana',    '0999990008'),
-
--- Director
-(2, true, 'Navarro Ferreira', '0909090909', 'navarro.director@ejemplo.com',  null , 'José Mario',     '0999990009');
-
--- Insertar persona_rol (asumiendo que IDs se asignan automáticamente en orden)
+-- Insertar persona_rol
 INSERT INTO app_schema.persona_rol (pers_id, rol_id) VALUES
-
-(1, 3),
-(2, 4);
+(1, 1);

@@ -1,6 +1,7 @@
 package com.security.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -8,18 +9,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.security.db.Persona;
 import com.security.service.IGestorPersonaService;
+import com.security.service.IGestorProcesoService;
 import com.security.service.IGestorUsurio;
 import com.security.service.IKeycloakService;
 import com.security.service.IPersonaService;
+import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.PersonaDTO;
+import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.utils.Convertidor;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
 public class GestorUsuarioImpl implements IGestorUsurio {
+
+    private final PersonaServiceImpl personaServiceImpl;
+
+    private final ProcesoServiceImpl procesoServiceImpl;
 
     @Autowired
     private IGestorPersonaService gestorPersonaService;
@@ -31,13 +41,20 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     private IKeycloakService keycloakService;
 
     @Autowired
+    private IGestorProcesoService gestorProcesoService;
+
+    @Autowired
     private Convertidor convertidor;
+
+    GestorUsuarioImpl(ProcesoServiceImpl procesoServiceImpl, PersonaServiceImpl personaServiceImpl) {
+        this.procesoServiceImpl = procesoServiceImpl;
+        this.personaServiceImpl = personaServiceImpl;
+    }
 
     // Metodo para ingresar un nuevo registro de usuario
     @Override
     public PersonaDTO createUser(PersonaDTO personaDTO) {
 
-        System.out.println("personaDTooooooooooooooooooooooO: " + personaDTO);
         String idUser = this.keycloakService.createUser(
                 personaDTO.getCedula(),
                 personaDTO.getCorreo(),
@@ -80,42 +97,75 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     @Override
     public Boolean updateUser(PersonaDTO personaDTO) {
         try {
-            PersonaDTO dto = this.convertidor.convertirAPersonaDTO(this.gestorPersonaService.actualizar(personaDTO));
+            Persona personaActual = this.personaService.findById(personaDTO.getId());
+            if (personaActual == null) {
+                throw new EntityNotFoundException("No se encontró la persona con id: " + personaDTO.getId());
+            }
 
-            System.out.println(dto);
+            // Validar si están intentando desactivar y la persona tiene procesos activos
+            if (personaActual.getActivo() && !personaDTO.getActivo()) {
+                boolean tieneProcesosActivos = tieneProcesosActivos(personaActual);
+                if (tieneProcesosActivos) {
+                    return false;
+                }
+            }
 
-            return this.keycloakService.updateUser(
-                    dto.getIdKeycloak(),
-                    dto.getCedula(),
-                    dto.getCorreo(),
-                    dto.getRoles());
+            // Actualizar la persona en la base de datos
+            System.out.println("Actualizando persona en la base de datos...");
+            Persona personaActualizada = this.gestorPersonaService.actualizar(personaDTO);
+            System.out.println("se actualizo");
+            // Convertir para extraer los datos necesarios
+            System.out.println("Convertir para extraer los datos necesarios...");
+            PersonaDTO dtoActualizada = this.convertidor.convertirAPersonaDTO(personaActualizada);
+            System.out.println("se convirtio a DTO");
+            // Actualizar en Keycloak
+
+            boolean keycloakActualizado = this.keycloakService.updateUser(
+                    personaActual.getIdKeycloak(),
+                    dtoActualizada.getCedula(),
+                    dtoActualizada.getCorreo(),
+                    dtoActualizada.getRoles());
+            System.out.println("se actualizo en keycloak");
+            return keycloakActualizado;
+
+        } catch (EntityNotFoundException | IllegalStateException e) {
+            System.err.println("error en la base de datos" + e.getMessage());
+            return false;
         } catch (Exception e) {
-            e.printStackTrace();
+            // Errores inesperados
+            System.err.println(" Error inesperado al actualizar la persona: " + e.getMessage());
             return false;
         }
+    }
+
+    private boolean tieneProcesosActivos(Persona persona) {
+        // TODO Auto-generated method stub
+        List<MiProcesoDTO> procesos = this.gestorProcesoService.obtenerMisProcesos(persona.getId());
+
+        for (MiProcesoDTO miProcesoDTO : procesos) {
+            System.out.println(miProcesoDTO.toString());
+        }
+        for (MiProcesoDTO proceso : procesos) {
+            boolean cancelado = Boolean.TRUE.equals(proceso.getCancelado()); // seguro contra null
+            boolean finalizado = Boolean.TRUE.equals(proceso.getFinalizado());
+            if (!cancelado || !finalizado) {
+                return true;
+            }
+        }
+        return false;
+
     }
 
     @Override
     public Boolean deleteUser(String idKeycloak) {
         try {
-            // Intentar eliminar en la base de datos
-            int bdEliminado = this.personaService.deleteByIdKeycloak(idKeycloak);
-            System.out.println("Eliminados en la base de datos: " + bdEliminado);
-
-            // Si no se eliminó ningún registro en la base de datos, retornar false
-            if (bdEliminado == 0) {
-                System.out.println("No se encontró el registro en la base de datos para eliminar.");
+            Persona personaActual = this.personaService.findByIdKeycloak(idKeycloak);
+            boolean tieneProcesosActivos = tieneProcesosActivos(personaActual);
+            if (tieneProcesosActivos) {
+                System.out.println("La persona tiene procesos activos, no se puede eliminar.");
                 return false;
             }
-
-            // Verificar manualmente si el registro sigue existiendo en la tabla para evitar
-            // errores post-transacción
-            boolean sigueExistiendo = this.personaService.existeRegistro(idKeycloak);
-            if (sigueExistiendo) {
-                System.err.println("El registro no se pudo eliminar porque está siendo referenciado en otras tablas.");
-                return false;
-            }
-
+            this.personaService.deleteByIdKeycloak(idKeycloak);
             // Si la eliminación en la base de datos fue exitosa, proceder con Keycloak
             boolean keycloakEliminado = this.keycloakService.deleteUser(idKeycloak);
             System.out.println("Se eliminó de Keycloak exitosamente.");

@@ -12,6 +12,7 @@ public class ConvertidorProcesoTitulacion {
     public ProcesoTitulacionLigeroDTO convertirProcesoTitulacion(ProcesoTitulacion procesoTitulacion) {
         ProcesoTitulacionLigeroDTO ProcesoTitulacionLigeroDTO = new ProcesoTitulacionLigeroDTO();
 
+        ProcesoTitulacionLigeroDTO.setRequirienteId(procesoTitulacion.getProceso().getRequiriente().getId());
         ProcesoTitulacionLigeroDTO.setGrupo(procesoTitulacion.getGrupo());
         ProcesoTitulacionLigeroDTO.setCalificacionFinal(procesoTitulacion.getCalificacionFinal());
         ProcesoTitulacionLigeroDTO.setFechaDefensa(procesoTitulacion.getFechaDefensa());
@@ -24,6 +25,7 @@ public class ConvertidorProcesoTitulacion {
         ProcesoTitulacionLigeroDTO.setPersonaTribunal2(procesoTitulacion.getPersonaTribunal2());
         ProcesoTitulacionLigeroDTO.setNotaTribunal3(procesoTitulacion.getNotaTribunal3());
         ProcesoTitulacionLigeroDTO.setTutorId(procesoTitulacion.getTutorId());
+        ProcesoTitulacionLigeroDTO.setCompanieroId(procesoTitulacion.getCompanieroId());
         // ProcesoTitulacionLigeroDTO.setNotaPropuestaProyecto(procesoTitulacion.getNotaPropuestaProyecto());
 
         return ProcesoTitulacionLigeroDTO;

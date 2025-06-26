@@ -19,6 +19,8 @@ public class ProcesoCompletoTitulacionDTO extends ProcesoCompletoDTO {
     private LocalDateTime fechaDefensa;
     private Double notaLector1;
     private Double notaLector2;
+    private Integer tutorId;
+    private Integer companieroId;
     private List<ObservacionLector> observaciones;
 
     public ProcesoCompletoTitulacionDTO(ProcesoTitulacion procesoTitulacion) {
@@ -28,6 +30,8 @@ public class ProcesoCompletoTitulacionDTO extends ProcesoCompletoDTO {
         this.notaLector1 = procesoTitulacion.getNotaLector1();
         this.notaLector2 = procesoTitulacion.getNotaLector2();
         this.observaciones = procesoTitulacion.getObservaciones();
+        this.companieroId = procesoTitulacion.getCompanieroId();
+        this.tutorId = procesoTitulacion.getTutorId();
     }
 
 }

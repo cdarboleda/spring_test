@@ -33,4 +33,6 @@ public interface IPersonaService {
 
     public Persona findByEmail(String email);
 
+    public boolean tieneRelacionConPaso(String idKeycloak);
+
 }

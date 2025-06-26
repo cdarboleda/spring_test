@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -116,6 +117,13 @@ public class PersonaServiceImpl implements IPersonaService {
     public List<Persona> findPersonasByIds(List<Integer> ids) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findPersonasByIds'");
+    }
+
+    @Override
+    public boolean tieneRelacionConPaso(String idKeycloak) {
+        // TODO Auto-generated method stub
+        return this.personaRepository.tieneRelacionConPaso(idKeycloak);
+
     }
 
 }

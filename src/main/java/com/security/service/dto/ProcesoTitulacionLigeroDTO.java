@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class ProcesoTitulacionLigeroDTO {
 
+    private Integer requirienteId;
     private Boolean grupo;
     private Double calificacionFinal;
     private LocalDateTime fechaDefensa;
@@ -18,6 +19,7 @@ public class ProcesoTitulacionLigeroDTO {
     private Double notaTribunal2;
     private String personaTribunal2;
     private Integer tutorId;
+    private Integer companieroId;
     private Double notaTribunal3;
     private String personaTribunal3;
     private Double notaPropuestaProyecto;

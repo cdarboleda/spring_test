@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -19,7 +20,10 @@ public interface IPersonaRepository extends JpaRepository<Persona, Integer> {
 
     public Optional<Persona> findByIdKeycloak(String idKeycloak);
 
-    public int deleteByIdKeycloak(String idKeycloak);
+    public Integer deleteByIdKeycloak(String idKeycloak);
+
+    @Query("SELECT COUNT(p) > 0 FROM Paso p WHERE p.responsable.idKeycloak = :idKeycloak")
+    public boolean tieneRelacionConPaso(@Param("idKeycloak") String idKeycloak);
 
     boolean existsByIdKeycloak(String idKeycloak);
 

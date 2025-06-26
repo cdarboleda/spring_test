@@ -73,9 +73,9 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
                     HttpStatus.BAD_REQUEST);
         }
         personaDTO.setId(null);
+        personaDTO = limpiarCamposPersona(personaDTO);
         Persona persona = new Persona();
         convertidor.convertirAPersona(persona, personaDTO);
-
         List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
 
         this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
@@ -97,7 +97,7 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
         List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
 
         this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
-
+        personaDTO = limpiarCamposPersona(personaDTO);
         convertidor.convertirAPersona(persona, personaDTO);
         // personaDTOPersona.setProcesos(persona.getProcesos());
         persona.setRoles(new HashSet<>(roles));
@@ -187,7 +187,7 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
 
         // Filtrar las personas activas
         List<Persona> personasActivas = personas.stream()
-                .filter(Persona::getActivo) 
+                .filter(Persona::getActivo)
                 .collect(Collectors.toList());
 
         if (personasActivas.isEmpty()) {
@@ -195,6 +195,37 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
         }
 
         return personasActivas;
+    }
+
+    private PersonaDTO limpiarCamposPersona(PersonaDTO dto) {
+        if (dto.getNombre() != null) {
+            dto.setNombre(dto.getNombre().trim().replaceAll("\\s+", " "));
+        }
+        if (dto.getApellido() != null) {
+            dto.setApellido(dto.getApellido().trim().replaceAll("\\s+", " "));
+        }
+        if (dto.getCedula() != null) {
+            dto.setCedula(dto.getCedula().trim());
+        }
+        if (dto.getTelefono() != null) {
+            dto.setTelefono(dto.getTelefono().trim());
+        }
+        if (dto.getCorreo() != null) {
+            dto.setCorreo(dto.getCorreo().trim());
+        }
+        if (dto.getCedula() != null) {
+            dto.setCedula(dto.getCedula().trim());
+        }
+        if (dto.getIdKeycloak() != null) {
+            dto.setIdKeycloak(dto.getIdKeycloak().trim());
+        }
+        if (dto.getRoles() != null) {
+            dto.setRoles(dto.getRoles().stream().filter(Objects::nonNull).collect(Collectors.toList()));
+        }
+        if (dto.getTelefono() != null) {
+            dto.setTelefono(dto.getTelefono().trim());
+        }
+        return dto;
     }
 
 }

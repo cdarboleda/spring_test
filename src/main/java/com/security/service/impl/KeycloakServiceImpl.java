@@ -175,8 +175,9 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            throw new RuntimeException("Error al actualizar el usuario en Keycloak en updateUser de KeycloakService",
+                    e);
+
         }
     }
 

@@ -21,6 +21,10 @@ public class MiProcesoDTO {
     private String requirienteCedula;
     private String requirienteNombre;
     private String requirienteApellido;
+    private Integer requiriente2Id;
+    private String requiriente2Nombre;
+    private String requiriente2Apellido;
+    private Boolean grupo;
 
     private String pasoNombre;
     private String pasoEstado;
@@ -28,9 +32,9 @@ public class MiProcesoDTO {
     private Integer responsablePasoId;
     private String responsablePasoCedula;
 
-public MiProcesoDTO(){
+    public MiProcesoDTO() {
 
-}
+    }
 
     public MiProcesoDTO(
             Integer procesoId,
@@ -58,37 +62,37 @@ public MiProcesoDTO(){
     }
 
     public MiProcesoDTO(
-        Integer procesoId,
-        TipoProceso tipoProceso,
-        LocalDateTime fechaInicio,
-        LocalDateTime fechaFin,
-        Boolean finalizado,
-        Boolean cancelado,
-        Integer personaId,
-        String personaCedula,
-        String personaNombre,
-        String personaApellido,
-        String pasoNombre,
-        String pasoEstado,
-        String pasoDescripcionEstado,
-        Integer responsablePasoId,
-        String responsablePasoCedula) {
-    this.procesoId = procesoId;
-    this.tipoProceso = tipoProceso;
-    this.fechaInicio = fechaInicio;
-    this.fechaFin = fechaFin;
-    this.finalizado = finalizado;
-    this.cancelado = cancelado;
-    this.requirienteId = personaId;
-    this.requirienteCedula = personaCedula;
-    this.requirienteNombre = personaNombre;
-    this.requirienteApellido = personaApellido;
-    this.pasoNombre = pasoNombre;
-    this.pasoEstado = pasoEstado;
-    this.pasoDescripcionEstado = pasoDescripcionEstado;
-    this.responsablePasoId = responsablePasoId;
-    this.responsablePasoCedula = responsablePasoCedula;
-}
+            Integer procesoId,
+            TipoProceso tipoProceso,
+            LocalDateTime fechaInicio,
+            LocalDateTime fechaFin,
+            Boolean finalizado,
+            Boolean cancelado,
+            Integer personaId,
+            String personaCedula,
+            String personaNombre,
+            String personaApellido,
+            String pasoNombre,
+            String pasoEstado,
+            String pasoDescripcionEstado,
+            Integer responsablePasoId,
+            String responsablePasoCedula) {
+        this.procesoId = procesoId;
+        this.tipoProceso = tipoProceso;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.finalizado = finalizado;
+        this.cancelado = cancelado;
+        this.requirienteId = personaId;
+        this.requirienteCedula = personaCedula;
+        this.requirienteNombre = personaNombre;
+        this.requirienteApellido = personaApellido;
+        this.pasoNombre = pasoNombre;
+        this.pasoEstado = pasoEstado;
+        this.pasoDescripcionEstado = pasoDescripcionEstado;
+        this.responsablePasoId = responsablePasoId;
+        this.responsablePasoCedula = responsablePasoCedula;
+    }
 
     // Getters y Setters
 }
