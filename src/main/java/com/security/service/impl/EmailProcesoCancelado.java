@@ -1,7 +1,6 @@
 package com.security.service.impl;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.security.db.Persona;
-import com.security.service.dto.PasoDTO;
 
 import jakarta.mail.MessagingException;
 

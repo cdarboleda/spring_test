@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.service.dto.PasoDTO;
-import com.security.service.impl.*;
+import com.security.service.impl.EmailPasoCompletado;
+import com.security.service.impl.EmailPasoRechazado;
+import com.security.service.impl.EmailProcesoCancelado;
+import com.security.service.impl.EmailProcesoFinalizado;
+import com.security.service.impl.EmailProcesoIniciado;
 
 @RestController
 @RequestMapping("/notificacion")

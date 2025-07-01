@@ -55,9 +55,8 @@ public class PersonaController {
     // Buscar necesita la cedula dentro del body
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('administrador', 'administrador_usuarios')")
-    public ResponseEntity<?> actualizar(@PathVariable(name = "id") Integer id, @RequestBody PersonaDTO personaDTO) {
+    public ResponseEntity<?> actualizar(@PathVariable(name = "id") Integer id, @Valid @RequestBody PersonaDTO personaDTO) {
         personaDTO.setId(id);
-        // personaDTO.setCedula(cedula);
         return new ResponseEntity<>(this.gestorUsurio.updateUser(personaDTO), HttpStatus.OK);
     }
 

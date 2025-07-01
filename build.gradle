@@ -25,9 +25,6 @@ ext {
 dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter'
-		// //websocket
-	// implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation("org.springframework.boot:spring-boot-starter-websocket:3.4.3")
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
@@ -40,28 +37,15 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.18.2'
     implementation 'org.postgresql:postgresql:42.7.3'
         
-	implementation ('org.keycloak:keycloak-admin-client:26.0.4') {
-		  exclude group: 'org.jboss.resteasy', module: 'resteasy-core'
-	      exclude group: 'org.jboss', module: 'jandex'
-	      exclude group: "org.jboss.resteasy", module: "resteasy-jaxrs"
-	      exclude group: 'org.jboss.resteasy', module: 'resteasy-multipart-provider'
-	      exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
-	      exclude group: 'org.jboss.resteasy', module: 'resteasy-jackson2-provider'
-  	      exclude group: 'org.jboss.resteasy', module: 'resteasy-jaxb-provider'
-	} 
-
-
-	
-    implementation 'org.jboss.resteasy:resteasy-client:6.2.11.Final'
-    implementation 'org.jboss.resteasy:resteasy-multipart-provider:6.2.11.Final'
-    implementation 'org.jboss.resteasy:resteasy-jackson2-provider:6.2.11.Final'
-    implementation 'org.jboss.resteasy:resteasy-jaxb-provider:6.2.11.Final'
-    
+	implementation ('org.keycloak:keycloak-admin-client:26.0.4')    
     // Dependencias para testing
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    //testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	testImplementation 'org.mockito:mockito-core'  
+	testImplementation 'org.mockito:mockito-junit-jupiter'  
+	testImplementation 'com.h2database:h2'
 
 	//swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'

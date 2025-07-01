@@ -41,9 +41,6 @@ public class Persona {
 
     @Column(name = "pers_id_keycloak", unique = true)
     private String idKeycloak;
-
-    @NotBlank
-    @NotEmpty
     @Column(name = "pers_nombre")
     private String nombre;
     @Column(name = "pers_apellido", nullable = false)

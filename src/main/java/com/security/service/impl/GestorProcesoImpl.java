@@ -2,30 +2,23 @@ package com.security.service.impl;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.security.controller.NotificacionController;
 import com.security.db.Materia;
 import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.Proceso;
 import com.security.db.ProcesoPagoDocente;
 import com.security.db.ProcesoTitulacion;
-import com.security.db.enums.Estado;
 import com.security.db.enums.Rol;
-import com.security.db.enums.TipoEventoNotificacion;
 import com.security.db.enums.TipoProceso;
 import com.security.repo.ICarpetaDocumentoRepository;
 import com.security.repo.IPasoRepository;
@@ -34,24 +27,18 @@ import com.security.repo.IProcesoPagoDocenteRepository;
 import com.security.repo.IProcesoRepository;
 import com.security.repo.IProcesoTitulacionRepository;
 import com.security.service.IGestorPasoService;
-import com.security.service.IGestorProcesoLogService;
 import com.security.service.IGestorProcesoService;
 import com.security.service.IMateriaService;
-import com.security.service.IPasoService;
 import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
-
 import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.MiProcesoPagoDocenteDTO;
-import com.security.service.dto.notificacionDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteDTO;
 import com.security.service.dto.ProcesoPagoDocenteResponsablesDTO;
 import com.security.service.dto.ProcesoPasoDocumentoDTO;
 import com.security.service.dto.ProcesoTitulacionDTO;
-import com.security.service.dto.utils.ConvertidorCarpetaDocumento;
 import com.security.service.dto.utils.ConvertidorPaso;
-import com.security.service.dto.utils.ConvertidorPersona;
 import com.security.service.dto.utils.ConvertidorProceso;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -88,12 +75,6 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     private IProcesoTitulacionRepository procesoTitulacionRepository;
     @Autowired
     private ConvertidorPaso convertidorPaso;
-
-    @Autowired
-    private ProcesoResponsablesCache procesoResponsablesCache;
-
-    @Autowired
-    NotificacionController notificacionController;
 
     @Override
     public List<ProcesoDTO> findProcesosByRequirienteId(Integer id) {
@@ -230,14 +211,6 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         proceso.setPasos(pasos); // el chat dijo que estos "pasos" son los mismos que los del mapaRolPasos
         Proceso procesoGuardado = this.procesoRepository.save(proceso);
 
-        // Guardar el cache de responsables de un proceso
-        procesoResponsablesCache.setResponsables(procesoGuardado.getId(),
-                pasos.stream()
-                        .map(Paso::getResponsable)
-                        .filter(Objects::nonNull)
-                        .map(Persona::getIdKeycloak)
-                        .collect(Collectors.toSet()));
-
         ProcesoPagoDocente pagoDocente = new ProcesoPagoDocente();
         pagoDocente.setProceso(procesoGuardado);
         pagoDocente.setModalidad(procesoDTO.getModalidad());
@@ -247,9 +220,6 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         pagoDocente.setMateria(materia);
 
         var procesoEspecifico = procesoPagoDocenteRepository.save(pagoDocente);
-
-        // notificacionController.notificarProcesoCreacion(procesoGuardado.getId());
-
         return convertidorProceso.convertirACompletoDTO(procesoEspecifico);
     }
 
@@ -263,8 +233,6 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             proceso.setCancelado(procesoDTO.getCancelado());
         }
 
-        // notificacionController.notificarProcesoActualizacion(procesoDTO.getId());
-
         return convertidorProceso.convertirALigeroDTO(proceso);
     }
 
@@ -272,8 +240,6 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     // aaaaaaasdasdasdasd
     @Override
     public void delete(Integer id) {
-        var ids = procesoResponsablesCache.getResponsables(id);
-
         this.procesoRepository.responsablesDeUnProceso(id);
         this.procesoPagoDocenteRepository.deleteById(id);
         this.procesoTitulacionRepository.deleteById(id);
@@ -281,7 +247,6 @@ public class GestorProcesoImpl implements IGestorProcesoService {
         pasoRepository.deleteByProcesoId(id);
         procesoLogRepository.deleteByProcesoId(id);
         this.procesoRepository.deleteById(id);
-        // notificacionController.notificarProcesoEliminacion(id, ids);
 
     }
 
@@ -327,14 +292,10 @@ public class GestorProcesoImpl implements IGestorProcesoService {
 
     @Override
     public List<ProcesoPasoDocumentoDTO> obtenerDetalleProcesoId(Integer procesoId) {
-
-        // notificacionController.notificarCambio(procesoId);
         return this.procesoRepository.findProcesoDetalleById(procesoId);
     }
     @Override
     public ProcesoPasoDocumentoDTO obtenerDetallePasoId(Integer procesoId) {
-
-        // notificacionController.notificarCambio(procesoId);
         return this.procesoRepository.findPasoDetalleById(procesoId);
     }
 

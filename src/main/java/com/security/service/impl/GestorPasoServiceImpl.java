@@ -2,7 +2,6 @@ package com.security.service.impl;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.security.controller.NotificacionController;
 import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.Proceso;
@@ -21,7 +19,6 @@ import com.security.db.enums.Estado;
 import com.security.db.enums.EstadoHelper;
 import com.security.db.enums.Evento;
 import com.security.db.enums.Rol;
-import com.security.db.enums.TipoProceso;
 import com.security.exception.CustomException;
 import com.security.factory.PasoFactoryManager;
 import com.security.repo.IPasoRepository;
@@ -64,9 +61,6 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
 
     @Autowired
     private PasoFactoryManager factoryManager;
-
-    @Autowired
-    NotificacionController notificacionController;
 
     @Autowired
     private IGestorCarpetaDocumento carpetaDocumento;
@@ -176,7 +170,6 @@ public Map<String, Object> avanzarPaso(Integer pasoActualId, Integer pasoSiguien
             respuesta.put("procesoFechaFin", proceso.getFechaFin());
         }
 
-        // notificacionController.notificarPasoActualizacion(procesoId, pasosModificados.stream().map(Paso::getId).collect(Collectors.toList()));
         respuesta.put("pasos", pasosModificados);
         return respuesta;
 
@@ -233,7 +226,6 @@ public Map<String, Object> avanzarPaso(Integer pasoActualId, Integer pasoSiguien
 
             pasos.add(pasoAnterior);
 
-            // notificacionController.notificarPasoActualizacion(pasoActual.getProceso().getId(), Arrays.asList(idPasoActual, pasoAnteriorDTO.getId()));
         }
 
         return pasos;
