@@ -90,19 +90,21 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
     // error
     @Override
     public Persona actualizar(PersonaDTO personaDTO) {
+
         if (this.personaService.tieneErrores(personaDTO) || personaDTO.getId() == null) {
-            throw new CustomException("Hay campos erróneos, por favor revise antes de enviar", HttpStatus.BAD_REQUEST);
+            throw new CustomException("Hay campos erróneos, por favor revise antes de enviar",
+                    HttpStatus.BAD_REQUEST);
         }
         Persona persona = this.personaService.findById(personaDTO.getId());
+        if (persona == null) {
+            throw new EntityNotFoundException("No se encontró la persona con id: " + personaDTO.getId());
+        }
         List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
-
         this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
         personaDTO = limpiarCamposPersona(personaDTO);
-        convertidor.convertirAPersona(persona, personaDTO);
-        // personaDTOPersona.setProcesos(persona.getProcesos());
         persona.setRoles(new HashSet<>(roles));
-
-        return persona;
+        convertidor.convertirAPersona(persona, personaDTO);
+        return this.personaRepository.save(persona);
     }
 
     @Override
@@ -180,9 +182,10 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
         }
 
         Set<Persona> personas = rol.get().getPersonas();
-
         if (personas == null || personas.isEmpty()) {
-            throw new CustomException("No hay personas asociadas al rol: " + nombreRol, HttpStatus.NOT_FOUND);
+            // throw new CustomException("No hay personas asociadas al rol: " + nombreRol,
+            // HttpStatus.NOT_FOUND);
+            return null;
         }
 
         // Filtrar las personas activas
@@ -191,7 +194,9 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
                 .collect(Collectors.toList());
 
         if (personasActivas.isEmpty()) {
-            throw new CustomException("No hay personas activas con el rol: " + nombreRol, HttpStatus.NOT_FOUND);
+            // throw new CustomException("No hay personas activas con el rol: " + nombreRol,
+            // HttpStatus.NOT_FOUND);
+            return null;
         }
 
         return personasActivas;

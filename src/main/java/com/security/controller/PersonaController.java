@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.db.Persona;
+import com.security.exception.CustomException;
 import com.security.service.IGestorPersonaService;
 import com.security.service.IGestorProcesoService;
 import com.security.service.IGestorUsurio;
@@ -57,20 +58,11 @@ public class PersonaController {
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> actualizar(@PathVariable(name = "id") Integer id, @RequestBody PersonaDTO personaDTO) {
         personaDTO.setId(id);
-        try {
-            boolean actualizado = gestorUsurio.updateUser(personaDTO);
-
-            if (actualizado) {
-                return ResponseEntity.ok("Usuario actualizado exitosamente.");
-            } else {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("No se puede modificar el estado del usuario mientras tenga procesos activos.");
-            }
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Ocurrió un error inesperado al actualizar el usuario.");
+        boolean actualizado = gestorUsurio.updateUser(personaDTO);
+        if (actualizado) {
+            return ResponseEntity.ok("Usuario actualizado exitosamente.");
         }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el usuario.");
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -132,22 +124,8 @@ public class PersonaController {
 
     @DeleteMapping(path = "/{idKeycloak}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> eliminarPersona(@PathVariable(name = "idKeycloak") String idKeycloak) {
-        try {
-            boolean eliminado = gestorUsurio.deleteUser(idKeycloak);
-
-            if (eliminado) {
-                return ResponseEntity.ok("Usuario eliminado exitosamente.");
-            } else {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("No se pude eliminar el usuario mientras tenga procesos vinculados.");
-            }
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Error de integridad referencial, no se puede eliminar.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error inesperado.");
-        }
+        gestorUsurio.deleteUser(idKeycloak);
+        return ResponseEntity.ok("Usuario eliminado exitosamente.");
     }
 
     @GetMapping(path = "/{cedula}/pasos", produces = MediaType.APPLICATION_JSON_VALUE)

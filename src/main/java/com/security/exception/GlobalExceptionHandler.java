@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<String> customException(CustomException ex) {
+    public ResponseEntity<String> customException(CustomException ex) {     
         return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
     }
 

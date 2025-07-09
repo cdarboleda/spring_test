@@ -1,23 +1,23 @@
 package com.security.service.impl;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.security.db.Persona;
+import com.security.db.Rol;
+import com.security.exception.CustomException;
 import com.security.service.IGestorPersonaService;
 import com.security.service.IGestorProcesoService;
 import com.security.service.IGestorUsurio;
 import com.security.service.IKeycloakService;
 import com.security.service.IPersonaService;
+import com.security.service.IRolService;
 import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.PersonaDTO;
-import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.utils.Convertidor;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -26,10 +26,6 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class GestorUsuarioImpl implements IGestorUsurio {
-
-    private final PersonaServiceImpl personaServiceImpl;
-
-    private final ProcesoServiceImpl procesoServiceImpl;
 
     @Autowired
     private IGestorPersonaService gestorPersonaService;
@@ -44,32 +40,39 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     private IGestorProcesoService gestorProcesoService;
 
     @Autowired
-    private Convertidor convertidor;
+    private IRolService rolService;
 
-    GestorUsuarioImpl(ProcesoServiceImpl procesoServiceImpl, PersonaServiceImpl personaServiceImpl) {
-        this.procesoServiceImpl = procesoServiceImpl;
-        this.personaServiceImpl = personaServiceImpl;
-    }
+    @Autowired
+    private Convertidor convertidor;
 
     // Metodo para ingresar un nuevo registro de usuario
     @Override
     public PersonaDTO createUser(PersonaDTO personaDTO) {
 
+        String rol = obtenerRolAdministrativo(personaDTO);
+        boolean roldisponible = validarRolesAdministrativosDisponibles(personaDTO, rol);
+        if (!roldisponible) {
+            throw new CustomException(
+                    "No se puede asignar el rol (" + rol
+                            + ") porque ya existe un usuario ACTIVO con ese rol",
+                    HttpStatus.CONFLICT);
+
+        }
+
         String idUser = this.keycloakService.createUser(
                 personaDTO.getCedula(),
                 personaDTO.getCorreo(),
-                personaDTO.getRoles());
-
-        if (idUser == null) {
-            throw new RuntimeException("Error al crear el usuario en Keycloak");
-        }
+                personaDTO.getRoles(),
+                personaDTO.getNombre(),
+                personaDTO.getApellido());
 
         personaDTO.setIdKeycloak(idUser);
+
         try {
             return this.gestorPersonaService.insertar(personaDTO);
         } catch (Exception e) {
             try {
-                this.keycloakService.deleteUser(idUser); // Intentar eliminar en Keycloak
+                this.keycloakService.deleteUser(idUser);
             } catch (Exception rollbackError) {
                 throw new RuntimeException(
                         "Error al insertar en la base de datos. Además, falló el rollback en Keycloak.", rollbackError);
@@ -82,8 +85,13 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     @Override
     public List<PersonaDTO> getUsers() {
 
+        Rol rolBuscado = this.rolService.findAll().stream().filter(r -> r.getNombre().equals("administrador")).findAny()
+                .orElse(null);
+
         List<PersonaDTO> personas = this.personaService.findAll().stream()
-                .map(persona -> this.convertidor.convertirAPersonaDTO(persona)).collect(Collectors.toList());
+                .filter(p -> !p.getRoles().contains(rolBuscado))
+                .map(this.convertidor::convertirAPersonaDTO)
+                .collect(Collectors.toList());
 
         return personas;
     }
@@ -96,50 +104,83 @@ public class GestorUsuarioImpl implements IGestorUsurio {
 
     @Override
     public Boolean updateUser(PersonaDTO personaDTO) {
-        try {
-            Persona personaActual = this.personaService.findById(personaDTO.getId());
-            if (personaActual == null) {
-                throw new EntityNotFoundException("No se encontró la persona con id: " + personaDTO.getId());
-            }
-
-            // Validar si están intentando desactivar y la persona tiene procesos activos
-            if (personaActual.getActivo() && !personaDTO.getActivo()) {
-                boolean tieneProcesosActivos = tieneProcesosActivos(personaActual);
-                if (tieneProcesosActivos) {
-                    return false;
-                }
-            }
-
-            // Actualizar la persona en la base de datos
-            System.out.println("Actualizando persona en la base de datos...");
-            Persona personaActualizada = this.gestorPersonaService.actualizar(personaDTO);
-            System.out.println("se actualizo");
-            // Convertir para extraer los datos necesarios
-            System.out.println("Convertir para extraer los datos necesarios...");
-            PersonaDTO dtoActualizada = this.convertidor.convertirAPersonaDTO(personaActualizada);
-            System.out.println("se convirtio a DTO");
-            // Actualizar en Keycloak
-
-            boolean keycloakActualizado = this.keycloakService.updateUser(
-                    personaActual.getIdKeycloak(),
-                    dtoActualizada.getCedula(),
-                    dtoActualizada.getCorreo(),
-                    dtoActualizada.getRoles());
-            System.out.println("se actualizo en keycloak");
-            return keycloakActualizado;
-
-        } catch (EntityNotFoundException | IllegalStateException e) {
-            System.err.println("error en la base de datos" + e.getMessage());
-            return false;
-        } catch (Exception e) {
-            // Errores inesperados
-            System.err.println(" Error inesperado al actualizar la persona: " + e.getMessage());
-            return false;
+        Persona personaActual = this.personaService.findById(personaDTO.getId());
+        if (personaActual == null) {
+            throw new EntityNotFoundException("No se encontró la persona con id: " + personaDTO.getId());
         }
+
+        // Validar si están intentando desactivar y la persona tiene procesos activos
+        if (personaActual.getActivo() && !personaDTO.getActivo()) {
+            boolean tieneProcesosActivos = tieneProcesosActivos(personaActual);
+            if (tieneProcesosActivos) {
+                // return false;
+                throw new CustomException(
+                        "La persona tiene procesos activos, no se puede desactivar.", HttpStatus.CONFLICT);
+            }
+        } else if (personaActual.getActivo() == personaDTO.getActivo()) {
+            String rol = obtenerRolAdministrativo(personaDTO);
+            boolean roldisponible = validarRolesAdministrativosDisponibles(personaDTO, rol);
+            if (!roldisponible) {
+                throw new CustomException(
+                        "No se puede asignar el rol (" + rol + ") porque ya existe un usuario ACTIVO con ese rol",
+                        HttpStatus.CONFLICT);
+
+            }
+        } else {
+            String rol = obtenerRolAdministrativo(personaDTO);
+            boolean roldisponible = validarRolesAdministrativosDisponibles(personaDTO, rol);
+            if (!roldisponible) {
+                throw new CustomException(
+                        "No se puede Activar el usuario mientras exista un usuario ACTIVO con ese rol",
+                        HttpStatus.CONFLICT);
+            }
+        }
+
+        boolean estado = this.keycloakService.updateUser(
+                personaDTO.getIdKeycloak(),
+                personaDTO.getCedula(),
+                personaDTO.getCorreo(),
+                personaDTO.getRoles());
+
+        if (estado) {
+            this.gestorPersonaService.actualizar(personaDTO);
+        }
+
+        return estado;
+    }
+
+    @Override
+    public Boolean deleteUser(String idKeycloak) {
+
+        Persona personaActual = this.personaService.findByIdKeycloak(idKeycloak);
+        if (personaActual == null) {
+            throw new EntityNotFoundException("No se encontró la persona");
+        }
+
+        boolean tieneProcesosActivos = tieneProcesosActivos(personaActual);
+        if (tieneProcesosActivos) {
+            throw new CustomException("La persona tiene procesos activos, no se puede eliminar.", HttpStatus.CONFLICT);
+        }
+
+        String rol = obtenerRolAdministrativo(this.convertidor.convertirAPersonaDTO(personaActual));
+        if (rol != null && personaActual.getActivo()) {
+            throw new CustomException(
+                    "No se puede eliminar el usuario con el rol (" + rol + ") mientras esté ACTIVO.",
+                    HttpStatus.CONFLICT);
+        }
+
+        this.personaService.deleteByIdKeycloak(idKeycloak);
+        // Si la eliminación en la base de datos fue exitosa, proceder con Keycloak
+        boolean keycloakEliminado = this.keycloakService.deleteUser(idKeycloak);
+        if (!keycloakEliminado) {
+            throw new CustomException("Error al eliminar el usuario", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        System.out.println("Se eliminó de Keycloak exitosamente.");
+        return keycloakEliminado;
+
     }
 
     private boolean tieneProcesosActivos(Persona persona) {
-        // TODO Auto-generated method stub
         List<MiProcesoDTO> procesos = this.gestorProcesoService.obtenerMisProcesos(persona.getId());
 
         for (MiProcesoDTO miProcesoDTO : procesos) {
@@ -156,30 +197,30 @@ public class GestorUsuarioImpl implements IGestorUsurio {
 
     }
 
-    @Override
-    public Boolean deleteUser(String idKeycloak) {
-        try {
-            Persona personaActual = this.personaService.findByIdKeycloak(idKeycloak);
-            boolean tieneProcesosActivos = tieneProcesosActivos(personaActual);
-            if (tieneProcesosActivos) {
-                System.out.println("La persona tiene procesos activos, no se puede eliminar.");
-                return false;
+    private boolean validarRolesAdministrativosDisponibles(PersonaDTO personaDTO, String rolAdministrativo) {
+
+        if (rolAdministrativo != null) {
+            List<Persona> personas = this.gestorPersonaService.findPersonasByRol(rolAdministrativo);
+
+            if (personas != null && !personas.isEmpty()) {
+                boolean personalAdministrativoActivo = personas.stream()
+                        .anyMatch(persona -> Boolean.TRUE
+                                .equals(persona.getActivo() && persona.getId() != personaDTO.getId()));
+
+                if (personalAdministrativoActivo) {
+                    return false;
+                }
             }
-            this.personaService.deleteByIdKeycloak(idKeycloak);
-            // Si la eliminación en la base de datos fue exitosa, proceder con Keycloak
-            boolean keycloakEliminado = this.keycloakService.deleteUser(idKeycloak);
-            System.out.println("Se eliminó de Keycloak exitosamente.");
-            return keycloakEliminado;
-
-        } catch (DataIntegrityViolationException e) {
-            // Capturar errores de integridad referencial
-            System.err.println("Error de integridad referencial al eliminar en la base de datos: " + e.getMessage());
-            return false;
-
-        } catch (Exception e) {
-            // Capturar cualquier otra excepción
-            System.err.println("Error inesperado: " + e.getMessage());
-            return false;
         }
+        return true;
     }
+
+    private String obtenerRolAdministrativo(PersonaDTO personaDTO) {
+        List<String> rolesAdministrativos = List.of("secretaria", "director");
+        return personaDTO.getRoles().stream()
+                .filter(rolesAdministrativos::contains)
+                .findAny()
+                .orElse(null);
+    }
+
 }

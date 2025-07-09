@@ -82,7 +82,7 @@ public class TitulacionPasoFactory implements IPasoFactory {
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_ESTUDIANTE));
                 pasos.add(this.crearPaso(PasoTitulacion.CERTIFICADO_NO_ADEUDAMIENTO.getNombre(), 13,
-                                "Secreataria gestiona el certificado de no adeudamiento y lo marca como idoneo para defensa",
+                                "Secreataria gestiona el certificado de no adeudamiento y lo marca como idoneo para el proceso de defensa",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_SECRETARIA));
                 pasos.add(this.crearPaso(PasoTitulacion.MECANISCMOS_DE_TITULACION.getNombre(), 14,
@@ -90,19 +90,21 @@ public class TitulacionPasoFactory implements IPasoFactory {
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_DIRECTOR));
                 pasos.add(this.crearPaso(PasoTitulacion.VERIFICACION_DATOS_TITULACION_SECRETARIA.getNombre(), 15,
-                                "Secretaria verifica los requisitos previos para la defensa",
+                                "Secretaria verifica los requisitos previos que debe cumplir el estudainte para la defensa",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_SECRETARIA));
-                pasos.add(this.crearPaso(PasoTitulacion.VERIFICACION_DATOS_TITULACION_SEC_ABOGADO.getNombre(), 16,
-                                "Secretario abogado verifica los requisitos previos para la defensa",
-                                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
-                                ROL_DIRECTOR));
-                pasos.add(this.crearPaso(PasoTitulacion.DOCUMENTACION_DEFENSA.getNombre(), 17,
+                // pasos.add(this.crearPaso(PasoTitulacion.VERIFICACION_DATOS_TITULACION_SEC_ABOGADO.getNombre(),
+                // 16,
+                // "Secretario abogado verifica los requisitos previos para la defensa",
+                // Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0),
+                // null,
+                // ROL_DIRECTOR));
+                pasos.add(this.crearPaso(PasoTitulacion.DOCUMENTACION_DEFENSA.getNombre(), 16,
                                 "El estudiante entrega la documentacion final para la defensa",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_ESTUDIANTE));
-                pasos.add(this.crearPaso(PasoTitulacion.DEFENSA.getNombre(), 18,
-                                "Secretaria coordina la defensa y se asigna un tribunal",
+                pasos.add(this.crearPaso(PasoTitulacion.DEFENSA.getNombre(), 17,
+                                "Secretaria coordina la defensa, asigna un tribunal y registra las calificaciones",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_SECRETARIA));
                 return pasos;

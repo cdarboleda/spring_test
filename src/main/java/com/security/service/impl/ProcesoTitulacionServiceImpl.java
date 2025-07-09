@@ -73,9 +73,9 @@ public class ProcesoTitulacionServiceImpl implements IProcesoTitulacionService {
 
                 // hacer a lguna comprobacion parq no inserte null al inicio
                 // procesoExistente.setFechaDefensa(procesoTitulacionDTO.getFechaDefensa());
-                Optional.ofNullable(procesoTitulacionDTO.getFechaDefensa())
-                                .ifPresent(procesoExistente::setFechaDefensa);
-
+                // Optional.ofNullable(procesoTitulacionDTO.getFechaDefensa())
+                // .ifPresent(procesoExistente::setFechaDefensa);
+                procesoExistente.setFechaDefensa(procesoTitulacionDTO.getFechaDefensa());
                 Optional.ofNullable(procesoTitulacionDTO.getNotaLector1()).ifPresent(procesoExistente::setNotaLector1);
                 Optional.ofNullable(procesoTitulacionDTO.getNotaLector2()).ifPresent(procesoExistente::setNotaLector2);
                 Optional.ofNullable(procesoTitulacionDTO.getTutorId()).ifPresent(procesoExistente::setTutorId);

@@ -55,6 +55,8 @@ public class GestorProcesoTitulacionServiceImpl implements IGestorProcesoTitulac
                 String observacion = Optional.ofNullable(pasoEspecifico.getObservacion()).orElse(null);
                 personaResponsablePaso.setCorreo(
                                 persona != null ? persona.getCorreo() : "error al obtener correo");
+                personaResponsablePaso.setTelefono(
+                                persona != null ? persona.getTelefono() : "error al obtener telefono");
                 personaResponsablePaso.setResponsablePaso(
                                 persona != null ? formatNombreCompleto(persona) : "No asignado");
                 personaResponsablePaso.setObservacion(

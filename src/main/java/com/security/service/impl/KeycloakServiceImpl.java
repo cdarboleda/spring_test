@@ -2,6 +2,7 @@ package com.security.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.security.db.Rol;
 import com.security.exception.CustomException;
 import com.security.service.IKeycloakService;
 import com.security.service.dto.UserDTO;
@@ -18,8 +20,12 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -50,6 +56,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
     private void assignRolesToUser(String userId, List<RoleRepresentation> roles) {
         getKeycloak().users().get(userId).roles().clientLevel(clientName).add(roles);
+
     }
 
     private void removeRolesFromUser(String userId, List<RoleRepresentation> roles) {
@@ -57,21 +64,26 @@ public class KeycloakServiceImpl implements IKeycloakService {
     }
 
     @Override
-    public String createUser(String username, String email, List<String> rolesToAssign) {
+    public String createUser(String username, String email, List<String> rolesToAssign, String firstName,
+            String lastName) {
         // Usar un Set para evitar roles duplicados
         // Set<String> keycloakRolesToAssign = mapRolesToKeycloakRoles(rolesToAssign);
 
         UserRepresentation user = new UserRepresentation();
         user.setUsername(username);
         user.setEmail(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setEnabled(true);
         user.setEmailVerified(true);
 
+        Map<String, List<String>> attributes = new HashMap<>();
+        attributes.put("roles_info", List.of(String.join(",", rolesToAssign)));
+        user.setAttributes(attributes);
+        // Crear el usuario en Keycloak
         Response response = null;
         String userId = null;
-
         try {
-            // Crear el usuario
             response = getKeycloak().users().create(user);
 
             if (response.getStatus() == 409) {
@@ -89,10 +101,8 @@ public class KeycloakServiceImpl implements IKeycloakService {
                     .filter(role -> rolesToAssign.contains(role.getName()))
                     .collect(Collectors.toList());
 
-            // Asignar roles al usuario (nivel de cliente o realm, según corresponda)
             assignRolesToUser(userId, roles);
 
-            // (Opcional) Enviar correo para que el usuario configure su contraseña
             keycloakProvider.getKeycloak()
                     .realm(realmName)
                     .users()
@@ -102,15 +112,17 @@ public class KeycloakServiceImpl implements IKeycloakService {
             return userId;
 
         } catch (Exception e) {
-            // Si hubo error, eliminar el usuario creado parcialmente
             if (userId != null) {
-                this.deleteUser(userId);
+                try {
+                    this.deleteUser(userId);
+                } catch (Exception deleteEx) {
+                    System.err.println("Error al intentar hacer rollback en Keycloak: " + deleteEx.getMessage());
+                }
             }
             throw new RuntimeException("Error al crear el usuario en Keycloak en createUser de KeycloakService", e);
-
         } finally {
             if (response != null) {
-                response.close(); // Cerrar la respuesta para evitar fugas
+                response.close();
             }
         }
     }
@@ -156,11 +168,12 @@ public class KeycloakServiceImpl implements IKeycloakService {
         try {
             getKeycloak().users().get(userId).remove();
             return true;
-        } catch (NotFoundException e) {
-            return false;
+        } catch (NotFoundException e) { // Si ya no existe en Keycloak, lo consideramos eliminado
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            // e.printStackTrace();
+            // return false;
+            throw new CustomException("Error al eliminar el usuario en Keycloak.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -168,16 +181,16 @@ public class KeycloakServiceImpl implements IKeycloakService {
         System.out.println(userId + " " + email + " " + rolesToAssign.toString());
         try {
             String updateDetailsMessage = updateUserDetails(userId, username, email);
-            System.out.println(updateDetailsMessage);
+            System.out.println(" updateDetailsMessage " + updateDetailsMessage);
 
             String updateRolesMessage = updateUserRoles(userId, rolesToAssign);
-            System.out.println(updateRolesMessage);
+            System.out.println(" updateRolesMessage " + updateRolesMessage);
 
             return true;
         } catch (Exception e) {
-            throw new RuntimeException("Error al actualizar el usuario en Keycloak en updateUser de KeycloakService",
-                    e);
-
+            throw new CustomException(
+                    "Hubo un error al actualizar el usuario, por favor revise los datos.",
+                    HttpStatus.CONFLICT);
         }
     }
 
@@ -188,7 +201,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
         user.setEmail(newEmail);
 
         getKeycloak().users().get(userId).update(user);
-        return "Detalles del usuario actualizados con éxito";
+        return "Detalles del usuario actualizados con éxito.";
     }
 
     @Override

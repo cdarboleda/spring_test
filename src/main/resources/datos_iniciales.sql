@@ -3,7 +3,7 @@ INSERT INTO app_schema.persona (
     pers_id, pers_activo, pers_apellido, pers_cedula, pers_correo,
     pers_id_keycloak, pers_nombre, pers_telefono
 ) VALUES
-(1, true, 'admin', null, 'administradorSigepro@ejemplo.com', null, 'Sigepro', null);
+(1, true, 'sigepro', 'xxxxxxxxxx', 'fing.consejo.posgrado@gmail.com', null, 'administrador', null);
 
 -- Insertar roles
 INSERT INTO app_schema.rol (

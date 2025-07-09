@@ -67,7 +67,8 @@ public class PersonaServiceImpl implements IPersonaService {
     @Override
     public Persona findByIdKeycloak(String idKeycloak) {
         // return this.personaRepository.findByIdKeycloak(idKeycloak)
-        // .orElseThrow(()-> new EntityNotFoundException("No se encontró un usuario con ese ID de keycloak"));
+        // .orElseThrow(()-> new EntityNotFoundException("No se encontró un usuario con
+        // ese ID de keycloak"));
         return this.personaRepository.findByIdKeycloak(idKeycloak).orElse(null);
     }
 
@@ -96,7 +97,6 @@ public class PersonaServiceImpl implements IPersonaService {
         return personaRepository.findByEmail(email);
     }
 
-
     @Override
     public boolean existeRegistro(String idKeycloak) {
         return personaRepository.existsByIdKeycloak(idKeycloak);
@@ -104,7 +104,15 @@ public class PersonaServiceImpl implements IPersonaService {
 
     @Override
     public int deleteByIdKeycloak(String idKeycloak) {
-        return this.personaRepository.deleteByIdKeycloak(idKeycloak);
+        try {
+            return this.personaRepository.deleteByIdKeycloak(idKeycloak);
+        } catch (DataIntegrityViolationException e) {
+            throw new CustomException("No se puede eliminar la persona, existen referencias en la base.",
+                    HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            throw new CustomException("Error inesperado al eliminar la persona",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
