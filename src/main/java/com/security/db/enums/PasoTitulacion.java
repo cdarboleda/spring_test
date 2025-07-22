@@ -1,7 +1,7 @@
 package com.security.db.enums;
 
 public enum PasoTitulacion {
-    REGISTRO_PROYECTO("registro_propuesta"),
+    PROPUESTA_PROYECTO("registro_propuesta"),
     REVISION_DOCUMENTACION("revision_documentacion"),
     REVISION_IDONEIDAD("revision_idoneidad"),
     CORRECCION_PLAN("correccion_plan"),
@@ -19,7 +19,8 @@ public enum PasoTitulacion {
     VERIFICACION_DATOS_TITULACION_SEC_ABOGADO("verificacion_datos_titulacion_sec_abogado"),
     CORRECCION_OBSERVACION_LECTORES("correccion_observacion_lectores"),
     DOCUMENTACION_DEFENSA("documentacion_defensa"),
-    DEFENSA("defensa");
+    DEFENSA("defensa"),
+    RESUMEN("resumen");
 
     private final String nombre;
 

@@ -31,7 +31,7 @@ public class TitulacionPasoFactory implements IPasoFactory {
         @Transactional
         public List<PasoDTO> generatePasos() {
                 List<PasoDTO> pasos = new ArrayList<>();
-                pasos.add(this.crearPaso(PasoTitulacion.REGISTRO_PROYECTO.getNombre(), 1,
+                pasos.add(this.crearPaso(PasoTitulacion.PROPUESTA_PROYECTO.getNombre(), 1,
                                 "Se registra la propuesta de proyecto",
                                 Estado.EN_CURSO, EstadoHelper.getDescripcionPorIndice(Estado.EN_CURSO, 0),
                                 LocalDateTime.now(), ROL_ESTUDIANTE));
@@ -93,18 +93,16 @@ public class TitulacionPasoFactory implements IPasoFactory {
                                 "Secretaria verifica los requisitos previos que debe cumplir el estudainte para la defensa",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_SECRETARIA));
-                // pasos.add(this.crearPaso(PasoTitulacion.VERIFICACION_DATOS_TITULACION_SEC_ABOGADO.getNombre(),
-                // 16,
-                // "Secretario abogado verifica los requisitos previos para la defensa",
-                // Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0),
-                // null,
-                // ROL_DIRECTOR));
                 pasos.add(this.crearPaso(PasoTitulacion.DOCUMENTACION_DEFENSA.getNombre(), 16,
                                 "El estudiante entrega la documentacion final para la defensa",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_ESTUDIANTE));
                 pasos.add(this.crearPaso(PasoTitulacion.DEFENSA.getNombre(), 17,
                                 "Secretaria coordina la defensa, asigna un tribunal y registra las calificaciones",
+                                Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
+                                ROL_SECRETARIA));
+                pasos.add(this.crearPaso(PasoTitulacion.RESUMEN.getNombre(), 18,
+                                "Resumen del proceso de titulacion finalizado",
                                 Estado.PENDIENTE, EstadoHelper.getDescripcionPorIndice(Estado.PENDIENTE, 0), null,
                                 ROL_SECRETARIA));
                 return pasos;

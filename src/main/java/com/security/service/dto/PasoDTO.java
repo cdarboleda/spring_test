@@ -16,17 +16,17 @@ public class PasoDTO {
     private LocalDateTime fechaFin;
     private String observacion;
     private String rol;
-
-    
     private Integer idProceso;
     private Integer idResponsable;
 
-    public PasoDTO(){}
-    public PasoDTO(Integer id, String nombre, Integer idResponsable, String rol){
+    public PasoDTO() {
+    }
+
+    public PasoDTO(Integer id, String nombre, Integer idResponsable, String rol) {
         this.id = id;
         this.nombre = nombre;
         this.idResponsable = idResponsable;
         this.rol = rol;
     }
-    
+
 }

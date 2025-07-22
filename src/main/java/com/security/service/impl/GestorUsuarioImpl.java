@@ -49,15 +49,16 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     @Override
     public PersonaDTO createUser(PersonaDTO personaDTO) {
 
-        String rol = obtenerRolAdministrativo(personaDTO);
-        boolean roldisponible = validarRolesAdministrativosDisponibles(personaDTO, rol);
-        if (!roldisponible) {
-            throw new CustomException(
-                    "No se puede asignar el rol (" + rol
-                            + ") porque ya existe un usuario ACTIVO con ese rol",
-                    HttpStatus.CONFLICT);
+        // String rol = obtenerRolAdministrativo(personaDTO);
+        // boolean roldisponible = validarRolesAdministrativosDisponibles(personaDTO,
+        // rol);
+        // if (!roldisponible) {
+        // throw new CustomException(
+        // "No se puede asignar el rol (" + rol
+        // + ") porque ya existe un usuario ACTIVO con ese rol",
+        // HttpStatus.CONFLICT);
 
-        }
+        // }
 
         String idUser = this.keycloakService.createUser(
                 personaDTO.getCedula(),

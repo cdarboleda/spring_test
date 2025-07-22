@@ -51,6 +51,10 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
     @Autowired
     private PasoFactoryManager factoryManager;
 
+    @Autowired
+    private EmailPasoService emailPasoService;
+    
+
     @Override
     public List<PasoDTO> crearPasos(String proceso) {
         return this.factoryManager.generarPasosPorProceso(proceso);
@@ -103,6 +107,8 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
         }
 
         this.gestorProcesoLogService.insertarProcesoLog(paso, Evento.ESTADO);
+        this.emailPasoService.enviarNotificacionPaso(paso);
+
         return paso; // Guarda los cambios
     }
 

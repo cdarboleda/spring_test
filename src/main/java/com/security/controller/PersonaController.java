@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.db.Persona;
-import com.security.exception.CustomException;
 import com.security.service.IGestorPersonaService;
 import com.security.service.IGestorProcesoService;
 import com.security.service.IGestorUsurio;

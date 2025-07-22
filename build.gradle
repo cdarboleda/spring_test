@@ -33,6 +33,9 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator:9.0.0.CR1'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.18.2'
     implementation 'org.postgresql:postgresql:42.7.3'
+
+		implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.4.3'
         
 	implementation ('org.keycloak:keycloak-admin-client:26.0.4') {
 		  exclude group: 'org.jboss.resteasy', module: 'resteasy-core'

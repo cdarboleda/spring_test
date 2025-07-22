@@ -1,0 +1,13 @@
+<div th:fragment="content">
+    <h3 style="text-align: center;">Notificación de Proceso Finalizado</h3>
+    <br>
+    <p>Saludos <strong th:text="${requirienteNombre} + ' ' + ${requirienteApellido}">Nombre Apellido</strong></p>
+
+    <p>Le informamos que el Proceso de Titulación #<strong th:text="${procesoId}">123</strong> ha sido
+        <strong>FINALIZADO CON ÉXITO</strong>.
+    </p>
+    <!-- <p><strong>Cédula:</strong> <span th:text="${requirienteCedula}">0000000</span></p> -->
+    <p><strong>Fecha y hora:</strong> <span th:text="${fecha}">2024-04-20</span></p>
+
+    <br>
+</div>

@@ -14,6 +14,7 @@ import com.security.service.dto.ProcesoCompletoPagoDocenteDTO;
 import com.security.service.dto.ProcesoCompletoTitulacionDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteDTO;
+import com.security.service.dto.ProcesoTitulacionDTO;
 
 @Component
 public class ConvertidorProceso {
@@ -120,5 +121,24 @@ public class ConvertidorProceso {
         procesoDTO.setTipoProceso(proceso.getTipoProceso().toString());
         return procesoDTO;
     }
+
+    /*
+     * public ProcesoTitulacionDTO convertirProcesoTitulacionALigeroDTO(Proceso
+     * proceso) {
+     * 
+     * ProcesoTitulacionDTO procesoDTO = new ProcesoTitulacionDTO();
+     * 
+     * procesoDTO.setId(proceso.getId());
+     * procesoDTO.setDescripcion(proceso.getDescripcion());
+     * procesoDTO.setFechaInicio(proceso.getFechaInicio());
+     * procesoDTO.setModalidadVirtual(proceso.getProcesoPagoDocente().
+     * getModalidadVirtual());
+     * procesoDTO.setFechaFin(proceso.getFechaFin());
+     * procesoDTO.setFinalizado(proceso.getFinalizado());
+     * 
+     * procesoDTO.setTipoProceso(proceso.getTipoProceso().toString());
+     * return procesoDTO;
+     * }
+     */
 
 }

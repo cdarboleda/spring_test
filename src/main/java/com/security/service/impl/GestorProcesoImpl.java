@@ -2,16 +2,19 @@ package com.security.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import com.security.db.CarpetaDocumento;
 import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.Proceso;
@@ -20,7 +23,6 @@ import com.security.db.ProcesoTitulacion;
 import com.security.db.enums.Estado;
 import com.security.db.enums.Evento;
 import com.security.db.enums.TipoProceso;
-import com.security.exception.CustomException;
 import com.security.repo.ICarpetaDocumentoRepository;
 import com.security.repo.IPasoRepository;
 import com.security.repo.IProcesoLogRepository;
@@ -28,7 +30,6 @@ import com.security.repo.IProcesoPagoDocenteRepository;
 import com.security.repo.IProcesoRepository;
 import com.security.repo.IProcesoTitulacionRepository;
 import com.security.service.IGestorPasoService;
-import com.security.service.IGestorPersonaService;
 import com.security.service.IGestorProcesoLogService;
 import com.security.service.IGestorProcesoService;
 import com.security.service.IPasoService;
@@ -36,17 +37,18 @@ import com.security.service.IPersonaService;
 import com.security.service.IProcesoService;
 import com.security.service.IRolService;
 import com.security.service.dto.MiProcesoDTO;
-import com.security.service.dto.ProcesoCompletoPagoDocenteDTO;
 import com.security.service.dto.ProcesoCompletoTitulacionDTO;
 import com.security.service.dto.ProcesoDTO;
 import com.security.service.dto.ProcesoPagoDocenteDTO;
 import com.security.service.dto.ProcesoPasoDocumentoDTO;
 import com.security.service.dto.ProcesoTitulacionDTO;
 import com.security.service.dto.utils.ConvertidorCarpetaDocumento;
+import com.security.service.dto.utils.ConvertidorFechaFormato;
 import com.security.service.dto.utils.ConvertidorPaso;
 import com.security.service.dto.utils.ConvertidorPersona;
 import com.security.service.dto.utils.ConvertidorProceso;
 
+import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
@@ -77,12 +79,6 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     @Autowired
     private ConvertidorProceso convertidorProceso;
     @Autowired
-    private ConvertidorPersona convertidorPersona;
-    @Autowired
-    private ConvertidorCarpetaDocumento convertidorDocumento;
-    @Autowired
-    private IPasoService pasoService;
-    @Autowired
     private IGestorPasoService gestorPasoService;
     @Autowired
     private IProcesoPagoDocenteRepository procesoPagoDocenteRepository;
@@ -94,6 +90,9 @@ public class GestorProcesoImpl implements IGestorProcesoService {
 
     @Autowired
     private ConvertidorPaso convertidorPaso;
+
+    @Autowired
+    private EmailProcesoService emailProcesoService;
 
     @Override
     public List<ProcesoDTO> findProcesosByRequirienteId(Integer id) {
@@ -130,21 +129,18 @@ public class GestorProcesoImpl implements IGestorProcesoService {
             titulacion.setProceso(proceso);
             titulacion.setGrupo(procesoTDTO.getGrupo());
             // validar el id del companiero qu exista en la base
-            titulacion.setCompanieroId(procesoTDTO.getGrupo() == true ? procesoTDTO.getCompanieroId() : null);
+            titulacion.setCompanieroId(procesoTDTO.getGrupo() ? procesoTDTO.getCompanieroId() : null);
             titulacion.setCalificacionFinal(procesoTDTO.getCalificacionFinal());
             titulacion.setFechaDefensa(procesoTDTO.getFechaDefensa());
             titulacion.setNotaLector1(procesoTDTO.getNotaLector1());
             titulacion.setNotaLector2(procesoTDTO.getNotaLector2());
 
-            // Agrega los compañeros al proceso en caso de ser modo GRUPAL
-            /*
-             * if (procesoTDTO.getGrupo() != null && procesoTDTO.getIdInvolucrados() !=
-             * null) {
-             * asociarCompañerosAlProceso(proceso, procesoTDTO.getIdInvolucrados());
-             * 
-             * }
-             */
-            return this.procesoTitulacionRepository.save(titulacion);
+            // se inserta un proceso de titulación
+            var procesoTitulacionInsertado = this.procesoTitulacionRepository.save(titulacion);
+            // envío del correo Notificacion del inicio del proceso de (titulación)
+            this.emailProcesoService.enviarNotificacionProcesoInciado(procesoTitulacionInsertado);
+
+            return procesoTitulacionInsertado;
         }
 
         return null;
@@ -197,9 +193,23 @@ public class GestorProcesoImpl implements IGestorProcesoService {
     public ProcesoDTO update(ProcesoDTO procesoDTO) {
 
         Proceso proceso = this.procesoService.findById(procesoDTO.getId());
-        proceso.setFechaFin(procesoDTO.getFechaFin());
+        proceso.setFechaFin(proceso.getFechaFin() == null ? LocalDateTime.now() : proceso.getFechaFin());
+        System.out.println("FFecha fin------------------ : " + proceso.getFechaFin());
         proceso.setFinalizado(true);
         proceso.setCancelado(procesoDTO.getCancelado());
+
+        if (procesoDTO.getCancelado()) {
+            ProcesoTitulacion procesoTitulacion = this.procesoTitulacionRepository.findById(proceso.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Proceso de titulación no encontrado"));
+
+            this.emailProcesoService.enviarNotificacionProcesoCancelado(procesoTitulacion);
+        } else if (procesoDTO.getFinalizado() && !procesoDTO.getCancelado()) {
+            ProcesoTitulacion procesoTitulacion = this.procesoTitulacionRepository.findById(proceso.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Proceso de titulación no encontrado"));
+
+            this.emailProcesoService.enviarNotificacionProcesoFinalizado(procesoTitulacion);
+        }
+
         return convertidorProceso.convertirALigeroDTO(proceso);
     }
 
@@ -266,16 +276,25 @@ public class GestorProcesoImpl implements IGestorProcesoService {
 
         for (Proceso proceso : procesos) {
             // Buscar el paso en estado EN_CURSO, si existe
-            Paso pasoEnCurso = proceso.getPasos().stream()
-                    .filter(p -> p.getEstado() == Estado.EN_CURSO && p.getResponsable().getId().equals(responsableId))
-                    .findFirst()
-                    .orElseGet(() ->
-                    // Si no se encuentra un paso con el responsableId, obtener el primer paso en
-                    // EN_CURSO
-                    proceso.getPasos().stream()
-                            .filter(p -> p.getEstado() == Estado.EN_CURSO)
-                            .findFirst()
-                            .orElse(null));
+            Paso pasoEnCurso = Optional.ofNullable(proceso.getPasos())
+                    .orElse(Collections.emptyList())
+                    .stream()
+                    .filter(p -> p != null && p.getEstado() == Estado.EN_CURSO)
+                    .collect(Collectors.collectingAndThen(
+                            Collectors.toList(),
+                            pasos -> {
+                                // Buscar pasos donde el usuario es responsable
+                                List<Paso> pasosResponsable = pasos.stream()
+                                        .filter(p -> responsableId.equals(p.getResponsable().getId()))
+                                        .toList();
+
+                                if (!pasosResponsable.isEmpty()) {
+                                    return pasosResponsable.get(0); // Tomar el primero de los pasos del responsable
+                                }
+
+                                // Si no hay pasos del responsable, devolver el último EN_CURSO
+                                return pasos.isEmpty() ? null : pasos.get(pasos.size() - 1);
+                            }));
 
             // Crear el DTO con la información relevante
             MiProcesoDTO dto = new MiProcesoDTO(

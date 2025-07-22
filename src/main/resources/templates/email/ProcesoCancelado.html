@@ -1,0 +1,22 @@
+<div th:fragment="content">
+    <h3 style="text-align: center;">Notificación de Proceso Cancelado</h3>
+    <br>
+    <!-- <p>Saludos <strong th:text="${requirienteNombre} + ' ' + ${requirienteApellido}">Nombre Apellido</strong>, de cédula <strong th:text="${requirienteCedula}">0000000</strong></p> -->
+    <p>Saludos <strong th:text="${requirienteNombre} + ' ' + ${requirienteApellido}">Nombre Apellido</strong></p>
+
+    <p>Le informamos que el Proceso Pago Docente #<strong th:text="${procesoId}">123</strong> ha sido
+        <strong>CANCELADO</strong>.
+    </p>
+
+    <p><strong>Fecha de cancelación:</strong> <span th:text="${fecha}">2024-04-19 12:45</span></p>
+
+    <p><strong>Motivo de cancelación: </strong>
+    <p th:text="${motivo}">motivo</p>
+    </p>
+    <!-- <div th:if="${motivo != null and not #lists.isEmpty(motivo)}">
+        <ul>
+            <li th:each="item : ${motivo}" th:text="${item}"></li>
+        </ul>
+    </div> -->
+    <br>
+</div>

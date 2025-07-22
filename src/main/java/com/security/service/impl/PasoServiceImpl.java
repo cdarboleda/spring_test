@@ -16,7 +16,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
-@Transactional
 public class PasoServiceImpl implements IPasoService {
 
     @Autowired

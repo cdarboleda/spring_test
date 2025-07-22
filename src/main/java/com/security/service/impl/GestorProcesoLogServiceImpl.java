@@ -129,25 +129,33 @@ public class GestorProcesoLogServiceImpl implements IGestorProcesoLogService {
         if (logs.isEmpty())
             return logs;
 
+        if (logs.getLast().getPasoNombre().equals(PasoTitulacion.RESUMEN.getNombre())
+                && logs.getLast().getPasoEstado().equals("FINALIZADO")) {
+            ProcesoLogDTO ultimoPasoLog = logs.getLast();
+            ultimoPasoLog.setPasoEstadoDescripcion("FINAL DEL PROCESO");
+            ultimoPasoLog.setResponsableNombre(null);
+            ultimoPasoLog.setResponsableRol(null);
+
+        }
         logs.getFirst().setPasoEstadoDescripcion("INICIO DEL PROCESO");
 
         // Set<String> pasosExcluidos = Set.of(
-        //         PasoTitulacion.APROBACION_PLAN_TITULACION.toString(),
-        //         PasoTitulacion.DESIGNACION_LECTORES.toString(),
-        //         PasoTitulacion.REVISION_LECTOR_1.toString(),
-        //         PasoTitulacion.CORRECCION_OBSERVACION_LECTORES.toString());
+        // PasoTitulacion.APROBACION_PLAN_TITULACION.toString(),
+        // PasoTitulacion.DESIGNACION_LECTORES.toString(),
+        // PasoTitulacion.REVISION_LECTOR_1.toString(),
+        // PasoTitulacion.CORRECCION_OBSERVACION_LECTORES.toString());
 
         // for (int i = 0; i < logs.size() - 1; i++) {
-        //     ProcesoLogDTO actual = logs.get(i);
+        // ProcesoLogDTO actual = logs.get(i);
 
-        //     if ("FINALIZADO".equalsIgnoreCase(actual.getPasoEstado())) {
-        //         ProcesoLogDTO siguiente = logs.get(i + 1);
-        //         if (siguiente.getPasoOrden() == actual.getPasoOrden() + 1 &&
-        //                 !"FINALIZADO".equalsIgnoreCase(siguiente.getPasoEstado()) &&
-        //                 !pasosExcluidos.contains(actual.getPasoNombre())) {
-        //             actual.setPasoEstadoDescripcion("Enviado");
-        //         }
-        //     }
+        // if ("FINALIZADO".equalsIgnoreCase(actual.getPasoEstado())) {
+        // ProcesoLogDTO siguiente = logs.get(i + 1);
+        // if (siguiente.getPasoOrden() == actual.getPasoOrden() + 1 &&
+        // !"FINALIZADO".equalsIgnoreCase(siguiente.getPasoEstado()) &&
+        // !pasosExcluidos.contains(actual.getPasoNombre())) {
+        // actual.setPasoEstadoDescripcion("Enviado");
+        // }
+        // }
         // }
 
         return logs;
