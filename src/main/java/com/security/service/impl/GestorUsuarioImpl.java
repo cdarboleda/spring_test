@@ -1,6 +1,9 @@
 package com.security.service.impl;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,17 +52,6 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     @Override
     public PersonaDTO createUser(PersonaDTO personaDTO) {
 
-        // String rol = obtenerRolAdministrativo(personaDTO);
-        // boolean roldisponible = validarRolesAdministrativosDisponibles(personaDTO,
-        // rol);
-        // if (!roldisponible) {
-        // throw new CustomException(
-        // "No se puede asignar el rol (" + rol
-        // + ") porque ya existe un usuario ACTIVO con ese rol",
-        // HttpStatus.CONFLICT);
-
-        // }
-
         String idUser = this.keycloakService.createUser(
                 personaDTO.getCedula(),
                 personaDTO.getCorreo(),
@@ -105,43 +97,66 @@ public class GestorUsuarioImpl implements IGestorUsurio {
 
     @Override
     public Boolean updateUser(PersonaDTO personaDTO) {
+        if (personaDTO == null || personaDTO.getId() == null) {
+            throw new IllegalArgumentException("El objeto PersonaDTO o su ID no pueden ser nulos.");
+        }
+
         Persona personaActual = this.personaService.findById(personaDTO.getId());
         if (personaActual == null) {
             throw new EntityNotFoundException("No se encontró la persona con id: " + personaDTO.getId());
         }
 
-        // Validar si están intentando desactivar y la persona tiene procesos activos
-        if (personaActual.getActivo() && !personaDTO.getActivo()) {
-            boolean tieneProcesosActivos = tieneProcesosActivos(personaActual);
-            if (tieneProcesosActivos) {
-                // return false;
-                throw new CustomException(
-                        "La persona tiene procesos activos, no se puede desactivar.", HttpStatus.CONFLICT);
-            }
-        } else if (personaActual.getActivo() == personaDTO.getActivo()) {
-            String rol = obtenerRolAdministrativo(personaDTO);
-            boolean roldisponible = validarRolesAdministrativosDisponibles(personaDTO, rol);
-            if (!roldisponible) {
-                throw new CustomException(
-                        "No se puede asignar el rol (" + rol + ") porque ya existe un usuario ACTIVO con ese rol",
-                        HttpStatus.CONFLICT);
+        boolean estaActiva = Boolean.TRUE.equals(personaActual.getActivo());
+        boolean deseaActivar = Boolean.TRUE.equals(personaDTO.getActivo());
+        boolean deseaDesactivar = Boolean.FALSE.equals(personaDTO.getActivo());
 
-            }
-        } else {
-            String rol = obtenerRolAdministrativo(personaDTO);
-            boolean roldisponible = validarRolesAdministrativosDisponibles(personaDTO, rol);
-            if (!roldisponible) {
+        // Validar desactivación con procesos activos
+        if (estaActiva && deseaDesactivar) {
+            if (tieneProcesosActivos(personaActual)) {
                 throw new CustomException(
-                        "No se puede Activar el usuario mientras exista un usuario ACTIVO con ese rol",
+                        "La persona tiene procesos activos, no se puede desactivar.",
                         HttpStatus.CONFLICT);
             }
         }
 
-        boolean estado = this.keycloakService.updateUser(
-                personaDTO.getIdKeycloak(),
-                personaDTO.getCedula(),
-                personaDTO.getCorreo(),
-                personaDTO.getRoles());
+        // Validar activación con roles administrativos ocupados
+        if (!estaActiva && deseaActivar) {
+            String rol = obtenerRolAdministrativo(personaDTO);
+            if (!validarRolesAdministrativosDisponibles(personaDTO, rol)) {
+                throw new CustomException(
+                        "No se puede activar el usuario \"" + personaDTO.getNombre() + " " + personaDTO.getApellido() +
+                                "\" mientras exista un usuario ACTIVO con ese rol.",
+                        HttpStatus.CONFLICT);
+            }
+        }
+
+        // Validar si hay cambios en roles y si están disponibles para asignar
+        List<String> rolesActuales = personaActual.getRoles().stream()
+                .map(Rol::getNombre)
+                .collect(Collectors.toList());
+        List<String> nuevosRoles = Optional.ofNullable(personaDTO.getRoles()).orElse(Collections.emptyList());
+        if (Boolean.TRUE.equals(personaDTO.getActivo()) && !rolesActuales.containsAll(nuevosRoles)) {
+            String rol = obtenerRolAdministrativo(personaDTO);
+            if (!validarRolesAdministrativosDisponibles(personaDTO, rol)) {
+                throw new CustomException(
+                        "No se puede asignar el rol (" + rol + ") porque ya existe un usuario ACTIVO con ese rol.",
+                        HttpStatus.CONFLICT);
+            }
+        }
+
+        boolean requiereActualizarKeycloak = !Objects.equals(personaDTO.getCedula(), personaActual.getCedula()) ||
+                !Objects.equals(personaDTO.getCorreo(), personaActual.getCorreo()) ||
+                !Objects.equals(nuevosRoles, rolesActuales);
+
+        boolean estado = true;
+
+        if (requiereActualizarKeycloak) {
+            estado = this.keycloakService.updateUser(
+                    personaDTO.getIdKeycloak(),
+                    personaDTO.getCedula(),
+                    personaDTO.getCorreo(),
+                    nuevosRoles);
+        }
 
         if (estado) {
             this.gestorPersonaService.actualizar(personaDTO);
@@ -184,14 +199,16 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     private boolean tieneProcesosActivos(Persona persona) {
         List<MiProcesoDTO> procesos = this.gestorProcesoService.obtenerMisProcesos(persona.getId());
 
-        for (MiProcesoDTO miProcesoDTO : procesos) {
-            System.out.println(miProcesoDTO.toString());
+        if (procesos == null || procesos.isEmpty()) {
+            return false;
         }
+
         for (MiProcesoDTO proceso : procesos) {
-            boolean cancelado = Boolean.TRUE.equals(proceso.getCancelado()); // seguro contra null
-            boolean finalizado = Boolean.TRUE.equals(proceso.getFinalizado());
-            if (!cancelado || !finalizado) {
-                return true;
+            // boolean cancelado = Boolean.TRUE.equals(proceso.getCancelado()); // seguro
+            // contra null
+            boolean finalizado = Boolean.FALSE.equals(proceso.getFinalizado());
+            if (finalizado) {
+                return true; // Si hay al menos un proceso no finalizado, retorna true
             }
         }
         return false;

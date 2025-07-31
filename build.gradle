@@ -51,6 +51,12 @@ dependencies {
     implementation 'org.jboss.resteasy:resteasy-multipart-provider:6.2.11.Final'
     implementation 'org.jboss.resteasy:resteasy-jackson2-provider:6.2.11.Final'
     implementation 'org.jboss.resteasy:resteasy-jaxb-provider:6.2.11.Final'
+
+	//websocket
+implementation 'org.springframework.boot:spring-boot-starter-websocket'
+implementation 'org.springframework.boot:spring-boot-starter-security'
+implementation 'org.springframework.security:spring-security-messaging:6.4.2'
+
     
     // Dependencias para testing
     testImplementation 'org.springframework.security:spring-security-test'

@@ -57,7 +57,7 @@ public class PasoController {
      * }
      */
 
-    @GetMapping(path = "proceso/{idProceso}/ultimo", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "    ", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> buscarUltimoPasoPorProcesoId(@PathVariable(name = "idProceso") Integer idProceso) {
         List<PasoDTO> pasos = this.gestorPasoService.findPasosDTOByProcesoId(idProceso);
 

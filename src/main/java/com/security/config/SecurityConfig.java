@@ -34,7 +34,11 @@ public class SecurityConfig {
         return httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(http -> http.anyRequest().authenticated())
+                // Permite acceso a WebSocket sin autenticación, pero después el interceptor
+                // valida el token
+                .authorizeHttpRequests(http -> http.requestMatchers("/ws/**")
+                        .permitAll().anyRequest().authenticated())
+
                 .oauth2ResourceServer(oauth -> {
                     oauth.jwt(jwt -> {
                         jwt.jwtAuthenticationConverter(authenticationConverter);
@@ -47,7 +51,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(frontendServerUrl)); 
+        configuration.setAllowedOrigins(List.of(frontendServerUrl));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
