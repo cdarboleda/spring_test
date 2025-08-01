@@ -12,7 +12,6 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import com.security.db.Persona;
 import com.security.db.ProcesoTitulacion;
-import com.security.service.dto.utils.ConvertidorFechaFormato;
 
 @Service
 public class EmailProcesoService {

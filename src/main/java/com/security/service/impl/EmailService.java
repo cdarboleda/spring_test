@@ -3,6 +3,7 @@ package com.security.service.impl;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -20,13 +21,10 @@ public class EmailService {
 
     @Value("${spring.mail.username}")
     private String emailUsername;
-    private final JavaMailSender mailSender;
-    private final TemplateEngine templateEngine;
-
-    public EmailService(JavaMailSender mailSender, TemplateEngine templateEngine) {
-        this.mailSender = mailSender;
-        this.templateEngine = templateEngine;
-    }
+    @Autowired
+    private JavaMailSender mailSender;
+    @Autowired
+    private TemplateEngine templateEngine;
 
     @Async
     public void sendEmail(String plantilla, String to, String subject, Map<String, Object> variables)

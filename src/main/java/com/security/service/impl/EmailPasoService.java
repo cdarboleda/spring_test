@@ -13,13 +13,11 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import com.security.db.Paso;
 import com.security.db.Persona;
-import com.security.db.Proceso;
 import com.security.db.ProcesoTitulacion;
 import com.security.db.enums.PasoTitulacion;
 import com.security.exception.CustomException;
 import com.security.repo.IProcesoTitulacionRepository;
-import com.security.service.dto.ProcesoTitulacionDTO;
-import com.security.service.dto.utils.ConvertidorProceso;
+
 
 import jakarta.mail.MessagingException;
 
@@ -28,9 +26,6 @@ public class EmailPasoService {
 
     @Autowired
     private PersonaServiceImpl personaServiceImpl;
-
-    @Autowired
-    private ConvertidorProceso convertidorProceso;
 
     @Autowired
     private IProcesoTitulacionRepository procesoTitulacionServiceImpl;
