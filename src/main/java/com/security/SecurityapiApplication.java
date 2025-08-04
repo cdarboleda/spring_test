@@ -19,7 +19,7 @@ public class SecurityapiApplication {
 	@PostConstruct
 	public void init() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-		System.out.println("Zona horaria configurada a UTC");
+		System.out.println("Inicio");
 	}
 
 }
