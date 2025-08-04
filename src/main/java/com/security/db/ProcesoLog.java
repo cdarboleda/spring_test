@@ -53,5 +53,8 @@ public class ProcesoLog {
 
     @Column(name = "proc_log_fecha_cambio")
     private Instant fechaCambio;
+
+    @Column(name = "proc_log_observacion")
+    private String observacion;
     
 }

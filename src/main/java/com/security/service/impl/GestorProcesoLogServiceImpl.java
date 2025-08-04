@@ -65,8 +65,14 @@ public class GestorProcesoLogServiceImpl implements IGestorProcesoLogService {
         procesoLog.setPasoOrden(paso.getOrden());
         procesoLog.setTipoEvento(tipoEvento);
 
+        ///////////////////////////////////////////////////
+        procesoLog.setObservacion(paso.getObservacion());
+
         try {
-            return this.procesoLogService.insert(procesoLog);
+            ProcesoLog proclog = this.procesoLogService.insert(procesoLog);
+            System.out.println("-------------------------------------------------------");
+            System.out.println(proclog.toString());
+            return proclog;
 
         } catch (Exception e) {
             throw new RuntimeException("Error al guardar log de paso " + procesoLog.getPasoOrden() + ": "

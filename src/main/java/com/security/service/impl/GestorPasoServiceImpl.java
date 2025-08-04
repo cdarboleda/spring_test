@@ -128,7 +128,7 @@ public class GestorPasoServiceImpl implements IGestorPasoService {
             paso.setFechaFin(null);
         }
 
-        this.gestorProcesoLogService.insertarProcesoLog(paso, Evento.ESTADO);
+        this.gestorProcesoLogService.insertarProcesoLog(paso,Evento.ESTADO);
         return paso; // Guarda los cambios
     }
 
