@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -50,18 +51,14 @@ public class PersonaController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 
     public ResponseEntity<?> insertar(@Valid @RequestBody PersonaDTO persona) {
-        this.gestorUsurio.insertarIndividual(persona);
-        return ResponseEntity.ok("asd");
+        return new ResponseEntity<>(this.gestorUsurio.insertarIndividual(persona), HttpStatus.OK);
     }
 
     @PostMapping("/bulk")
     public ResponseEntity<?> subirArchivo(@RequestParam("file") MultipartFile file) {
-        long tiempoInicial = System.currentTimeMillis();
-        // Lógica para procesar el archivo
-        System.out.println("Archivo recibido: " + file.getOriginalFilename() + ", tipo: " + file.getContentType());
-        this.gestorUsurio.insertarMasivo(file);
-        System.out.println("Tiempo de carga: " + (System.currentTimeMillis() - tiempoInicial) + "ms");
-        return ResponseEntity.ok("Archivo procesado correctamente");
+        System.out.println("file--------------------------------: " + file.getOriginalFilename());
+        return new ResponseEntity<>(gestorUsurio.insertarMasivo(file), HttpStatus.OK);
+
     }
 
     // Buscar necesita la cedula dentro del body

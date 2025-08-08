@@ -46,6 +46,19 @@ public class ExcelService {
                     esPrimeraFila = false; // Saltar encabezado
                     continue;
                 }
+                // Validar que la fila no esté completamente vacía
+                boolean filaVacia = true;
+                for (int i = 0; i <= 6; i++) { // hasta columna roles
+                    Cell celda = fila.getCell(i);
+                    if (celda != null && celda.getCellType() != CellType.BLANK
+                            && !getCellValue(celda).trim().isEmpty()) {
+                        filaVacia = false;
+                        break;
+                    }
+                }
+                if (filaVacia) {
+                    continue; // saltar fila vacía
+                }
 
                 PersonaDTO persona = new PersonaDTO();
                 persona.setNombre(getCellValue(fila.getCell(0)));
@@ -60,11 +73,11 @@ public class ExcelService {
                 String rolesStr = getCellValue(fila.getCell(6)); // Ej: "ESTUDIANTE,DOCENTE"
 
                 if (rolesStr != null && !rolesStr.isBlank()) {
-                    List<String> roles = Arrays.stream(rolesStr.split(","))
+                    List<String> rolesAsignar = Arrays.stream(rolesStr.split(","))
                             .map(String::trim)
                             .collect(Collectors.toList());
 
-                    Boolean roleExists = rolesDB.stream().anyMatch(rol -> roles.contains(rol.getNombre()));
+                    Boolean roleExists = rolesDB.stream().anyMatch(rol -> rolesAsignar.contains(rol.getNombre()));
 
                     if (!roleExists) {
                         throw new CustomException(
@@ -73,7 +86,17 @@ public class ExcelService {
                                 HttpStatus.BAD_REQUEST);
                     }
 
-                    persona.setRoles(roles);
+                    // validar si los roles de esa personas pueden ser asignados segun la regla de
+                    // negocio
+                    boolean rolesValidos = this.validarConjuntoRoles(rolesAsignar);
+                    if (!rolesValidos) {
+                        throw new CustomException(
+                                "Los roles " + rolesAsignar + " del usuario " + persona.getCedula()
+                                        + " no se pueden asignar simultaneamente",
+                                HttpStatus.CONFLICT);
+                    }
+
+                    persona.setRoles(rolesAsignar);
                 } else {
                     persona.setRoles(Collections.emptyList()); // Si no se proporcionan roles, se establece una lista
                                                                // vacia
@@ -99,5 +122,33 @@ public class ExcelService {
             case BOOLEAN -> String.valueOf(celda.getBooleanCellValue());
             default -> "";
         };
+    }
+
+    private boolean validarConjuntoRoles(List<String> rolesAsignar) {
+
+        // Validaciones específicas de negocio:
+        boolean tieneEstudiante = rolesAsignar.contains("estudiante");
+        boolean tieneDocente = rolesAsignar.contains("docente");
+        boolean tieneDirector = rolesAsignar.contains("director");
+        boolean tieneSecretaria = rolesAsignar.contains("secretaria");
+
+        // Si tiene estudiante, solo puede tener estudiante (ningún otro)
+        if (tieneEstudiante)
+            return rolesAsignar.size() == 1;
+        // Si tiene secretaria, solo puede ser secretaria
+        if (tieneSecretaria)
+            return rolesAsignar.size() == 1;
+        // Si tiene docente, puede tener docente y opcionalmente director (y viceversa)
+        if (tieneDocente || tieneDirector) {
+            // Solo puede tener docente y/o director, nada más
+            for (String rol : rolesAsignar) {
+                if (!rol.equals("docente") && !rol.equals("director")) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        // Si no cumple con ninguna regla, no válido
+        return false;
     }
 }

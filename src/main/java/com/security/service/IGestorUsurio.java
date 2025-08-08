@@ -18,7 +18,7 @@ public interface IGestorUsurio {
 
     public Boolean deleteUser(String idKeycloak);
 
-    public void insertarMasivo(MultipartFile personas);
+    public Boolean insertarMasivo(MultipartFile personas);
 
-    public void insertarIndividual(PersonaDTO personaDTO);
+    public PersonaDTO insertarIndividual(PersonaDTO personaDTO);
 }

@@ -69,26 +69,29 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     public List<PersonaDTO> createUser(List<PersonaDTO> listaPersonasDTO) {
 
         List<String> usersIdsKeycloak = new ArrayList<>();
-        for (PersonaDTO personaDTO : listaPersonasDTO) {
-            String idUser = this.keycloakService.createUser(
-                    personaDTO.getCedula(),
-                    personaDTO.getCorreo(),
-                    personaDTO.getRoles(),
-                    personaDTO.getNombre(),
-                    personaDTO.getApellido());
-            personaDTO.setIdKeycloak(idUser);
-            usersIdsKeycloak.add(idUser);
-
-        }
-
-        // keycloakProvider.getKeycloak()
-        // .realm(realmName)
-        // .users()
-        // .get(idUser)
-        // .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
-
         try {
+
             for (PersonaDTO personaDTO : listaPersonasDTO) {
+                System.out.println(" PERSONA INSERT KEYCLOAK-------------------------- " + personaDTO);
+                String idUser = this.keycloakService.createUser(
+                        personaDTO.getCedula(),
+                        personaDTO.getCorreo(),
+                        personaDTO.getRoles(),
+                        personaDTO.getNombre(),
+                        personaDTO.getApellido());
+                personaDTO.setIdKeycloak(idUser);
+                usersIdsKeycloak.add(idUser);
+
+            }
+
+            // keycloakProvider.getKeycloak()
+            // .realm(realmName)
+            // .users()
+            // .get(idUser)
+            // .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
+
+            for (PersonaDTO personaDTO : listaPersonasDTO) {
+                System.out.println(" PERSONA INSERT DB------------------- " + personaDTO);
                 this.gestorPersonaService.insertar(personaDTO);
             }
             return listaPersonasDTO;
@@ -109,27 +112,38 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     }
 
     @Override
-    public void insertarMasivo(MultipartFile personas) {
-        List<PersonaDTO> personasDTO = this.excelService.leerPersonasDesdeExcel(personas);
-
-        List<PersonaDTO> personasCreadas = this.createUser(personasDTO);
-        for (PersonaDTO persona : personasCreadas) {
-            emailKeycloak.enviarCorreoCambioPassword(persona.getIdKeycloak());
+    public Boolean insertarMasivo(MultipartFile personas) {
+        try {
+            List<PersonaDTO> personasDTO = this.excelService.leerPersonasDesdeExcel(personas);
+            System.out.println("persona leidas desde excel: " + personasDTO.size());
+            List<PersonaDTO> personasCreadas = this.createUser(personasDTO);
+            for (PersonaDTO persona : personasCreadas) {
+                emailKeycloak.enviarCorreoCambioPassword(persona.getIdKeycloak());
+            }
+            return true;
+        } catch (Exception e) {
+            throw e;
         }
+
     }
 
     @Override
-    public void insertarIndividual(PersonaDTO personaDTO) {
-        // TODO Auto-generated method stub
-        List<PersonaDTO> personasDTO = new ArrayList<>();
-        personasDTO.add(personaDTO);
+    public PersonaDTO insertarIndividual(PersonaDTO personaDTO) {
 
-        List<PersonaDTO> personasCreadas = this.createUser(personasDTO);
-        for (PersonaDTO persona : personasCreadas) {
-            emailKeycloak.enviarCorreoCambioPassword(persona.getIdKeycloak());
+        try {
+            List<PersonaDTO> personasDTO = new ArrayList<>();
+            personasDTO.add(personaDTO);
+
+            List<PersonaDTO> personasCreadas = this.createUser(personasDTO);
+            for (PersonaDTO persona : personasCreadas) {
+                emailKeycloak.enviarCorreoCambioPassword(persona.getIdKeycloak());
+            }
+            return personaDTO;
+        } catch (Exception e) {
+            throw e;
         }
-    }
 
+    }
 
     @Override
     public List<PersonaDTO> getUsers() {

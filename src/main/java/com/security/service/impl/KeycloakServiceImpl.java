@@ -82,7 +82,8 @@ public class KeycloakServiceImpl implements IKeycloakService {
             response = getKeycloak().users().create(user);
 
             if (response.getStatus() == 409) {
-                throw new CustomException("El usuario: ¨" + username + "¨ o email: ¨" + email + "¨ ya se encuentran registrados  ", HttpStatus.CONFLICT);
+                throw new CustomException("La cédula " + username + " o el correo ya se encuentran registrados.",
+                        HttpStatus.CONFLICT);
             }
 
             if (response.getStatus() != 201) {
@@ -99,10 +100,10 @@ public class KeycloakServiceImpl implements IKeycloakService {
             assignRolesToUser(userId, roles);
 
             // keycloakProvider.getKeycloak()
-            //         .realm(realmName)
-            //         .users()
-            //         .get(userId)
-            //         .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
+            // .realm(realmName)
+            // .users()
+            // .get(userId)
+            // .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
 
             return userId;
 
