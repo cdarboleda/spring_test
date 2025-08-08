@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import com.security.db.Paso;
 import com.security.db.Persona;
 import com.security.db.Rol;
@@ -26,7 +25,7 @@ import com.security.service.IRolService;
 import com.security.service.dto.PersonaDTO;
 import com.security.service.dto.PersonaLigeroDTO;
 import com.security.service.dto.utils.Convertidor;
-import com.security.service.dto.utils.ConvertidorPersona;
+
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -49,9 +48,6 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
 
     @Autowired
     private Convertidor convertidor;
-
-    @Autowired
-    private ConvertidorPersona convertidorPersona;
 
     @Autowired
     private IPasoService pasoService;
@@ -77,8 +73,7 @@ public class GestorPersonaServiceImpl implements IGestorPersonaService {
         Persona persona = new Persona();
         convertidor.convertirAPersona(persona, personaDTO);
         List<Rol> roles = this.rolService.findByNombreIn(personaDTO.getRoles());
-
-        this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
+        //this.rolesInvalidosMensaje(roles, personaDTO.getRoles());
 
         persona.setRoles(new HashSet<>(roles));
         return convertidor.convertirAPersonaDTO(personaRepository.save(persona));

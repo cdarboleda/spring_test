@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.security.db.Persona;
 import com.security.service.IGestorPersonaService;
@@ -50,7 +50,18 @@ public class PersonaController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 
     public ResponseEntity<?> insertar(@Valid @RequestBody PersonaDTO persona) {
-        return new ResponseEntity<>(this.gestorUsurio.createUser(persona), HttpStatus.OK);
+        this.gestorUsurio.insertarIndividual(persona);
+        return ResponseEntity.ok("asd");
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<?> subirArchivo(@RequestParam("file") MultipartFile file) {
+        long tiempoInicial = System.currentTimeMillis();
+        // Lógica para procesar el archivo
+        System.out.println("Archivo recibido: " + file.getOriginalFilename() + ", tipo: " + file.getContentType());
+        this.gestorUsurio.insertarMasivo(file);
+        System.out.println("Tiempo de carga: " + (System.currentTimeMillis() - tiempoInicial) + "ms");
+        return ResponseEntity.ok("Archivo procesado correctamente");
     }
 
     // Buscar necesita la cedula dentro del body

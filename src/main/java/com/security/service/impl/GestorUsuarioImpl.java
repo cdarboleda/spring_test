@@ -1,5 +1,7 @@
 package com.security.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -7,8 +9,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.security.db.Persona;
 import com.security.db.Rol;
@@ -22,7 +27,6 @@ import com.security.service.IRolService;
 import com.security.service.dto.MiProcesoDTO;
 import com.security.service.dto.PersonaDTO;
 import com.security.service.dto.utils.Convertidor;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
@@ -46,26 +50,55 @@ public class GestorUsuarioImpl implements IGestorUsurio {
     private IRolService rolService;
 
     @Autowired
+    private ExcelService excelService;
+
+    @Autowired
     private Convertidor convertidor;
+
+    @Autowired
+    private EmailKeycloak emailKeycloak;
+
+    // @Value("${keycloak.realm.name}")
+    // private String realmName;
+
+    // @Autowired
+    // private KeycloakProvider keycloakProvider;
 
     // Metodo para ingresar un nuevo registro de usuario
     @Override
-    public PersonaDTO createUser(PersonaDTO personaDTO) {
+    public List<PersonaDTO> createUser(List<PersonaDTO> listaPersonasDTO) {
 
-        String idUser = this.keycloakService.createUser(
-                personaDTO.getCedula(),
-                personaDTO.getCorreo(),
-                personaDTO.getRoles(),
-                personaDTO.getNombre(),
-                personaDTO.getApellido());
+        List<String> usersIdsKeycloak = new ArrayList<>();
+        for (PersonaDTO personaDTO : listaPersonasDTO) {
+            String idUser = this.keycloakService.createUser(
+                    personaDTO.getCedula(),
+                    personaDTO.getCorreo(),
+                    personaDTO.getRoles(),
+                    personaDTO.getNombre(),
+                    personaDTO.getApellido());
+            personaDTO.setIdKeycloak(idUser);
+            usersIdsKeycloak.add(idUser);
 
-        personaDTO.setIdKeycloak(idUser);
+        }
+
+        // keycloakProvider.getKeycloak()
+        // .realm(realmName)
+        // .users()
+        // .get(idUser)
+        // .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
 
         try {
-            return this.gestorPersonaService.insertar(personaDTO);
+            for (PersonaDTO personaDTO : listaPersonasDTO) {
+                this.gestorPersonaService.insertar(personaDTO);
+            }
+            return listaPersonasDTO;
+
         } catch (Exception e) {
             try {
-                this.keycloakService.deleteUser(idUser);
+                for (String idUser : usersIdsKeycloak) {
+                    this.keycloakService.deleteUser(idUser);
+                }
+
             } catch (Exception rollbackError) {
                 throw new RuntimeException(
                         "Error al insertar en la base de datos. Además, falló el rollback en Keycloak.", rollbackError);
@@ -74,6 +107,29 @@ public class GestorUsuarioImpl implements IGestorUsurio {
                     "Error al insertar en la base de datos. Se ha revertido la creación en Keycloak.", e);
         }
     }
+
+    @Override
+    public void insertarMasivo(MultipartFile personas) {
+        List<PersonaDTO> personasDTO = this.excelService.leerPersonasDesdeExcel(personas);
+
+        List<PersonaDTO> personasCreadas = this.createUser(personasDTO);
+        for (PersonaDTO persona : personasCreadas) {
+            emailKeycloak.enviarCorreoCambioPassword(persona.getIdKeycloak());
+        }
+    }
+
+    @Override
+    public void insertarIndividual(PersonaDTO personaDTO) {
+        // TODO Auto-generated method stub
+        List<PersonaDTO> personasDTO = new ArrayList<>();
+        personasDTO.add(personaDTO);
+
+        List<PersonaDTO> personasCreadas = this.createUser(personasDTO);
+        for (PersonaDTO persona : personasCreadas) {
+            emailKeycloak.enviarCorreoCambioPassword(persona.getIdKeycloak());
+        }
+    }
+
 
     @Override
     public List<PersonaDTO> getUsers() {

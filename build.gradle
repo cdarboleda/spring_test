@@ -53,11 +53,13 @@ dependencies {
     implementation 'org.jboss.resteasy:resteasy-jaxb-provider:6.2.11.Final'
 
 	//websocket
-implementation 'org.springframework.boot:spring-boot-starter-websocket'
-implementation 'org.springframework.boot:spring-boot-starter-security'
-implementation 'org.springframework.security:spring-security-messaging:6.4.2'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-messaging:6.4.2'
 
-    
+	// Dependencias para manejo de excel
+	implementation 'org.apache.poi:poi-ooxml:5.2.5'
+
     // Dependencias para testing
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

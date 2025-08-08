@@ -2,7 +2,6 @@ package com.security.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.security.db.Rol;
 import com.security.exception.CustomException;
 import com.security.service.IKeycloakService;
 import com.security.service.dto.UserDTO;
@@ -20,9 +18,6 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +82,7 @@ public class KeycloakServiceImpl implements IKeycloakService {
             response = getKeycloak().users().create(user);
 
             if (response.getStatus() == 409) {
-                throw new CustomException("El email y la cédula deben ser únicos", HttpStatus.CONFLICT);
+                throw new CustomException("El usuario: ¨" + username + "¨ o email: ¨" + email + "¨ ya se encuentran registrados  ", HttpStatus.CONFLICT);
             }
 
             if (response.getStatus() != 201) {
@@ -103,11 +98,11 @@ public class KeycloakServiceImpl implements IKeycloakService {
 
             assignRolesToUser(userId, roles);
 
-            keycloakProvider.getKeycloak()
-                    .realm(realmName)
-                    .users()
-                    .get(userId)
-                    .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
+            // keycloakProvider.getKeycloak()
+            //         .realm(realmName)
+            //         .users()
+            //         .get(userId)
+            //         .executeActionsEmail(Arrays.asList("UPDATE_PASSWORD"));
 
             return userId;
 
